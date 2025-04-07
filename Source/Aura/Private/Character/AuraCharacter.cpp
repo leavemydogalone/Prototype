@@ -140,7 +140,6 @@ int32 AAuraCharacter::FindLevelForXP_Implementation(int32 InXP) const
 {
 	const AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
 	check(AuraPlayerState);
-	check(AuraPlayerState);
 	return AuraPlayerState->LevelUpInfo->FindLevelForXP(InXP);
 }
 
