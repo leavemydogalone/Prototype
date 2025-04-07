@@ -5,6 +5,7 @@
 
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "AbilitySystem/AuraAttributeSet.h"
+#include "Character/AuraUnitBase.h"
 #include "Net/UnrealNetwork.h"
 
 AAuraPlayerState::AAuraPlayerState()
@@ -26,11 +27,34 @@ void AAuraPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME(AAuraPlayerState, XP);
 	DOREPLIFETIME(AAuraPlayerState, AttributePoints);
 	DOREPLIFETIME(AAuraPlayerState, SpellPoints);
+	DOREPLIFETIME(AAuraPlayerState, SelectedUnit);
 }
 
 UAbilitySystemComponent* AAuraPlayerState::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
+}
+
+void AAuraPlayerState::SetSelectedUnit(AActor* NewUnit)
+{
+	if (HasAuthority())
+	{
+		if (AAuraUnitBase* UnitCharacter = Cast<AAuraUnitBase>(NewUnit))
+		{
+			SelectedUnit = UnitCharacter;
+			UE_LOG(LogTemp, Warning, TEXT("Selected Unit: %s"), *GetNameSafe(SelectedUnit));
+		}
+		/*SelectedUnit = NewUnit;
+		UE_LOG(LogTemp, Warning, TEXT("Selected Unit: %s"), *GetNameSafe(SelectedUnit));*/
+	}
+}
+
+void AAuraPlayerState::OnRep_SelectedUnit()
+{
+	//write a debug message on screen of the new selected unit
+
+	UE_LOG(LogTemp, Warning, TEXT("Client Selected Unit: %s"), *GetNameSafe(SelectedUnit));
+
 }
 
 void AAuraPlayerState::AddToXP(int32 InXP)

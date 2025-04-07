@@ -11,6 +11,7 @@
 class UAbilitySystemComponent;
 class UAttributeSet;
 class ULevelUpInfo;
+class AAuraUnitBase;
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnPlayerStatChanged, int32 /*StatValue*/)
 DECLARE_MULTICAST_DELEGATE_TwoParams(FOnLevelChanged, int32 /*StatValue*/, bool /*bLevelUp*/)
@@ -51,6 +52,12 @@ public:
 	void SetAttributePoints(int32 InPoints);
 	void SetSpellPoints(int32 InPoints);
 	
+	UFUNCTION(BlueprintCallable, Category = "Unit Management")
+	void SetSelectedUnit(AActor* NewUnit);
+
+	UFUNCTION(BlueprintCallable, Category = "Unit Management")
+	AAuraUnitBase* GetSelectedUnit() const { return SelectedUnit; }
+
 protected:
 	
 	UPROPERTY(VisibleAnywhere)
@@ -58,6 +65,12 @@ protected:
 
 	UPROPERTY()
 	TObjectPtr<UAttributeSet> AttributeSet;
+
+	UPROPERTY(ReplicatedUsing = OnRep_SelectedUnit)
+	TObjectPtr<AAuraUnitBase> SelectedUnit;
+
+	UFUNCTION()
+	void OnRep_SelectedUnit();
 
 private:
 
