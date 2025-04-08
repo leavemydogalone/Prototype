@@ -13,6 +13,7 @@
 #include "Serialization/ObjectAndNameAsStringProxyArchive.h"
 #include "UI/ViewModel/MVVM_LoadSlot.h"
 #include "GameFramework/Character.h"
+#include "Character/AuraUnitBase.h"
 
 void AAuraGameModeBase::SaveSlotData(UMVVM_LoadSlot* LoadSlot, int32 SlotIndex)
 {
@@ -231,17 +232,52 @@ void AAuraGameModeBase::PlayerDied(ACharacter* DeadCharacter)
 	UGameplayStatics::OpenLevel(DeadCharacter, FName(SaveGame->MapAssetName));
 }
 
+// My Additions
+
 void AAuraGameModeBase::PostLogin(APlayerController* NewPlayer)
 {
+	Super::PostLogin(NewPlayer);
+
+	if (HasAuthority() && NewPlayer)
+	{
+		SpawnUnitsForPlayer(NewPlayer);
+	}
 }
 
 void AAuraGameModeBase::SpawnUnitsForPlayer(APlayerController* Player)
 {
+	if (!HasAuthority() || !Player) return;
+
+	UWorld* World = GetWorld();
+
+	check(DefaultUnitPawn);
+
+	if (APawn* PlayerPawn = Player->GetPawn())
+	{
+		FVector PawnLocation = PlayerPawn->GetActorLocation();
+		for (int i = 0; i < 2; i++)
+		{
+			FVector SpawnLocation = GetSpawnLocationForPlayer(PawnLocation, i);
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.Owner = Player;
+			SpawnParams.Instigator = nullptr;
+
+			AAuraUnitBase* NewUnit = World->SpawnActor<AAuraUnitBase>(DefaultUnitPawn, SpawnLocation, FRotator::ZeroRotator, SpawnParams);
+			if (NewUnit)
+			{
+				//NewUnit->InitializeUnit(PlayerState, StatsArray[i]);
+				NewUnit->SetOwner(Player);
+				NewUnit->SetAutonomousProxy(true);
+			}
+		}
+	}
 }
 
 FVector AAuraGameModeBase::GetSpawnLocationForPlayer(FVector PawnLocation, int Index)
 {
-	return FVector();
+	FVector RandomLocation = FVector(Index * 200, 0.f, 0.f);
+	FVector BaseSpawnLocation = PawnLocation + RandomLocation;// Adjust for formation
+	return BaseSpawnLocation;
 }
 
 void AAuraGameModeBase::BeginPlay()
