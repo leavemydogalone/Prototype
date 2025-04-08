@@ -231,6 +231,19 @@ void AAuraGameModeBase::PlayerDied(ACharacter* DeadCharacter)
 	UGameplayStatics::OpenLevel(DeadCharacter, FName(SaveGame->MapAssetName));
 }
 
+void AAuraGameModeBase::PostLogin(APlayerController* NewPlayer)
+{
+}
+
+void AAuraGameModeBase::SpawnUnitsForPlayer(APlayerController* Player)
+{
+}
+
+FVector AAuraGameModeBase::GetSpawnLocationForPlayer(FVector PawnLocation, int Index)
+{
+	return FVector();
+}
+
 void AAuraGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
