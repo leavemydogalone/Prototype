@@ -14,6 +14,7 @@ class ULevelUpInfo;
 struct FGameplayAbilityTargetDataHandle;
 struct FGameplayTag;
 class AAuraUnitBase;
+class IUnitInterface;
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnPlayerStatChanged, int32 /*StatValue*/)
 DECLARE_MULTICAST_DELEGATE_TwoParams(FOnLevelChanged, int32 /*StatValue*/, bool /*bLevelUp*/)
@@ -58,9 +59,9 @@ public:
 	void SetSelectedUnit(AActor* NewUnit);
 
 	UFUNCTION(BlueprintCallable, Category = "Unit Management")
-	AAuraUnitBase* GetSelectedUnit() const { return SelectedUnit; }
+	AActor* GetSelectedUnit() const { return SelectedUnit; }
 
-	void PassCommandToSelectedUnit(FGameplayTag& InputTag, const FGameplayAbilityTargetDataHandle& DataHandle);
+	//void PassCommandToSelectedUnit(FGameplayTag& InputTag, const FGameplayAbilityTargetDataHandle& DataHandle);
 
 protected:
 	
@@ -71,7 +72,7 @@ protected:
 	TObjectPtr<UAttributeSet> AttributeSet;
 
 	UPROPERTY(ReplicatedUsing = OnRep_SelectedUnit)
-	TObjectPtr<AAuraUnitBase> SelectedUnit;
+	TObjectPtr<AActor> SelectedUnit;
 
 	UFUNCTION()
 	void OnRep_SelectedUnit();

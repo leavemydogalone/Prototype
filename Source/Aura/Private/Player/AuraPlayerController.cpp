@@ -270,17 +270,17 @@ AAuraPlayerState* AAuraPlayerController::GetPS()
 	return AuraPlayerState;
 }
 
-UAuraAbilitySystemComponent* AAuraPlayerController::GetSelectedUnitASC()
-{
-	if (SelectedUnitASC == nullptr)
-	{
-		if (GetPS()->GetSelectedUnit())
-		{
-			SelectedUnitASC = Cast<UAuraAbilitySystemComponent>(GetPS()->GetSelectedUnit()->GetAbilitySystemComponent());
-		}
-	}
-	return SelectedUnitASC;
-}
+//UAuraAbilitySystemComponent* AAuraPlayerController::GetSelectedUnitASC()
+//{
+//	if (SelectedUnitASC == nullptr)
+//	{
+//		if (GetPS()->GetSelectedUnit())
+//		{
+//			SelectedUnitASC = Cast<UAuraAbilitySystemComponent>(GetPS()->GetSelectedUnit()->GetAbilitySystemComponent());
+//		}
+//	}
+//	return SelectedUnitASC;
+//}
 
 void AAuraPlayerController::BeginPlay()
 {

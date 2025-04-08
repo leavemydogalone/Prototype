@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Character/AuraCharacterBase.h"
+#include "Interaction/UnitInterface.h"
 #include "AuraUnitBase.generated.h"
 
 class UBehaviorTree;
@@ -13,7 +14,7 @@ class AAuraAIController;
  * 
  */
 UCLASS()
-class AURA_API AAuraUnitBase : public AAuraCharacterBase
+class AURA_API AAuraUnitBase : public AAuraCharacterBase, public IUnitInterface
 {
 	GENERATED_BODY()
 	

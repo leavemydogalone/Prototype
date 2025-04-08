@@ -268,6 +268,21 @@ void AAuraCharacter::SaveProgress_Implementation(const FName& CheckpointTag)
 	}
 }
 
+AActor* AAuraCharacter::GetSelectedUnit_Implementation() const
+{
+	const AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
+	check(AuraPlayerState);
+	return AuraPlayerState->GetSelectedUnit();
+}
+
+void AAuraCharacter::SetSelectedUnit_Implementation(AActor* NewUnit)
+{
+	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
+	check(AuraPlayerState);
+	AuraPlayerState->SetSelectedUnit(NewUnit);
+	
+}
+
 int32 AAuraCharacter::GetPlayerLevel_Implementation()
 {
 	const AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();

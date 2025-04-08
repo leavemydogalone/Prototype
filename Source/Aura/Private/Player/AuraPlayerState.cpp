@@ -39,34 +39,34 @@ void AAuraPlayerState::SetSelectedUnit(AActor* NewUnit)
 {
 	if (HasAuthority())
 	{
-		if (AAuraUnitBase* UnitCharacter = Cast<AAuraUnitBase>(NewUnit))
+		if (IsValid(NewUnit) && NewUnit->Implements<UUnitInterface>())
 		{
-			SelectedUnit = UnitCharacter;
+			SelectedUnit = NewUnit;
 			UE_LOG(LogTemp, Warning, TEXT("Selected Unit: %s"), *GetNameSafe(SelectedUnit));
 		}
 	}
 }
 
-void AAuraPlayerState::PassCommandToSelectedUnit(FGameplayTag& InputTag, const FGameplayAbilityTargetDataHandle& DataHandle)
-{
-	if (SelectedUnit)
-	{
-		if (DataHandle.IsValid(0))
-		{
-			const FGameplayAbilityTargetData_SingleTargetHit* TargetData = static_cast<const FGameplayAbilityTargetData_SingleTargetHit*>(DataHandle.Get(0));
-			if (TargetData)
-			{
-				SelectedUnit->ReceiveCommand(InputTag, TargetData->HitResult);
-			}
-		}
-	}
-}
+//void AAuraPlayerState::PassCommandToSelectedUnit(FGameplayTag& InputTag, const FGameplayAbilityTargetDataHandle& DataHandle)
+//{
+//	if (SelectedUnit)
+//	{
+//		if (DataHandle.IsValid(0))
+//		{
+//			const FGameplayAbilityTargetData_SingleTargetHit* TargetData = static_cast<const FGameplayAbilityTargetData_SingleTargetHit*>(DataHandle.Get(0));
+//			if (TargetData)
+//			{
+//				SelectedUnit->ReceiveCommand(InputTag, TargetData->HitResult);
+//			}
+//		}
+//	}
+//}
 
 void AAuraPlayerState::OnRep_SelectedUnit()
 {
 	//write a debug message on screen of the new selected unit
 
-	UE_LOG(LogTemp, Warning, TEXT("Client Selected Unit: %s"), *GetNameSafe(SelectedUnit));
+	UE_LOG(LogTemp, Warning, TEXT("Client Selected Unit"));
 
 }
 

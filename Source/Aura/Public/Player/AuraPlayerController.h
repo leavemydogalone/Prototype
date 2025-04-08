@@ -89,9 +89,9 @@ private:
 	TObjectPtr<AAuraPlayerState> AuraPlayerState;
 	AAuraPlayerState* GetPS();
 
-	UPROPERTY()
+	/*UPROPERTY()
 	TObjectPtr<UAuraAbilitySystemComponent> SelectedUnitASC;
-	UAuraAbilitySystemComponent* GetSelectedUnitASC();
+	UAuraAbilitySystemComponent* GetSelectedUnitASC();*/
 	
 	FVector CachedDestination = FVector::ZeroVector;
 	float FollowTime = 0.f;
