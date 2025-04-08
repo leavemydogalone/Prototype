@@ -27,6 +27,7 @@ public:
 	//virtual void UnHighlightActor() override;
 	// end Unit interface
 
+	void ReceiveCommand(FGameplayTag InputTag, FHitResult HitResult);
 
 protected:
 

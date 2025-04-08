@@ -218,11 +218,15 @@ void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 		return;
 	}
 
-	if (GetSelectedUnitASC() && !InputTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_1))
+	//if (GetSelectedUnitASC() && !InputTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_1))
+	//{
+	//	GetSelectedUnitASC()->AbilityInputTagHeld(InputTag);
+	//	return;
+	//}
+	/*if (GetPS()->GetSelectedUnit() && !InputTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_1))
 	{
-		GetSelectedUnitASC()->AbilityInputTagHeld(InputTag);
-		return;
-	}
+
+	}*/
 
 	if (!InputTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB))
 	{

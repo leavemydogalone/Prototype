@@ -11,6 +11,8 @@
 class UAbilitySystemComponent;
 class UAttributeSet;
 class ULevelUpInfo;
+struct FGameplayAbilityTargetDataHandle;
+struct FGameplayTag;
 class AAuraUnitBase;
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnPlayerStatChanged, int32 /*StatValue*/)
@@ -57,6 +59,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Unit Management")
 	AAuraUnitBase* GetSelectedUnit() const { return SelectedUnit; }
+
+	void PassCommandToSelectedUnit(FGameplayTag& InputTag, const FGameplayAbilityTargetDataHandle& DataHandle);
 
 protected:
 	

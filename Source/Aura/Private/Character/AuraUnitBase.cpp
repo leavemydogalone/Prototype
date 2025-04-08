@@ -40,6 +40,11 @@ void AAuraUnitBase::PossessedBy(AController* NewController)
 	AuraAIController = Cast<AAuraAIController>(NewController);
 }
 
+void AAuraUnitBase::ReceiveCommand(FGameplayTag InputTag, FHitResult HitResult)
+{
+	UE_LOG(LogTemp, Log, TEXT("Received command at location: %s"), *HitResult.ImpactPoint.ToString());
+}
+
 void AAuraUnitBase::BeginPlay()
 {
 	InitAbilityActorInfo();

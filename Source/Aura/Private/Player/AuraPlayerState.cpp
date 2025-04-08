@@ -44,8 +44,21 @@ void AAuraPlayerState::SetSelectedUnit(AActor* NewUnit)
 			SelectedUnit = UnitCharacter;
 			UE_LOG(LogTemp, Warning, TEXT("Selected Unit: %s"), *GetNameSafe(SelectedUnit));
 		}
-		/*SelectedUnit = NewUnit;
-		UE_LOG(LogTemp, Warning, TEXT("Selected Unit: %s"), *GetNameSafe(SelectedUnit));*/
+	}
+}
+
+void AAuraPlayerState::PassCommandToSelectedUnit(FGameplayTag& InputTag, const FGameplayAbilityTargetDataHandle& DataHandle)
+{
+	if (SelectedUnit)
+	{
+		if (DataHandle.IsValid(0))
+		{
+			const FGameplayAbilityTargetData_SingleTargetHit* TargetData = static_cast<const FGameplayAbilityTargetData_SingleTargetHit*>(DataHandle.Get(0));
+			if (TargetData)
+			{
+				SelectedUnit->ReceiveCommand(InputTag, TargetData->HitResult);
+			}
+		}
 	}
 }
 

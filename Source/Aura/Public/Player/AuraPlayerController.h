@@ -7,7 +7,6 @@
 #include "GameplayTagContainer.h"
 #include "AuraPlayerController.generated.h"
 
-
 class IHighlightInterface;
 class UNiagaraSystem;
 class UDamageTextComponent;
