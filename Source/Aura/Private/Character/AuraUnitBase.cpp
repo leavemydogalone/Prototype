@@ -47,8 +47,13 @@ void AAuraUnitBase::ReceiveCommand(FGameplayTag InputTag, FHitResult HitResult)
 
 void AAuraUnitBase::BeginPlay()
 {
+	Super::BeginPlay();
+	GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
 	InitAbilityActorInfo();
-	AddCharacterAbilities();
+	if (HasAuthority())
+	{
+		UAuraAbilitySystemLibrary::GiveStartupAbilities(this, AbilitySystemComponent, CharacterClass);
+	}
 }
 
 void AAuraUnitBase::InitAbilityActorInfo()
@@ -59,7 +64,10 @@ void AAuraUnitBase::InitAbilityActorInfo()
 	if (HasAuthority())
 	{
 		InitializeDefaultAttributes();
+		AddCharacterAbilities();
 	}
+	OnAscRegistered.Broadcast(AbilitySystemComponent);
+
 }
 
 void AAuraUnitBase::InitializeDefaultAttributes() const

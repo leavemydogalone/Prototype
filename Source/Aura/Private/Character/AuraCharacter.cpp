@@ -55,7 +55,9 @@ void AAuraCharacter::PossessedBy(AController* NewController)
 
 	// Init ability actor info for the Server
 	InitAbilityActorInfo();
+	InitializeDefaultAttributes();
 	AddCharacterAbilities();
+
 	//LoadProgress();
 
 	/*if (AAuraGameModeBase* AuraGameMode = Cast<AAuraGameModeBase>(UGameplayStatics::GetGameMode(this)))

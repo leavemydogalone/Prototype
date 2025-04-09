@@ -240,7 +240,8 @@ void AAuraGameModeBase::PostLogin(APlayerController* NewPlayer)
 
 	if (HasAuthority() && NewPlayer)
 	{
-		SpawnUnitsForPlayer(NewPlayer);
+		//SpawnUnitsForPlayer(NewPlayer);
+
 	}
 }
 
@@ -255,20 +256,24 @@ void AAuraGameModeBase::SpawnUnitsForPlayer(APlayerController* Player)
 	if (APawn* PlayerPawn = Player->GetPawn())
 	{
 		FVector PawnLocation = PlayerPawn->GetActorLocation();
-		for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 2; i++)  
 		{
-			FVector SpawnLocation = GetSpawnLocationForPlayer(PawnLocation, i);
-			FActorSpawnParameters SpawnParams;
-			SpawnParams.Owner = Player;
-			SpawnParams.Instigator = nullptr;
+			FTimerHandle TimerHandle;
+			GetWorld()->GetTimerManager().SetTimer(TimerHandle, [this, Player, PawnLocation, i]()
+				{
+					FVector SpawnLocation = GetSpawnLocationForPlayer(PawnLocation, i);
+					FActorSpawnParameters SpawnParams;
+					SpawnParams.Owner = Player;
+					SpawnParams.Instigator = nullptr;
 
-			AAuraUnitBase* NewUnit = World->SpawnActor<AAuraUnitBase>(DefaultUnitPawn, SpawnLocation, FRotator::ZeroRotator, SpawnParams);
-			if (NewUnit)
-			{
-				//NewUnit->InitializeUnit(PlayerState, StatsArray[i]);
-				NewUnit->SetOwner(Player);
-				NewUnit->SetAutonomousProxy(true);
-			}
+					AAuraUnitBase* NewUnit = GetWorld()->SpawnActor<AAuraUnitBase>(DefaultUnitPawn, SpawnLocation, FRotator::ZeroRotator, SpawnParams);
+					if (NewUnit)
+					{
+						//NewUnit->InitializeUnit(PlayerState, StatsArray[i]);  
+						NewUnit->SetOwner(Player);
+						NewUnit->SetAutonomousProxy(true);
+					}
+				}, i * 0.5f, false); // Delay increases with each iteration (e.g., 0.5 seconds per unit)  
 		}
 	}
 }
