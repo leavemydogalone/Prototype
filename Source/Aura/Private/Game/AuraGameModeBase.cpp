@@ -240,7 +240,7 @@ void AAuraGameModeBase::PostLogin(APlayerController* NewPlayer)
 
 	if (HasAuthority() && NewPlayer)
 	{
-		//SpawnUnitsForPlayer(NewPlayer);
+		SpawnUnitsForPlayer(NewPlayer);
 
 	}
 }
@@ -249,14 +249,17 @@ void AAuraGameModeBase::SpawnUnitsForPlayer(APlayerController* Player)
 {
 	if (!HasAuthority() || !Player) return;
 
-	UWorld* World = GetWorld();
-
-	check(DefaultUnitPawn);
+	//May want to use this. For some reason was affecting the below lambda
+	//UWorld* World = GetWorld();
+	//check(World);
+	
+	check(DefaultUnitPawnClass);
+	check(DefaultAIControllerClass);
 
 	if (APawn* PlayerPawn = Player->GetPawn())
 	{
 		FVector PawnLocation = PlayerPawn->GetActorLocation();
-        for (int i = 0; i < 2; i++)  
+		for (int i = 0; i < 2; i++)
 		{
 			FTimerHandle TimerHandle;
 			GetWorld()->GetTimerManager().SetTimer(TimerHandle, [this, Player, PawnLocation, i]()
@@ -266,14 +269,19 @@ void AAuraGameModeBase::SpawnUnitsForPlayer(APlayerController* Player)
 					SpawnParams.Owner = Player;
 					SpawnParams.Instigator = nullptr;
 
-					AAuraUnitBase* NewUnit = GetWorld()->SpawnActor<AAuraUnitBase>(DefaultUnitPawn, SpawnLocation, FRotator::ZeroRotator, SpawnParams);
+					// Corrected SpawnActor call to use the correct type for DefaultUnitPawn
+					AActor* NewUnit = GetWorld()->SpawnActor<AActor>(DefaultUnitPawnClass, SpawnLocation, FRotator::ZeroRotator, SpawnParams);
 					if (NewUnit)
 					{
-						//NewUnit->InitializeUnit(PlayerState, StatsArray[i]);  
 						NewUnit->SetOwner(Player);
-						NewUnit->SetAutonomousProxy(true);
+
+						AController* AIController = GetWorld()->SpawnActor<AController>(DefaultAIControllerClass);
+						if (AIController)
+						{
+							AIController->Possess(Cast<APawn>(NewUnit));
+						}
 					}
-				}, i * 0.5f, false); // Delay increases with each iteration (e.g., 0.5 seconds per unit)  
+				}, i * 0.5f, false); // Delay increases with each iteration (e.g., 0.5 seconds per unit)
 		}
 	}
 }

@@ -76,7 +76,9 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Character Class Defaults")
-	TSubclassOf<AAuraUnitBase> DefaultUnitPawn;
-	
+	UPROPERTY(EditDefaultsOnly, Category = "Unit Defaults")
+	TSubclassOf<AActor> DefaultUnitPawnClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Unit Defaults")
+	TSubclassOf<AController> DefaultAIControllerClass;
 };
