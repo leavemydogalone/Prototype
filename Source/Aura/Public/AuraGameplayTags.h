@@ -44,6 +44,11 @@ public:
 	FGameplayTag InputTag_Passive_1;
 	FGameplayTag InputTag_Passive_2;
 
+	FGameplayTag Event_Unit_LMB;
+	FGameplayTag Event_Unit_RMB;
+	FGameplayTag Event_Unit_Input1;
+	FGameplayTag Event_Unit_Input2;
+
 	FGameplayTag Damage;
 	FGameplayTag Damage_Fire;
 	FGameplayTag Damage_Lightning;

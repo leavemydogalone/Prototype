@@ -135,6 +135,30 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 		);
 
 	/*
+	 * Unit Event Input Types
+	 */
+	GameplayTags.Event_Unit_LMB = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.Unit.LMB"),
+		FString("Unit Event for Left Mouse Button")
+	);
+
+	GameplayTags.Event_Unit_RMB = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.Unit.RMB"),
+		FString("Unit Event for Right Mouse Button")
+	);
+
+	GameplayTags.Event_Unit_Input1 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.Unit.Input1"),
+		FString("Unit Event for Input 1")
+	);
+
+	GameplayTags.Event_Unit_Input2 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.Unit.Input2"),
+		FString("Unit Event for Input 2")
+	);
+
+
+	/*
 	 * Damage Types
 	 */
 
