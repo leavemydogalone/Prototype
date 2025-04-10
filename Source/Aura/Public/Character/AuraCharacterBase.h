@@ -7,6 +7,7 @@
 #include "GameFramework/Character.h"
 #include "AbilitySystem/Data/CharacterClassInfo.h"
 #include "Interaction/CombatInterface.h"
+#include "Interaction/TeamInterface.h"
 #include "AuraCharacterBase.generated.h"
 
 class UPassiveNiagaraComponent;
@@ -19,7 +20,7 @@ class UGameplayAbility;
 class UAnimMontage;
 
 UCLASS(Abstract)
-class AURA_API AAuraCharacterBase : public ACharacter, public IAbilitySystemInterface, public ICombatInterface
+class AURA_API AAuraCharacterBase : public ACharacter, public IAbilitySystemInterface, public ICombatInterface, public ITeamInterface
 {
 	GENERATED_BODY()
 
@@ -51,6 +52,12 @@ public:
 	virtual bool IsBeingShocked_Implementation() const override;
 	virtual FOnDamageSignature& GetOnDamageSignature() override;
 	/** end Combat Interface */
+
+	// Team interface
+	virtual int32 GetTeamID_Implementation() override;
+	virtual void SetTeamID(int32 ID) override { TeamID = ID; }
+	// end Team interface
+
 
 	FOnASCRegistered OnAscRegistered;
 	FOnDeathSignature OnDeathDelegate;
@@ -160,6 +167,12 @@ protected:
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UDebuffNiagaraComponent> StunDebuffComponent;
+
+	UPROPERTY(VisibleAnywhere, ReplicatedUsing = OnRep_TeamID)
+	int32 TeamID = -1;
+
+	UFUNCTION()
+	void OnRep_TeamID(int32 OldTeamID);
 	
 private:
 
@@ -183,4 +196,6 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USceneComponent> EffectAttachComponent;
+
+
 };

@@ -28,6 +28,7 @@ void AAuraPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME(AAuraPlayerState, AttributePoints);
 	DOREPLIFETIME(AAuraPlayerState, SpellPoints);
 	DOREPLIFETIME(AAuraPlayerState, SelectedUnit);
+	DOREPLIFETIME(AAuraPlayerState, TeamID);
 }
 
 UAbilitySystemComponent* AAuraPlayerState::GetAbilitySystemComponent() const
@@ -45,6 +46,11 @@ void AAuraPlayerState::SetSelectedUnit(AActor* NewUnit)
 			UE_LOG(LogTemp, Warning, TEXT("Selected Unit: %s"), *GetNameSafe(SelectedUnit));
 		}
 	}
+}
+
+int32 AAuraPlayerState::GetTeamID_Implementation()
+{
+	return TeamID;
 }
 
 //void AAuraPlayerState::PassCommandToSelectedUnit(FGameplayTag& InputTag, const FGameplayAbilityTargetDataHandle& DataHandle)
@@ -124,6 +130,12 @@ void AAuraPlayerState::OnRep_AttributePoints(int32 OldAttributePoints)
 void AAuraPlayerState::OnRep_SpellPoints(int32 OldSpellPoints)
 {
 	OnSpellPointsChangedDelegate.Broadcast(SpellPoints);
+}
+
+void AAuraPlayerState::OnRep_TeamID(int32 OldTeamID)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Team ID changed from %d to %d"), OldTeamID, TeamID);
+	// OnTeamIDChangedDelegate.Broadcast(TeamID);
 }
 
 void AAuraPlayerState::AddToAttributePoints(int32 InPoints)

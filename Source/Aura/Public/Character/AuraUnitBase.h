@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Character/AuraCharacterBase.h"
 #include "Interaction/UnitInterface.h"
+#include "Interaction/TeamInterface.h"
 #include "AuraUnitBase.generated.h"
 
 class UBehaviorTree;
@@ -49,4 +50,5 @@ protected:
 
 	UPROPERTY()
 	TObjectPtr<AAuraAIController> AuraAIController;
+
 };

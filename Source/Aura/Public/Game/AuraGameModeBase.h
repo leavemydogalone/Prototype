@@ -81,4 +81,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Unit Defaults")
 	TSubclassOf<AController> DefaultAIControllerClass;
+
+private:
+	int32 TeamID = 0;
 };

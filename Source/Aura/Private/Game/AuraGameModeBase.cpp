@@ -9,6 +9,7 @@
 #include "Game/LoadScreenSaveGame.h"
 #include "GameFramework/PlayerStart.h"
 #include "Interaction/SaveInterface.h"
+#include "Interaction/TeamInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "Serialization/ObjectAndNameAsStringProxyArchive.h"
 #include "UI/ViewModel/MVVM_LoadSlot.h"
@@ -240,8 +241,11 @@ void AAuraGameModeBase::PostLogin(APlayerController* NewPlayer)
 
 	if (HasAuthority() && NewPlayer)
 	{
-		SpawnUnitsForPlayer(NewPlayer);
 
+		ITeamInterface* TeamPlayerState = Cast<ITeamInterface>(NewPlayer->PlayerState);
+		TeamPlayerState->SetTeamID(TeamID);
+		SpawnUnitsForPlayer(NewPlayer);
+		TeamID++;
 	}
 }
 
@@ -249,39 +253,38 @@ void AAuraGameModeBase::SpawnUnitsForPlayer(APlayerController* Player)
 {
 	if (!HasAuthority() || !Player) return;
 
-	//May want to use this. For some reason was affecting the below lambda
-	//UWorld* World = GetWorld();
-	//check(World);
-	
+	UWorld* World = GetWorld();
+
+	check(World);
 	check(DefaultUnitPawnClass);
 	check(DefaultAIControllerClass);
+
 
 	if (APawn* PlayerPawn = Player->GetPawn())
 	{
 		FVector PawnLocation = PlayerPawn->GetActorLocation();
-		for (int i = 0; i < 2; i++)
+		for (int i = 0; i < 5; i++)
 		{
-			FTimerHandle TimerHandle;
-			GetWorld()->GetTimerManager().SetTimer(TimerHandle, [this, Player, PawnLocation, i]()
+			FVector SpawnLocation = GetSpawnLocationForPlayer(PawnLocation, i);
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.Owner = Player;
+			SpawnParams.Instigator = nullptr;
+
+
+			AActor* NewUnit = World->SpawnActor<AActor>(DefaultUnitPawnClass, SpawnLocation, FRotator::ZeroRotator, SpawnParams);
+			if (NewUnit)
+			{
+				NewUnit->SetOwner(Player);
+
+				AController* AIController = World->SpawnActor<AController>(DefaultAIControllerClass);
+				if (AIController)
 				{
-					FVector SpawnLocation = GetSpawnLocationForPlayer(PawnLocation, i);
-					FActorSpawnParameters SpawnParams;
-					SpawnParams.Owner = Player;
-					SpawnParams.Instigator = nullptr;
+					AIController->Possess(Cast<APawn>(NewUnit));
+				}
 
-					// Corrected SpawnActor call to use the correct type for DefaultUnitPawn
-					AActor* NewUnit = GetWorld()->SpawnActor<AActor>(DefaultUnitPawnClass, SpawnLocation, FRotator::ZeroRotator, SpawnParams);
-					if (NewUnit)
-					{
-						NewUnit->SetOwner(Player);
-
-						AController* AIController = GetWorld()->SpawnActor<AController>(DefaultAIControllerClass);
-						if (AIController)
-						{
-							AIController->Possess(Cast<APawn>(NewUnit));
-						}
-					}
-				}, i * 0.5f, false); // Delay increases with each iteration (e.g., 0.5 seconds per unit)
+				ITeamInterface* TeamUnit = Cast<ITeamInterface>(NewUnit);
+				TeamUnit->SetTeamID(TeamID);
+			}
 		}
 	}
 }

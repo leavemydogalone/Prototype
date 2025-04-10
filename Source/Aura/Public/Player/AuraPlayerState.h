@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
 #include "GameFramework/PlayerState.h"
+#include "Interaction/TeamInterface.h"
 #include "AuraPlayerState.generated.h"
 
 
@@ -23,7 +24,7 @@ DECLARE_MULTICAST_DELEGATE_TwoParams(FOnLevelChanged, int32 /*StatValue*/, bool 
  * 
  */
 UCLASS()
-class AURA_API AAuraPlayerState : public APlayerState, public IAbilitySystemInterface
+class AURA_API AAuraPlayerState : public APlayerState, public IAbilitySystemInterface, public ITeamInterface
 {
 	GENERATED_BODY()
 public:
@@ -61,7 +62,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Unit Management")
 	AActor* GetSelectedUnit() const { return SelectedUnit; }
 
-	//void PassCommandToSelectedUnit(FGameplayTag& InputTag, const FGameplayAbilityTargetDataHandle& DataHandle);
+	// Team interface
+	virtual int32 GetTeamID_Implementation() override;
+	virtual void SetTeamID(int32 ID) override { TeamID = ID; }
 
 protected:
 	
@@ -91,6 +94,9 @@ private:
 	UPROPERTY(VisibleAnywhere, ReplicatedUsing=OnRep_SpellPoints)
 	int32 SpellPoints = 0;
 	
+	UPROPERTY(VisibleAnywhere, ReplicatedUsing=OnRep_TeamID)
+	int32 TeamID = -1;
+
 	UFUNCTION()
 	void OnRep_Level(int32 OldLevel);
 
@@ -102,4 +108,7 @@ private:
 
 	UFUNCTION()
 	void OnRep_SpellPoints(int32 OldSpellPoints);
+
+	UFUNCTION()
+	void OnRep_TeamID(int32 OldTeamID);
 };

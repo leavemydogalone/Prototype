@@ -61,6 +61,7 @@ void AAuraCharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 	DOREPLIFETIME(AAuraCharacterBase, bIsStunned);
 	DOREPLIFETIME(AAuraCharacterBase, bIsBurned);
 	DOREPLIFETIME(AAuraCharacterBase, bIsBeingShocked);
+	DOREPLIFETIME(AAuraCharacterBase, TeamID);
 }
 
 float AAuraCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -229,6 +230,11 @@ FOnDamageSignature& AAuraCharacterBase::GetOnDamageSignature()
 	return OnDamageDelegate;
 }
 
+int32 AAuraCharacterBase::GetTeamID_Implementation()
+{
+	return TeamID;
+}
+
 void AAuraCharacterBase::InitAbilityActorInfo()
 {
 }
@@ -275,3 +281,7 @@ void AAuraCharacterBase::Dissolve()
 	}
 }
 
+void AAuraCharacterBase::OnRep_TeamID(int32 OldTeamID)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Team ID changed from %d to %d"), OldTeamID, TeamID);
+}
