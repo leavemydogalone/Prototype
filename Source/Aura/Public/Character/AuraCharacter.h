@@ -37,6 +37,8 @@ public:
 	virtual void ShowMagicCircle_Implementation(UMaterialInterface* DecalMaterial) override;
 	virtual void HideMagicCircle_Implementation() override;
 	virtual void SaveProgress_Implementation(const FName& CheckpointTag) override;
+	virtual AActor* GetSelectedUnit_Implementation() const override;
+	virtual void SetSelectedUnit_Implementation(AActor* NewUnit) override;
 	/** end Player Interface */
 
 	/** Combat Interface */

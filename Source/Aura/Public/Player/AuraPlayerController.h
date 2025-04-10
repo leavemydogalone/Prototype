@@ -7,7 +7,6 @@
 #include "GameplayTagContainer.h"
 #include "AuraPlayerController.generated.h"
 
-
 class IHighlightInterface;
 class UNiagaraSystem;
 class UDamageTextComponent;
@@ -18,6 +17,7 @@ class UAuraInputConfig;
 class UAuraAbilitySystemComponent;
 class USplineComponent;
 class AMagicCircle;
+class AAuraPlayerState;
 
 enum class ETargetingStatus : uint8
 {
@@ -82,9 +82,16 @@ private:
 
 	UPROPERTY()
 	TObjectPtr<UAuraAbilitySystemComponent> AuraAbilitySystemComponent;
-
 	UAuraAbilitySystemComponent* GetASC();
 
+	//My Additions
+	UPROPERTY()
+	TObjectPtr<AAuraPlayerState> AuraPlayerState;
+	AAuraPlayerState* GetPS();
+
+	/*UPROPERTY()
+	TObjectPtr<UAuraAbilitySystemComponent> SelectedUnitASC;
+	UAuraAbilitySystemComponent* GetSelectedUnitASC();*/
 	
 	FVector CachedDestination = FVector::ZeroVector;
 	float FollowTime = 0.f;

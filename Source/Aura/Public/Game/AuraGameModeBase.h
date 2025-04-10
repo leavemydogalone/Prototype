@@ -12,6 +12,9 @@ class USaveGame;
 class UMVVM_LoadSlot;
 class UAbilityInfo;
 class UCharacterClassInfo;
+class AAuraPlayerController;
+class AAuraUnitBase;
+
 /**
  * 
  */
@@ -60,7 +63,22 @@ public:
 	virtual AActor* ChoosePlayerStart_Implementation(AController* Player) override;
 
 	void PlayerDied(ACharacter* DeadCharacter);
+
+
+	// My Additions
+
+	virtual void PostLogin(APlayerController* NewPlayer) override;
+
+	void SpawnUnitsForPlayer(APlayerController* Player);
+
+	FVector GetSpawnLocationForPlayer(FVector PawnLocation, int Index);
+
 protected:
 	virtual void BeginPlay() override;
-	
+
+	UPROPERTY(EditDefaultsOnly, Category = "Unit Defaults")
+	TSubclassOf<AActor> DefaultUnitPawnClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Unit Defaults")
+	TSubclassOf<AController> DefaultAIControllerClass;
 };

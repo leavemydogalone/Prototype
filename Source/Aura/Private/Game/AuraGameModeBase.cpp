@@ -13,6 +13,7 @@
 #include "Serialization/ObjectAndNameAsStringProxyArchive.h"
 #include "UI/ViewModel/MVVM_LoadSlot.h"
 #include "GameFramework/Character.h"
+#include "Character/AuraUnitBase.h"
 
 void AAuraGameModeBase::SaveSlotData(UMVVM_LoadSlot* LoadSlot, int32 SlotIndex)
 {
@@ -229,6 +230,67 @@ void AAuraGameModeBase::PlayerDied(ACharacter* DeadCharacter)
 	if (!IsValid(SaveGame)) return;
 
 	UGameplayStatics::OpenLevel(DeadCharacter, FName(SaveGame->MapAssetName));
+}
+
+// My Additions
+
+void AAuraGameModeBase::PostLogin(APlayerController* NewPlayer)
+{
+	Super::PostLogin(NewPlayer);
+
+	if (HasAuthority() && NewPlayer)
+	{
+		SpawnUnitsForPlayer(NewPlayer);
+
+	}
+}
+
+void AAuraGameModeBase::SpawnUnitsForPlayer(APlayerController* Player)
+{
+	if (!HasAuthority() || !Player) return;
+
+	//May want to use this. For some reason was affecting the below lambda
+	//UWorld* World = GetWorld();
+	//check(World);
+	
+	check(DefaultUnitPawnClass);
+	check(DefaultAIControllerClass);
+
+	if (APawn* PlayerPawn = Player->GetPawn())
+	{
+		FVector PawnLocation = PlayerPawn->GetActorLocation();
+		for (int i = 0; i < 2; i++)
+		{
+			FTimerHandle TimerHandle;
+			GetWorld()->GetTimerManager().SetTimer(TimerHandle, [this, Player, PawnLocation, i]()
+				{
+					FVector SpawnLocation = GetSpawnLocationForPlayer(PawnLocation, i);
+					FActorSpawnParameters SpawnParams;
+					SpawnParams.Owner = Player;
+					SpawnParams.Instigator = nullptr;
+
+					// Corrected SpawnActor call to use the correct type for DefaultUnitPawn
+					AActor* NewUnit = GetWorld()->SpawnActor<AActor>(DefaultUnitPawnClass, SpawnLocation, FRotator::ZeroRotator, SpawnParams);
+					if (NewUnit)
+					{
+						NewUnit->SetOwner(Player);
+
+						AController* AIController = GetWorld()->SpawnActor<AController>(DefaultAIControllerClass);
+						if (AIController)
+						{
+							AIController->Possess(Cast<APawn>(NewUnit));
+						}
+					}
+				}, i * 0.5f, false); // Delay increases with each iteration (e.g., 0.5 seconds per unit)
+		}
+	}
+}
+
+FVector AAuraGameModeBase::GetSpawnLocationForPlayer(FVector PawnLocation, int Index)
+{
+	FVector RandomLocation = FVector(Index * 200, 0.f, 0.f);
+	FVector BaseSpawnLocation = PawnLocation + RandomLocation;// Adjust for formation
+	return BaseSpawnLocation;
 }
 
 void AAuraGameModeBase::BeginPlay()

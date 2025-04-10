@@ -19,6 +19,9 @@
 #include "GameFramework/Character.h"
 #include "Interaction/HighlightInterface.h"
 #include "UI/Widget/DamageTextComponent.h"
+#include "Player/AuraPlayerState.h"
+#include "Character/AuraUnitBase.h"
+
 
 AAuraPlayerController::AAuraPlayerController()
 {
@@ -209,10 +212,22 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 
 void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 {
+
 	if (GetASC() && GetASC()->HasMatchingGameplayTag(FAuraGameplayTags::Get().Player_Block_InputHeld))
 	{
 		return;
 	}
+
+	//if (GetSelectedUnitASC() && !InputTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_1))
+	//{
+	//	GetSelectedUnitASC()->AbilityInputTagHeld(InputTag);
+	//	return;
+	//}
+	/*if (GetPS()->GetSelectedUnit() && !InputTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_1))
+	{
+
+	}*/
+
 	if (!InputTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB))
 	{
 		if (GetASC()) GetASC()->AbilityInputTagHeld(InputTag);
@@ -244,6 +259,28 @@ UAuraAbilitySystemComponent* AAuraPlayerController::GetASC()
 	}
 	return AuraAbilitySystemComponent;
 }
+
+AAuraPlayerState* AAuraPlayerController::GetPS()
+{
+	if (AuraPlayerState == nullptr)
+	{
+		AuraPlayerState
+			= GetPlayerState<AAuraPlayerState>();
+	}
+	return AuraPlayerState;
+}
+
+//UAuraAbilitySystemComponent* AAuraPlayerController::GetSelectedUnitASC()
+//{
+//	if (SelectedUnitASC == nullptr)
+//	{
+//		if (GetPS()->GetSelectedUnit())
+//		{
+//			SelectedUnitASC = Cast<UAuraAbilitySystemComponent>(GetPS()->GetSelectedUnit()->GetAbilitySystemComponent());
+//		}
+//	}
+//	return SelectedUnitASC;
+//}
 
 void AAuraPlayerController::BeginPlay()
 {

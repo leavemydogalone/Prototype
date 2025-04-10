@@ -64,4 +64,10 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void SaveProgress(const FName& CheckpointTag);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)	
+	AActor* GetSelectedUnit() const;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void SetSelectedUnit(AActor* Actor);
 };
