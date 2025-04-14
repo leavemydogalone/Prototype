@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "AbilitySystem/Data/CharacterClassInfo.h"
 #include "Engine/TargetPoint.h"
+#include "Interaction/TeamInterface.h"
 #include "AuraEnemySpawnPoint.generated.h"
 
 class AAuraEnemy;
@@ -12,9 +13,10 @@ class AAuraEnemy;
  * 
  */
 UCLASS()
-class AURA_API AAuraEnemySpawnPoint : public ATargetPoint
+class AURA_API AAuraEnemySpawnPoint : public ATargetPoint, public ITeamInterface
 {
 	GENERATED_BODY()
+
 public:
 
 	UFUNCTION(BlueprintCallable)
@@ -28,4 +30,14 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Enemy Class")
 	ECharacterClass CharacterClass = ECharacterClass::Warrior;
+
+	// Team interface
+	virtual int32 GetTeamID_Implementation() override;
+	virtual void SetTeamID(int32 ID) override { TeamID = ID; }
+	// end Team interface
+
+private:
+
+	UPROPERTY(EditAnywhere)
+	int32 TeamID = 0;
 };

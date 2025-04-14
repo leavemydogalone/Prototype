@@ -16,3 +16,8 @@ void AAuraEnemySpawnPoint::SpawnEnemy()
 	Enemy->FinishSpawning(GetActorTransform());
 	Enemy->SpawnDefaultController();
 }
+
+int32 AAuraEnemySpawnPoint::GetTeamID_Implementation()
+{
+	return TeamID;
+}

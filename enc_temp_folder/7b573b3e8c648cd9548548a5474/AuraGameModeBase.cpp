@@ -263,10 +263,19 @@ void AAuraGameModeBase::SpawnUnitsForPlayer(APlayerController* Player)
 	TArray<AActor*> SpawnPoints;
 	UGameplayStatics::GetAllActorsOfClass(World, SpawnLocationClass, SpawnPoints);
 
+	// Get the spawn points
+	// For player 1, see if there are any spawn points with the teamid of 0
+	// spawn a unit at each spawn point with this id
+
+	// For player 2, see if there are any spawn points with the teamid of 1
+	// spawn a unit at each spawn point with this id
+
+
 	for (AActor* SpawnPoint : SpawnPoints)
 	{
 		if (ITeamInterface::Execute_GetTeamID(SpawnPoint) == TeamID)
 		{
+			//FVector SpawnLocation = GetSpawnLocationForPlayer(PawnLocation, i);
 			FActorSpawnParameters SpawnParams;
 			SpawnParams.Owner = Player;
 			//SpawnParams.Instigator = nullptr;
@@ -290,6 +299,12 @@ void AAuraGameModeBase::SpawnUnitsForPlayer(APlayerController* Player)
 	}
 }
 
+//FVector AAuraGameModeBase::GetSpawnLocationForPlayer(FVector PawnLocation, int Index)
+//{
+//	FVector RandomLocation = FVector(Index * 200, 0.f, 0.f);
+//	FVector BaseSpawnLocation = PawnLocation + RandomLocation;// Adjust for formation
+//	return BaseSpawnLocation;
+//}
 
 void AAuraGameModeBase::BeginPlay()
 {

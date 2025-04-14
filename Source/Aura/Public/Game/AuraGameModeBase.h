@@ -82,6 +82,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Unit Defaults")
 	TSubclassOf<AController> DefaultAIControllerClass;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Unit Defaults")
+	TSubclassOf<AActor> SpawnLocationClass;
+
 private:
 	int32 TeamID = 0;
 };
