@@ -229,6 +229,7 @@ float UAuraAbilitySystemLibrary::GetAttributeValueByGameplayTag(const UObject* W
 				return Pair.Value().GetNumericValue(AS);
 			}
 		}
+	
 	}
 	return 0.f;
 }

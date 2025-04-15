@@ -6,7 +6,12 @@
 #include "AbilitySystemComponent.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Data/CharacterClassInfo.h"
+#include "AuraAttributeSet.h"
 #include "AuraAbilitySystemLibrary.generated.h"
+
+
+template<class T>
+using TStaticFuncPtr = typename TBaseStaticDelegateInstance<T, FDefaultDelegateUserPolicy>::FFuncPtr;
 
 class ULootTiers;
 class ULoadScreenSaveGame;
@@ -62,6 +67,13 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="AuraAbilitySystemLibrary|CharacterClassDefaults", meta = (DefaultToSelf = "WorldContextObject"))
 	static ULootTiers* GetLootTiers(const UObject* WorldContextObject);
+
+	/*
+	 * My Stuff
+	 */
+
+	UFUNCTION(BlueprintPure, Category = "AuraAbilitySystemLibrary|GameplayAttributeAccessor")
+	static float GetAttributeValueByGameplayTag(const UObject* WorldContextObject, FGameplayTag AttributeTag);
 	
 	/*
 	 * Effect Context Getters
