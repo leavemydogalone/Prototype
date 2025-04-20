@@ -71,7 +71,7 @@ public:
 
 	void SpawnUnitsForPlayer(APlayerController* Player);
 
-	FVector GetSpawnLocationForPlayer(FVector PawnLocation, int Index);
+
 
 protected:
 	virtual void BeginPlay() override;
