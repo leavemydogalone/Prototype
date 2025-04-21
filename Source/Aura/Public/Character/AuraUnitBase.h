@@ -6,6 +6,7 @@
 #include "Character/AuraCharacterBase.h"
 #include "Interaction/UnitInterface.h"
 #include "Interaction/TeamInterface.h"
+#include "Interaction/HighlightInterface.h"
 #include "AuraUnitBase.generated.h"
 
 class UBehaviorTree;
@@ -15,7 +16,7 @@ class AAuraAIController;
  * 
  */
 UCLASS()
-class AURA_API AAuraUnitBase : public AAuraCharacterBase, public IUnitInterface
+class AURA_API AAuraUnitBase : public AAuraCharacterBase, public IUnitInterface, public IHighlightInterface
 {
 	GENERATED_BODY()
 	
@@ -24,10 +25,10 @@ public:
 
 	virtual void PossessedBy(AController* NewController) override;
 
-	// Unit interface
-	//virtual void HighlightActor() override;
-	//virtual void UnHighlightActor() override;
-	// end Unit interface
+	/** Highlight Interface */
+	virtual void HighlightActor_Implementation() override;
+	virtual void UnHighlightActor_Implementation() override;
+	/** end Highlight Interface */
 
 	void ReceiveCommand(FGameplayTag InputTag, FHitResult HitResult);
 

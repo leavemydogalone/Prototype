@@ -30,6 +30,9 @@ AAuraUnitBase::AAuraUnitBase()
 	bUseControllerRotationRoll = false;
 	GetCharacterMovement()->bUseControllerDesiredRotation = true;
 
+	GetMesh()->SetCustomDepthStencilValue(CUSTOM_DEPTH_BLUE);
+	GetMesh()->MarkRenderStateDirty();
+
 }
 
 void AAuraUnitBase::PossessedBy(AController* NewController)
@@ -73,4 +76,14 @@ void AAuraUnitBase::InitAbilityActorInfo()
 void AAuraUnitBase::InitializeDefaultAttributes() const
 {
 	UAuraAbilitySystemLibrary::InitializeDefaultAttributes(this, CharacterClass, Level, AbilitySystemComponent);
+}
+
+void AAuraUnitBase::HighlightActor_Implementation()
+{
+	GetMesh()->SetRenderCustomDepth(true);
+}
+
+void AAuraUnitBase::UnHighlightActor_Implementation()
+{
+	GetMesh()->SetRenderCustomDepth(false);
 }
