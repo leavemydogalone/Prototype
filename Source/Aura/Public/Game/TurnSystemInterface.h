@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+#include "AuraTurnPhase.h"
 #include "TurnSystemInterface.generated.h"
 
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnTurnChange, int32 NewTurn);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTurnChangeAssignable, int32, NewTurn);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnTurnPhaseChange, EAuraTurnPhase NewTurnPhase);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTurnPhaseChangeAssignable, EAuraTurnPhase, NewTurnPhase);
 
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI, NotBlueprintable)
@@ -25,11 +26,11 @@ class AURA_API ITurnSystemInterface
 
 
 public:
-	virtual FOnTurnChange& GetOnTurnChangeDelegate() = 0;
+	virtual FOnTurnPhaseChange& GetOnTurnPhaseChangeDelegate() = 0;
 
 	UFUNCTION(BlueprintCallable, Category = "Turn System")
-	virtual int32 GetCurrentTurn() const { return 0; };
+	virtual EAuraTurnPhase GetCurrentTurnPhase() const { return EAuraTurnPhase::Planning; };
 
 	UFUNCTION(BlueprintCallable, Category = "Turn System")
-	virtual void IncrementTurn() {};
+	virtual void AdvanceTurnPhase() {};
 };

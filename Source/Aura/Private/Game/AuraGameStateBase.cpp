@@ -3,6 +3,7 @@
 
 #include "Game/AuraGameStateBase.h"
 #include "Net/UnrealNetwork.h"
+#include "Game/AuraTurnPhase.h"
 #include "Net/Core/PushModel/PushModel.h"
 
 AAuraGameStateBase::AAuraGameStateBase()
@@ -10,17 +11,17 @@ AAuraGameStateBase::AAuraGameStateBase()
 	SetReplicates(true);
 }
 
-void AAuraGameStateBase::IncrementTurn()
+void AAuraGameStateBase::AdvanceTurnPhase()
 {
-	Server_IncrementTurn();
+	Server_AdvanceTurnPhase();
 
 }
 
-void AAuraGameStateBase::Server_IncrementTurn_Implementation()
+void AAuraGameStateBase::Server_AdvanceTurnPhase_Implementation()
 {
-	CurrentTurn++;
-	MARK_PROPERTY_DIRTY_FROM_NAME(AAuraGameStateBase, CurrentTurn, this);
-	OnRep_CurrentTurn();
+	CurrentTurnPhase = EAuraTurnPhase::ActionPhase1;
+	MARK_PROPERTY_DIRTY_FROM_NAME(AAuraGameStateBase, CurrentTurnPhase, this);
+	OnRep_CurrentTurnPhase();
 }
 
 void AAuraGameStateBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -31,5 +32,5 @@ void AAuraGameStateBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 	Params.bIsPushBased = true;
 	Params.Condition = COND_None;
 
-	DOREPLIFETIME_WITH_PARAMS_FAST(AAuraGameStateBase, CurrentTurn, Params);
+	DOREPLIFETIME_WITH_PARAMS_FAST(AAuraGameStateBase, CurrentTurnPhase, Params);
 }

@@ -9,9 +9,8 @@
 UENUM(BlueprintType)
 enum class EAuraTurnPhase : uint8
 {
-    Phase1 UMETA(DisplayName = "Phase 1"),
-    Phase2 UMETA(DisplayName = "Phase 2"),
-    Phase3 UMETA(DisplayName = "Phase 3"),
-    Phase4 UMETA(DisplayName = "Phase 4"),
-    Phase5 UMETA(DisplayName = "Phase 5")
+    Planning UMETA(DisplayName = "Planning"),
+    ActionPhase1 UMETA(DisplayName = "Action Phase 1"),
+    ActionPhase2 UMETA(DisplayName = "Action Phase 2"),
+	EndOfTurn UMETA(DisplayName = "End Of Turn"),
 };
