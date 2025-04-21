@@ -19,7 +19,21 @@ void AAuraGameStateBase::AdvanceTurnPhase()
 
 void AAuraGameStateBase::Server_AdvanceTurnPhase_Implementation()
 {
-	CurrentTurnPhase = EAuraTurnPhase::ActionPhase1;
+    switch (CurrentTurnPhase)
+    {
+    case EAuraTurnPhase::Planning:
+        CurrentTurnPhase = EAuraTurnPhase::ActionPhase1;
+        break;
+    case EAuraTurnPhase::ActionPhase1:
+        CurrentTurnPhase = EAuraTurnPhase::ActionPhase2;
+        break;
+    case EAuraTurnPhase::ActionPhase2:
+        CurrentTurnPhase = EAuraTurnPhase::Planning;
+        break;
+    default:
+        CurrentTurnPhase = EAuraTurnPhase::Planning;
+        break;
+    }
 	MARK_PROPERTY_DIRTY_FROM_NAME(AAuraGameStateBase, CurrentTurnPhase, this);
 	OnRep_CurrentTurnPhase();
 }
