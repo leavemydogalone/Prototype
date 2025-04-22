@@ -26,7 +26,7 @@
 AAuraPlayerController::AAuraPlayerController()
 {
 	bReplicates = true;
-	Spline = CreateDefaultSubobject<USplineComponent>("Spline");
+	//Spline = CreateDefaultSubobject<USplineComponent>("Spline");
 }
 
 void AAuraPlayerController::PlayerTick(float DeltaTime)
@@ -149,6 +149,9 @@ void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 	{
 		return;
 	}
+
+	if (GetASC()) GetASC()->AbilityInputTagPressed(InputTag);
+
 	/*if (InputTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB))
 	{
 		if (IsValid(ThisActor))
@@ -161,7 +164,6 @@ void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 		}
 		bAutoRunning = false;
 	}*/
-	if (GetASC()) GetASC()->AbilityInputTagPressed(InputTag);
 }
 
 void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
@@ -170,13 +172,15 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 	{
 		return;
 	}
+
+	if (GetASC()) GetASC()->AbilityInputTagReleased(InputTag);
+
 	/*if (!InputTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB))
 	{
 		if (GetASC()) GetASC()->AbilityInputTagReleased(InputTag);
 		return;
 	}*/
 
-	if (GetASC()) GetASC()->AbilityInputTagReleased(InputTag);
 
 
 	//if (TargetingStatus != ETargetingStatus::TargetingEnemy && !bShiftKeyDown)
@@ -218,6 +222,7 @@ void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 	{
 		return;
 	}
+	if (GetASC()) GetASC()->AbilityInputTagHeld(InputTag);
 
 	//if (GetSelectedUnitASC() && !InputTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_1))
 	//{
@@ -251,7 +256,6 @@ void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 	//	}
 	//}
 
-	if (GetASC()) GetASC()->AbilityInputTagHeld(InputTag);
 }
 
 UAuraAbilitySystemComponent* AAuraPlayerController::GetASC()

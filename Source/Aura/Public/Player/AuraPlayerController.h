@@ -93,17 +93,17 @@ private:
 	TObjectPtr<UAuraAbilitySystemComponent> SelectedUnitASC;
 	UAuraAbilitySystemComponent* GetSelectedUnitASC();*/
 	
-	FVector CachedDestination = FVector::ZeroVector;
-	float FollowTime = 0.f;
+	//FVector CachedDestination = FVector::ZeroVector;
+	//float FollowTime = 0.f;
 	float ShortPressThreshold = 0.5f;
-	bool bAutoRunning = false;
+	//bool bAutoRunning = false;
 	ETargetingStatus TargetingStatus = ETargetingStatus::NotTargeting;
 
 	UPROPERTY(EditDefaultsOnly)
 	float AutoRunAcceptanceRadius = 50.f;
 
-	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<USplineComponent> Spline;
+	/*UPROPERTY(VisibleAnywhere)
+	TObjectPtr<USplineComponent> Spline;*/
 
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UNiagaraSystem> ClickNiagaraSystem;
