@@ -65,6 +65,54 @@ void AAuraCharacter::PossessedBy(AController* NewController)
 	}*/
 }
 
+void AAuraCharacter::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+
+	// Init ability actor info for the Client
+	InitAbilityActorInfo();
+	//AddCharacterAbilities();
+}
+
+AActor* AAuraCharacter::GetSelectedUnit_Implementation() const
+{
+	const AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
+	check(AuraPlayerState);
+	return AuraPlayerState->GetSelectedUnit();
+}
+
+void AAuraCharacter::SetSelectedUnit_Implementation(AActor* NewUnit)
+{
+	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
+	check(AuraPlayerState);
+	AuraPlayerState->SetSelectedUnit(NewUnit);
+
+}
+
+void AAuraCharacter::InitAbilityActorInfo()
+{
+	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
+	check(AuraPlayerState);
+	AuraPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuraPlayerState, this);
+	Cast<UAuraAbilitySystemComponent>(AuraPlayerState->GetAbilitySystemComponent())->AbilityActorInfoSet();
+	AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent();
+	AttributeSet = AuraPlayerState->GetAttributeSet();
+	//OnAscRegistered.Broadcast(AbilitySystemComponent);
+	//AbilitySystemComponent->RegisterGameplayTagEvent(FAuraGameplayTags::Get().Debuff_Stun, EGameplayTagEventType::NewOrRemoved).AddUObject(this, &AAuraCharacter::StunTagChanged);
+
+	if (AAuraPlayerController* AuraPlayerController = Cast<AAuraPlayerController>(GetController()))
+	{
+		if (AAuraHUD* AuraHUD = Cast<AAuraHUD>(AuraPlayerController->GetHUD()))
+		{
+			AuraHUD->InitOverlay(AuraPlayerController, AuraPlayerState, AbilitySystemComponent, AttributeSet);
+		}
+	}
+
+	InitializeDefaultAttributes();
+
+}
+
+
 void AAuraCharacter::LoadProgress()
 {
 	AAuraGameModeBase* AuraGameMode = Cast<AAuraGameModeBase>(UGameplayStatics::GetGameMode(this));
@@ -98,14 +146,7 @@ void AAuraCharacter::LoadProgress()
 	}
 }
 
-void AAuraCharacter::OnRep_PlayerState()
-{
-	Super::OnRep_PlayerState();
 
-	// Init ability actor info for the Client
-	InitAbilityActorInfo();
-	//AddCharacterAbilities();
-}
 
 void AAuraCharacter::AddToXP_Implementation(int32 InXP)
 {
@@ -269,20 +310,7 @@ void AAuraCharacter::SaveProgress_Implementation(const FName& CheckpointTag)
 	}
 }
 
-AActor* AAuraCharacter::GetSelectedUnit_Implementation() const
-{
-	const AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
-	check(AuraPlayerState);
-	return AuraPlayerState->GetSelectedUnit();
-}
 
-void AAuraCharacter::SetSelectedUnit_Implementation(AActor* NewUnit)
-{
-	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
-	check(AuraPlayerState);
-	AuraPlayerState->SetSelectedUnit(NewUnit);
-	
-}
 
 int32 AAuraCharacter::GetPlayerLevel_Implementation()
 {
@@ -343,25 +371,3 @@ void AAuraCharacter::OnRep_Burned()
 	}
 }
 
-void AAuraCharacter::InitAbilityActorInfo()
-{
-	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
-	check(AuraPlayerState);
-	AuraPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuraPlayerState, this);
-	Cast<UAuraAbilitySystemComponent>(AuraPlayerState->GetAbilitySystemComponent())->AbilityActorInfoSet();
-	AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent();
-	AttributeSet = AuraPlayerState->GetAttributeSet();
-	//OnAscRegistered.Broadcast(AbilitySystemComponent);
-	//AbilitySystemComponent->RegisterGameplayTagEvent(FAuraGameplayTags::Get().Debuff_Stun, EGameplayTagEventType::NewOrRemoved).AddUObject(this, &AAuraCharacter::StunTagChanged);
-
-	if (AAuraPlayerController* AuraPlayerController = Cast<AAuraPlayerController>(GetController()))
-	{
-		if (AAuraHUD* AuraHUD = Cast<AAuraHUD>(AuraPlayerController->GetHUD()))
-		{
-			AuraHUD->InitOverlay(AuraPlayerController, AuraPlayerState, AbilitySystemComponent, AttributeSet);
-		}
-	}
-
-	InitializeDefaultAttributes();
-
-}

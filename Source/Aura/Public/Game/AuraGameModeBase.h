@@ -77,7 +77,10 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Unit Defaults")
-	TSubclassOf<AActor> DefaultUnitPawnClass;
+	TSubclassOf<AActor> PlayerOne_UnitPawnClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Unit Defaults")
+	TSubclassOf<AActor> PlayerTwo_UnitPawnClass;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Unit Defaults")
 	TSubclassOf<AController> DefaultAIControllerClass;
@@ -87,4 +90,6 @@ protected:
 
 private:
 	int32 TeamID = 0;
+
+	TSubclassOf<AActor> GetPawnForPlayer();
 };

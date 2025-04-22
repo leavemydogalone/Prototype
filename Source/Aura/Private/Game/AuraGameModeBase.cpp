@@ -241,7 +241,6 @@ void AAuraGameModeBase::PostLogin(APlayerController* NewPlayer)
 
 	if (HasAuthority() && NewPlayer)
 	{
-
 		ITeamInterface* TeamPlayerState = Cast<ITeamInterface>(NewPlayer->PlayerState);
 		TeamPlayerState->SetTeamID(TeamID);
 		SpawnUnitsForPlayer(NewPlayer);
@@ -256,7 +255,8 @@ void AAuraGameModeBase::SpawnUnitsForPlayer(APlayerController* Player)
 	UWorld* World = GetWorld();
 
 	check(World);
-	check(DefaultUnitPawnClass);
+	check(PlayerOne_UnitPawnClass);
+	check(PlayerTwo_UnitPawnClass);
 	check(DefaultAIControllerClass);
 	check(SpawnLocationClass);
 
@@ -272,7 +272,7 @@ void AAuraGameModeBase::SpawnUnitsForPlayer(APlayerController* Player)
 			//SpawnParams.Instigator = nullptr;
 			FVector SpawnLocation = SpawnPoint->GetActorLocation();
 
-			AActor* NewUnit = World->SpawnActor<AActor>(DefaultUnitPawnClass, SpawnLocation, FRotator::ZeroRotator, SpawnParams);
+			AActor* NewUnit = World->SpawnActor<AActor>(GetPawnForPlayer(), SpawnLocation, FRotator::ZeroRotator, SpawnParams);
 			if (NewUnit)
 			{
 				NewUnit->SetOwner(Player);
@@ -295,4 +295,16 @@ void AAuraGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
 	Maps.Add(DefaultMapName, DefaultMap);
+}
+
+TSubclassOf<AActor> AAuraGameModeBase::GetPawnForPlayer()
+{
+	if (TeamID == 0)
+	{
+		return PlayerOne_UnitPawnClass;
+	}
+	else
+	{
+		return PlayerTwo_UnitPawnClass;
+	}
 }
