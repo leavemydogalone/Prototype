@@ -269,22 +269,43 @@ void AAuraGameModeBase::SpawnUnitsForPlayer(APlayerController* Player)
 		{
 			FActorSpawnParameters SpawnParams;
 			SpawnParams.Owner = Player;
-			//SpawnParams.Instigator = nullptr;
 			FVector SpawnLocation = SpawnPoint->GetActorLocation();
 
-			AActor* NewUnit = World->SpawnActor<AActor>(GetPawnForPlayer(), SpawnLocation, FRotator::ZeroRotator, SpawnParams);
+			FTransform SpawnTransform = SpawnPoint->GetTransform();
+
+			AActor* NewUnit = World->SpawnActorDeferred<AActor>(
+				GetPawnForPlayer(),
+				SpawnTransform,
+				Player,
+				nullptr,
+				ESpawnActorCollisionHandlingMethod::AlwaysSpawn
+			);
+
 			if (NewUnit)
 			{
-				NewUnit->SetOwner(Player);
-
 				AController* AIController = World->SpawnActor<AController>(DefaultAIControllerClass);
+			
+				NewUnit->SetReplicates(true);
+				NewUnit->SetOwner(Player);
+				ITeamInterface* TeamUnit = Cast<ITeamInterface>(NewUnit);
+				TeamUnit->SetTeamID(TeamID);
+
+				NewUnit->FinishSpawning(SpawnTransform);
+
 				if (AIController)
 				{
 					AIController->Possess(Cast<APawn>(NewUnit));
 				}
+				// This stuff might not actually do anything, and am getting an error for the aicontroller part.
+				// Unit set to Sim Proxy after possession by AI
+				if (Player->GetRemoteRole() == ROLE_AutonomousProxy)
+				{
+					NewUnit->SetAutonomousProxy(true);
+					AIController->SetAutonomousProxy(true);
+				}
 
-				ITeamInterface* TeamUnit = Cast<ITeamInterface>(NewUnit);
-				TeamUnit->SetTeamID(TeamID);
+				NewUnit->SetOwner(Player);
+
 			}
 		}
 	}

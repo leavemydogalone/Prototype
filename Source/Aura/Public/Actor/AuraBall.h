@@ -44,10 +44,10 @@ protected:
 
 	void AddCharacterAbilities();
 
-	virtual void InitializeDefaultAttributes() const;
+	//virtual void InitializeDefaultAttributes() const;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Attributes")
-	TSubclassOf<UGameplayEffect> DefaultBallAttributes;
+	//UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Attributes")
+	//TSubclassOf<UGameplayEffect> DefaultBallAttributes;
 
 private:
 

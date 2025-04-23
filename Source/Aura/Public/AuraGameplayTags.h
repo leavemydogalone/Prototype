@@ -17,6 +17,10 @@ public:
     static const FAuraGameplayTags& Get() { return GameplayTags;}
     static void InitializeNativeGameplayTags();
 
+	FGameplayTag Phase_Planning;
+	FGameplayTag Phase_ActionPhase1;
+	FGameplayTag Phase_ActionPhase2;
+
 	FGameplayTag Attributes_Primary_Strength;
 	FGameplayTag Attributes_Primary_Intelligence;
 	FGameplayTag Attributes_Primary_Resilience;

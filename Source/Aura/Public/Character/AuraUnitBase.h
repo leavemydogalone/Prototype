@@ -23,7 +23,7 @@ class AURA_API AAuraUnitBase : public AAuraCharacterBase, public IUnitInterface,
 public:
 	AAuraUnitBase();
 
-	virtual void PossessedBy(AController* NewController) override;
+	//virtual void PossessedBy(AController* NewController) override;
 
 	/** Highlight Interface */
 	virtual void HighlightActor_Implementation() override;
@@ -49,7 +49,7 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "AI")
 	TObjectPtr<UBehaviorTree> BehaviorTree;
 
-	UPROPERTY()
-	TObjectPtr<AAuraAIController> AuraAIController;
+	//UPROPERTY()
+	//TObjectPtr<AAuraAIController> AuraAIController;
 
 };

@@ -13,6 +13,8 @@
 AAuraBall::AAuraBall()
 {
 	PrimaryActorTick.bCanEverTick = true;
+	bReplicates = true;
+
 	AbilitySystemComponent = CreateDefaultSubobject<UAuraAbilitySystemComponent>("AbilitySystemComponent");
 	AbilitySystemComponent->SetIsReplicated(true);
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
@@ -20,6 +22,8 @@ AAuraBall::AAuraBall()
 	AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>("AttributeSet");
 
 	const FAuraGameplayTags& GameplayTags = FAuraGameplayTags::Get();
+
+	SetRootComponent(CreateDefaultSubobject<USceneComponent>("SceneRoot"));
 
 	BallMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BallMesh"));
 	BallMesh->SetupAttachment(RootComponent);
@@ -113,7 +117,7 @@ void AAuraBall::AddCharacterAbilities()
 	AuraASC->AddCharacterPassiveAbilities(StartupPassiveAbilities);
 }
 
-void AAuraBall::InitializeDefaultAttributes() const
-{
-	ApplyEffectToSelf(DefaultBallAttributes, 1.f);
-}
+//void AAuraBall::InitializeDefaultAttributes() const
+//{
+//	ApplyEffectToSelf(DefaultBallAttributes, 1.f);
+//}

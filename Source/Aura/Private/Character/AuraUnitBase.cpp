@@ -35,13 +35,13 @@ AAuraUnitBase::AAuraUnitBase()
 
 }
 
-void AAuraUnitBase::PossessedBy(AController* NewController)
-{
-	Super::PossessedBy(NewController);
-
-	if (!HasAuthority()) return;
-	AuraAIController = Cast<AAuraAIController>(NewController);
-}
+//void AAuraUnitBase::PossessedBy(AController* NewController)
+//{
+//	Super::PossessedBy(NewController);
+//
+//	if (!HasAuthority()) return;
+//	AuraAIController = Cast<AAuraAIController>(NewController);
+//}
 
 void AAuraUnitBase::ReceiveCommand(FGameplayTag InputTag, FHitResult HitResult)
 {
