@@ -20,13 +20,15 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Turn System")
 	TScriptInterface <ITurnSystemInterface> GetTurnSystemInterface();
 
+	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
+
 	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Turn System")
 	TScriptInterface<ITurnSystemInterface> TurnSystemInterface;
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Turn System")
-	FGameplayTag OnTurnPhaseChangeReceived_BP(FGameplayTag TurnPhaseTag);
+	void ActivateUnitAbility();
 
 	UFUNCTION()
 	void HandlePhaseEnumFromDelegate(EAuraTurnPhase TurnPhase);
