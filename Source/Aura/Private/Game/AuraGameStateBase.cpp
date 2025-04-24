@@ -4,11 +4,18 @@
 #include "Game/AuraGameStateBase.h"
 #include "Net/UnrealNetwork.h"
 #include "Game/AuraTurnPhase.h"
+#include "AuraGameplayTags.h"
 #include "Net/Core/PushModel/PushModel.h"
 
 AAuraGameStateBase::AAuraGameStateBase()
 {
 	SetReplicates(true);
+    const FAuraGameplayTags& GameplayTags = FAuraGameplayTags::Get();
+
+	TurnPhaseToGameplayTagMap.Add(EAuraTurnPhase::Planning, GameplayTags.Phase_Planning);
+	TurnPhaseToGameplayTagMap.Add(EAuraTurnPhase::Action_1, GameplayTags.Phase_Action_1);
+	TurnPhaseToGameplayTagMap.Add(EAuraTurnPhase::Action_2, GameplayTags.Phase_Action_2);
+
 }
 
 void AAuraGameStateBase::AdvanceTurnPhase()
@@ -17,17 +24,22 @@ void AAuraGameStateBase::AdvanceTurnPhase()
 
 }
 
+FGameplayTag AAuraGameStateBase::GetGameplayTagForTurnPhase(EAuraTurnPhase& TurnPhase) const
+{
+	return TurnPhaseToGameplayTagMap.Contains(TurnPhase) ? TurnPhaseToGameplayTagMap[TurnPhase] : FGameplayTag();
+}
+
 void AAuraGameStateBase::Server_AdvanceTurnPhase_Implementation()
 {
     switch (CurrentTurnPhase)
     {
     case EAuraTurnPhase::Planning:
-        CurrentTurnPhase = EAuraTurnPhase::ActionPhase1;
+        CurrentTurnPhase = EAuraTurnPhase::Action_1;
         break;
-    case EAuraTurnPhase::ActionPhase1:
-        CurrentTurnPhase = EAuraTurnPhase::ActionPhase2;
+    case EAuraTurnPhase::Action_1:
+        CurrentTurnPhase = EAuraTurnPhase::Action_2;
         break;
-    case EAuraTurnPhase::ActionPhase2:
+    case EAuraTurnPhase::Action_2:
         CurrentTurnPhase = EAuraTurnPhase::Planning;
         break;
     default:

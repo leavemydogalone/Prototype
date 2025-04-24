@@ -18,8 +18,8 @@ public:
     static void InitializeNativeGameplayTags();
 
 	FGameplayTag Phase_Planning;
-	FGameplayTag Phase_ActionPhase1;
-	FGameplayTag Phase_ActionPhase2;
+	FGameplayTag Phase_Action_1;
+	FGameplayTag Phase_Action_2;
 
 	FGameplayTag Attributes_Primary_Strength;
 	FGameplayTag Attributes_Primary_Intelligence;

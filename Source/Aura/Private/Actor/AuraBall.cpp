@@ -58,7 +58,7 @@ void AAuraBall::HandleTurnPhaseChange(EAuraTurnPhase NewTurnPhase)
 	case EAuraTurnPhase::Planning:
 		FreezeBall();
 		break;
-	case EAuraTurnPhase::ActionPhase1:
+	case EAuraTurnPhase::Action_1:
 		UnFreezeBall();
 		break;
 	default:

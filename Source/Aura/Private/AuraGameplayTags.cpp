@@ -9,6 +9,24 @@ FAuraGameplayTags FAuraGameplayTags::GameplayTags;
 void FAuraGameplayTags::InitializeNativeGameplayTags()
 {
 	/*
+	 * Phases
+	 */
+	GameplayTags.Phase_Planning = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Phase.Planning"),
+		FString("Planning Phase")
+	);
+	GameplayTags.Phase_Action_1 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Phase.Action.1"),
+		FString("Action Phase 1")
+	);
+	GameplayTags.Phase_Action_2 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Phase.Action.2"),
+		FString("Action Phase 2")
+	);
+
+
+
+	/*
 	 * Primary Attributes
 	 */
 	GameplayTags.Attributes_Primary_Strength = UGameplayTagsManager::Get().AddNativeGameplayTag(

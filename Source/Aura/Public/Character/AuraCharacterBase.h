@@ -133,6 +133,8 @@ protected:
 
 	void AddCharacterAbilities();
 
+	void AddUnitAbilities();
+
 	/* Dissolve Effects */
 
 	void Dissolve();

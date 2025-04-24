@@ -30,6 +30,8 @@ public:
 	UFUNCTION(Server, Reliable)
 	virtual void Server_AdvanceTurnPhase();
 
+	virtual FGameplayTag GetGameplayTagForTurnPhase(EAuraTurnPhase& TurnPhase) const override;
+
 protected:
 
 	FOnTurnPhaseChange OnTurnPhaseChange;
@@ -49,4 +51,6 @@ protected:
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
+private:
+	TMap<EAuraTurnPhase, FGameplayTag> TurnPhaseToGameplayTagMap;
 };
