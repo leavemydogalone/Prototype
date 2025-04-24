@@ -52,6 +52,7 @@ public:
 	FGameplayTag Event_Unit_RMB;
 	FGameplayTag Event_Unit_Input1;
 	FGameplayTag Event_Unit_Input2;
+	FGameplayTag Event_Unit_Confirm;
 
 	FGameplayTag Damage;
 	FGameplayTag Damage_Fire;
@@ -117,6 +118,7 @@ public:
 
 	FGameplayTag Effects_HitReact;
 
+	FGameplayTag Player_Block_Select;
 	FGameplayTag Player_Block_InputPressed;
 	FGameplayTag Player_Block_InputHeld;
 	FGameplayTag Player_Block_InputReleased;

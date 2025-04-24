@@ -8,6 +8,22 @@
 #include "GameplayEffectTypes.h"
 #include "GameFramework/GameState.h"
 
+
+void UUnitGameplayAbilityBase::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
+{
+	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
+	BindToTurnPhaseDelegate();
+	StartAbilityPreview();
+	//Wait for confirmation event
+}
+
+void UUnitGameplayAbilityBase::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
+{
+	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
+	UnbindFromTurnPhaseDelegate();
+}
+
+
 TScriptInterface<ITurnSystemInterface> UUnitGameplayAbilityBase::GetTurnSystemInterface()
 {
 	if (!TurnSystemInterface.GetObject())
@@ -21,18 +37,6 @@ TScriptInterface<ITurnSystemInterface> UUnitGameplayAbilityBase::GetTurnSystemIn
 	}
 
 	return TurnSystemInterface;
-}
-
-void UUnitGameplayAbilityBase::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
-{
-	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
-	BindToTurnPhaseDelegate();
-}
-
-void UUnitGameplayAbilityBase::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
-{
-	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
-	UnbindFromTurnPhaseDelegate();
 }
 
 void UUnitGameplayAbilityBase::HandlePhaseEnumFromDelegate(EAuraTurnPhase TurnPhase)

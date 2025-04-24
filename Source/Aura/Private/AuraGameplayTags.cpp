@@ -175,6 +175,11 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 		FString("Unit Event for Input 2")
 	);
 
+	GameplayTags.Event_Unit_Confirm = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.Unit.Confirm"),
+		FString("Unit Event for Confirm")
+	);
+
 
 	/*
 	 * Damage Types
@@ -451,6 +456,10 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 	/*
 	 * Player Tags
 	 */
+	GameplayTags.Player_Block_Select = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Player.Block.Select"),
+		FString("Block Select ability for player")
+	);
 
 	GameplayTags.Player_Block_CursorTrace = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Player.Block.CursorTrace"),

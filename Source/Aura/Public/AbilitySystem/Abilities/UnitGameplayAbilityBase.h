@@ -17,9 +17,6 @@ class AURA_API UUnitGameplayAbilityBase : public UAuraGameplayAbility
 	
 protected:
 
-	UFUNCTION(BlueprintCallable, Category = "Turn System")
-	TScriptInterface <ITurnSystemInterface> GetTurnSystemInterface();
-
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 
 	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
@@ -33,9 +30,18 @@ protected:
 	UFUNCTION()
 	void HandlePhaseEnumFromDelegate(EAuraTurnPhase TurnPhase);
 
-	UFUNCTION(BlueprintCallable, Category = "Turn System")
-	void BindToTurnPhaseDelegate();
+	UFUNCTION(BlueprintImplementableEvent, Category = "Ability Steps")
+	void StartAbilityPreview();
+
+	//UFUNCTION()
+	//void OnTickPreview(float DeltaTime);
+
 
 private:
+
+	TScriptInterface <ITurnSystemInterface> GetTurnSystemInterface();
+
+	void BindToTurnPhaseDelegate();
+
 	void UnbindFromTurnPhaseDelegate();
 };
