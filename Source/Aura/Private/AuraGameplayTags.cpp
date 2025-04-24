@@ -180,6 +180,11 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 		FString("Unit Event for Confirm")
 	);
 
+	GameplayTags.Event_Unit_Cancel = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.Unit.Cancel"),
+		FString("Unit Event for Cancel")
+	);
+
 
 	/*
 	 * Damage Types

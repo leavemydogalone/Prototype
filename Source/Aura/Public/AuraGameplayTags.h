@@ -53,6 +53,7 @@ public:
 	FGameplayTag Event_Unit_Input1;
 	FGameplayTag Event_Unit_Input2;
 	FGameplayTag Event_Unit_Confirm;
+	FGameplayTag Event_Unit_Cancel;
 
 	FGameplayTag Damage;
 	FGameplayTag Damage_Fire;
