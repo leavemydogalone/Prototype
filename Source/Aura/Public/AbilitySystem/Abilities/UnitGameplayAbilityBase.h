@@ -30,7 +30,7 @@ protected:
 	UFUNCTION()
 	void HandlePhaseEnumFromDelegate(EAuraTurnPhase TurnPhase);
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "Ability Steps")
+	UFUNCTION(Client, BlueprintImplementableEvent, Category = "Ability Steps")
 	void StartAbilityPreview();
 
 	//UFUNCTION()
