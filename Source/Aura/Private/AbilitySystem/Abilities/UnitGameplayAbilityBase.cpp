@@ -13,7 +13,7 @@ void UUnitGameplayAbilityBase::ActivateAbility(const FGameplayAbilitySpecHandle 
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 	BindToTurnPhaseDelegate();
-	StartAbilityPreview();
+	//StartAbilityPreview();
 	//Wait for confirmation event
 }
 
@@ -53,6 +53,11 @@ void UUnitGameplayAbilityBase::HandlePhaseEnumFromDelegate(EAuraTurnPhase TurnPh
 	
 }
 
+void UUnitGameplayAbilityBase::HandleAbilityPreview(FGameplayTag AbilityTag, FVector TargetLocation)
+{
+	GetUnitInterface()->ShowAbilityPreview(AbilityTag, TargetLocation);
+}
+
 void UUnitGameplayAbilityBase::BindToTurnPhaseDelegate()
 {
 	GetTurnSystemInterface()->GetOnTurnPhaseChangeDelegate().AddUObject(this, &UUnitGameplayAbilityBase::HandlePhaseEnumFromDelegate);
@@ -60,4 +65,19 @@ void UUnitGameplayAbilityBase::BindToTurnPhaseDelegate()
 void UUnitGameplayAbilityBase::UnbindFromTurnPhaseDelegate()
 {
 	GetTurnSystemInterface()->GetOnTurnPhaseChangeDelegate().RemoveAll(this);
+}
+
+TScriptInterface<IUnitInterface> UUnitGameplayAbilityBase::GetUnitInterface()
+{
+	if (!UnitInterface.GetObject())
+	{
+		AGameStateBase* GameState = GetWorld()->GetGameState();
+		if (GameState && GameState->Implements<UUnitInterface>())
+		{
+			UnitInterface.SetObject(GameState);
+			UnitInterface.SetInterface(Cast<IUnitInterface>(GameState));
+		}
+	}
+
+	return UnitInterface;
 }

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "AbilitySystem/Abilities/AuraGameplayAbility.h"
 #include "Game/TurnSystemInterface.h"
+#include "Interaction/UnitInterface.h"
 #include "UnitGameplayAbilityBase.generated.h"
 
 /**
@@ -30,7 +31,10 @@ protected:
 	UFUNCTION()
 	void HandlePhaseEnumFromDelegate(EAuraTurnPhase TurnPhase);
 
-	UFUNCTION(Client, BlueprintImplementableEvent, Category = "Ability Steps")
+	UFUNCTION(BlueprintCallable, Category = "Ability Steps")
+	void HandleAbilityPreview(FGameplayTag AbilityTag, FVector TargetLocation);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Ability Steps")
 	void StartAbilityPreview();
 
 	//UFUNCTION()
@@ -39,9 +43,14 @@ protected:
 
 private:
 
-	TScriptInterface <ITurnSystemInterface> GetTurnSystemInterface();
+	TScriptInterface<ITurnSystemInterface> GetTurnSystemInterface();
 
 	void BindToTurnPhaseDelegate();
 
 	void UnbindFromTurnPhaseDelegate();
+
+	TScriptInterface<IUnitInterface> GetUnitInterface();
+
+	UPROPERTY()
+	TScriptInterface<IUnitInterface> UnitInterface;
 };

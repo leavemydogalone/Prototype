@@ -11,6 +11,7 @@
 
 class UBehaviorTree;
 class AAuraAIController;
+struct FGameplayTag;
 
 /**
  * 
@@ -30,7 +31,10 @@ public:
 	virtual void UnHighlightActor_Implementation() override;
 	/** end Highlight Interface */
 
-	void ReceiveCommand(FGameplayTag InputTag, FHitResult HitResult);
+	virtual void ShowAbilityPreview_Implementation(FGameplayTag AbilityTag, FVector TargetLocation) override;
+
+	UFUNCTION(Client, Reliable)
+	virtual void Client_ShowAbilityPreview(FGameplayTag AbilityTag, FVector TargetLocation);
 
 protected:
 

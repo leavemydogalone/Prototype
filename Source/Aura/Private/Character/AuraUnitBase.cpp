@@ -13,6 +13,7 @@
 #include "AI/AuraAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "BehaviorTree/BehaviorTree.h"
+#include "Kismet/GameplayStatics.h"
 #include "Aura/Aura.h"
 
 AAuraUnitBase::AAuraUnitBase()
@@ -42,11 +43,6 @@ AAuraUnitBase::AAuraUnitBase()
 //	if (!HasAuthority()) return;
 //	AuraAIController = Cast<AAuraAIController>(NewController);
 //}
-
-void AAuraUnitBase::ReceiveCommand(FGameplayTag InputTag, FHitResult HitResult)
-{
-	UE_LOG(LogTemp, Log, TEXT("Received command at location: %s"), *HitResult.ImpactPoint.ToString());
-}
 
 void AAuraUnitBase::BeginPlay()
 {
@@ -86,4 +82,24 @@ void AAuraUnitBase::HighlightActor_Implementation()
 void AAuraUnitBase::UnHighlightActor_Implementation()
 {
 	GetMesh()->SetRenderCustomDepth(false);
+}
+
+void AAuraUnitBase::ShowAbilityPreview_Implementation(FGameplayTag AbilityTag, FVector TargetLocation)
+{
+	Client_ShowAbilityPreview(AbilityTag, TargetLocation);
+}
+
+void AAuraUnitBase::Client_ShowAbilityPreview_Implementation(FGameplayTag AbilityTag, FVector TargetLocation)
+{
+    // Draw a debug sphere at the target location
+    if (GEngine)
+    {
+        const float SphereRadius = 100.0f; // Adjust the radius as needed
+        const FColor SphereColor = FColor::Red; // Adjust the color as needed
+        const float SphereLifetime = 5.0f; // Duration the sphere will be visible
+        const uint8 DepthPriority = 0; // Depth priority for rendering
+
+        GEngine->AddOnScreenDebugMessage(-1, SphereLifetime, FColor::Green, TEXT("Ability Preview: Drawing Debug Sphere"));
+    }
+
 }
