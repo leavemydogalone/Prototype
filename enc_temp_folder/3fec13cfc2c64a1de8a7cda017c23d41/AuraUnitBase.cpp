@@ -88,7 +88,7 @@ void AAuraUnitBase::ShowAbilityPreview(FGameplayTag AbilityTag, FVector TargetLo
 {
 	if (AController* OwnerController = Cast<AController>(GetOwner())) {
 		APlayerController* PC = Cast<APlayerController>(GetWorld()->GetFirstPlayerController());
-		if (PC)
+		if (PC && PC->IsLocalController())
 		{
 			float MouseX, MouseY;
 			if (PC->GetMousePosition(MouseX, MouseY))
