@@ -55,7 +55,7 @@ void UUnitGameplayAbilityBase::HandlePhaseEnumFromDelegate(EAuraTurnPhase TurnPh
 
 void UUnitGameplayAbilityBase::HandleAbilityPreview(FGameplayTag AbilityTag, FVector TargetLocation)
 {
-	GetUnitInterface()->ShowAbilityPreview(AbilityTag, TargetLocation);
+		GetUnitInterface()->ShowAbilityPreview(AbilityTag, TargetLocation);
 }
 
 void UUnitGameplayAbilityBase::BindToTurnPhaseDelegate()
@@ -71,11 +71,10 @@ TScriptInterface<IUnitInterface> UUnitGameplayAbilityBase::GetUnitInterface()
 {
 	if (!UnitInterface.GetObject())
 	{
-		AGameStateBase* GameState = GetWorld()->GetGameState();
-		if (GameState && GameState->Implements<UUnitInterface>())
+		if (GetAvatarActorFromActorInfo()->Implements<UUnitInterface>())
 		{
-			UnitInterface.SetObject(GameState);
-			UnitInterface.SetInterface(Cast<IUnitInterface>(GameState));
+			UnitInterface.SetObject(GetAvatarActorFromActorInfo());
+			UnitInterface.SetInterface(Cast<IUnitInterface>(GetAvatarActorFromActorInfo()));
 		}
 	}
 

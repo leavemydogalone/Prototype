@@ -31,7 +31,7 @@ public:
 	virtual void UnHighlightActor_Implementation() override;
 	/** end Highlight Interface */
 
-	virtual void ShowAbilityPreview_Implementation(FGameplayTag AbilityTag, FVector TargetLocation) override;
+	virtual void ShowAbilityPreview(FGameplayTag AbilityTag, FVector TargetLocation) override;
 
 	UFUNCTION(Client, Reliable)
 	virtual void Client_ShowAbilityPreview(FGameplayTag AbilityTag, FVector TargetLocation);
