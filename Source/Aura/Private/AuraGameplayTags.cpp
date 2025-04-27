@@ -153,8 +153,9 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 		);
 
 	/*
-	 * Unit Event Input Types
+	 * Unit Event Types
 	 */
+
 	GameplayTags.Event_Unit_LMB = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Event.Unit.LMB"),
 		FString("Unit Event for Left Mouse Button")
@@ -185,6 +186,14 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 		FString("Unit Event for Cancel")
 	);
 
+	/*
+	 * Player Event Types
+	 */
+
+	GameplayTags.Event_Player_ShowAbilityPreview = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.Player.ShowAbilityPreview"),
+		FString("Player Event for showing ability preview")
+	);
 
 	/*
 	 * Damage Types
@@ -400,6 +409,15 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 		FName("Abilities.Type.Passive"),
 		FString("Type Passive")
 		);
+
+	/*
+	* Unit Abilities
+	*/
+
+	GameplayTags.Abilities_Unit_Move = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.Unit.Move"),
+		FString("Unit Move Ability")
+	);
 
 	/*
 	* Cooldown

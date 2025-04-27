@@ -55,6 +55,8 @@ public:
 	FGameplayTag Event_Unit_Confirm;
 	FGameplayTag Event_Unit_Cancel;
 
+	FGameplayTag Event_Player_ShowAbilityPreview;
+
 	FGameplayTag Damage;
 	FGameplayTag Damage_Fire;
 	FGameplayTag Damage_Lightning;
@@ -97,10 +99,11 @@ public:
 	FGameplayTag Abilities_Lightning_Electrocute;
 	FGameplayTag Abilities_Arcane_ArcaneShards;
 
-
 	FGameplayTag Abilities_Passive_HaloOfProtection;
 	FGameplayTag Abilities_Passive_LifeSiphon;
 	FGameplayTag Abilities_Passive_ManaSiphon;
+
+	FGameplayTag Abilities_Unit_Move;
 
 	FGameplayTag Cooldown_Fire_FireBolt;
 

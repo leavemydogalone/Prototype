@@ -87,34 +87,7 @@ void AAuraUnitBase::UnHighlightActor_Implementation()
 void AAuraUnitBase::ShowAbilityPreview(FGameplayTag AbilityTag, FVector TargetLocation)
 {
 	if (AController* OwnerController = Cast<AController>(GetOwner())) {
-		APlayerController* PC = Cast<APlayerController>(GetWorld()->GetFirstPlayerController());
-		if (PC)
-		{
-			float MouseX, MouseY;
-			if (PC->GetMousePosition(MouseX, MouseY))
-			{
-				FVector WorldLocation, WorldDirection;
-				if (PC->DeprojectScreenPositionToWorld(MouseX, MouseY, WorldLocation, WorldDirection))
-				{
-					// Now you can use WorldLocation and WorldDirection
-					// For example, do a line trace to find what the mouse is pointing at
-					FVector TraceStart = WorldLocation;
-					FVector TraceEnd = TraceStart + WorldDirection * 10000.f;
-
-					FHitResult HitResult;
-					FCollisionQueryParams Params;
-					Params.bTraceComplex = true;
-					Params.AddIgnoredActor(this);
-
-					if (GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_Visibility, Params))
-					{
-						FVector HitLocation = HitResult.Location;
-						Client_ShowAbilityPreview_Implementation(AbilityTag, HitLocation);
-						UE_LOG(LogTemp, Log, TEXT("Mouse is pointing at: %s"), *HitLocation.ToString());
-					}
-				}
-			}
-		}
+		Client_ShowAbilityPreview_Implementation(AbilityTag, TargetLocation);
 	}
 }
 
