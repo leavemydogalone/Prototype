@@ -72,6 +72,7 @@ void AAuraCharacter::OnRep_PlayerState()
 	// Init ability actor info for the Client
 	InitAbilityActorInfo();
 	//AddCharacterAbilities();
+	BindPCToPlayerStateDelegates();
 }
 
 AActor* AAuraCharacter::GetSelectedUnit_Implementation() const
@@ -87,6 +88,44 @@ void AAuraCharacter::SetSelectedUnit_Implementation(AActor* NewUnit)
 	check(AuraPlayerState);
 	AuraPlayerState->SetSelectedUnit(NewUnit);
 
+}
+
+void AAuraCharacter::ShowAbilityPreview_Implementation(const FGameplayTag& AbilityTag, AActor* Unit, const int32 AbilitySize, const int32 AbilityRange)
+{
+	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
+	UAbilityInfo* AbilityInfo = UAuraAbilitySystemLibrary::GetAbilityInfo(this);
+	FAuraAbilityInfo Info = AbilityInfo->FindAbilityInfoForTag(AbilityTag);
+
+	if (AAuraPlayerController* AuraPlayerController = Cast<AAuraPlayerController>(GetController()))
+	{
+		AuraPlayerController->ShowAbilityPreview();
+		AuraPlayerController->bShowMouseCursor = false;
+	}
+
+}
+
+void AAuraCharacter::CancelAbilityPreview_Implementation()
+{
+	if (AAuraPlayerController* AuraPlayerController = Cast<AAuraPlayerController>(GetController()))
+	{
+		AuraPlayerController->HideAbilityPreview();
+		AuraPlayerController->bShowMouseCursor = true;
+	}
+}
+
+void AAuraCharacter::AddAbilityToStoredAbilities_Implementation(FGameplayTag& AbilityTag, AActor* Unit, int32 AbilitySize, FVector TargetLocation)
+{
+	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
+	UAbilityInfo* AbilityInfo = UAuraAbilitySystemLibrary::GetAbilityInfo(this);
+	FAuraAbilityInfo Info = AbilityInfo->FindAbilityInfoForTag(AbilityTag);
+	AuraPlayerState->AddAbilityToStoredAbilities(AbilityTag, Unit, AbilitySize, TargetLocation, Info.AbilityPreviewDecal);
+}
+
+void AAuraCharacter::RemoveLastStoredAbility_Implementation()
+{
+	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
+	check(AuraPlayerState);
+	AuraPlayerState->RemoveLastStoredAbility();
 }
 
 void AAuraCharacter::InitAbilityActorInfo()
@@ -109,6 +148,15 @@ void AAuraCharacter::InitAbilityActorInfo()
 	}
 
 	InitializeDefaultAttributes();
+
+}
+
+void AAuraCharacter::BindPCToPlayerStateDelegates()
+{
+	if (AAuraPlayerController* AuraPlayerController = Cast<AAuraPlayerController>(GetController()))
+	{
+		AuraPlayerController->BindToStoredAbilitiesDelegate();
+	}
 
 }
 

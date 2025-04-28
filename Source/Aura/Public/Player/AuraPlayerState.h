@@ -6,6 +6,7 @@
 #include "AbilitySystemInterface.h"
 #include "GameFramework/PlayerState.h"
 #include "Interaction/TeamInterface.h"
+#include "AuraGameplayTags.h"
 #include "AuraPlayerState.generated.h"
 
 
@@ -13,12 +14,25 @@ class UAbilitySystemComponent;
 class UAttributeSet;
 class ULevelUpInfo;
 struct FGameplayAbilityTargetDataHandle;
-struct FGameplayTag;
 class AAuraUnitBase;
 class IUnitInterface;
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnPlayerStatChanged, int32 /*StatValue*/)
 DECLARE_MULTICAST_DELEGATE_TwoParams(FOnLevelChanged, int32 /*StatValue*/, bool /*bLevelUp*/)
+
+USTRUCT()
+struct FStoredAbilityInfo
+{
+	GENERATED_BODY()
+
+	FGameplayTag AbilityTag;
+	TObjectPtr<AActor> Unit;
+	int32 AbilitySize = 1;
+	FVector TargetLocation;
+	TObjectPtr<UDecalComponent> Decal;
+};
+
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnPlayerStoredAbilitiesArrayChanged, TArray<FStoredAbilityInfo>&)
 
 /**
  * 
@@ -40,6 +54,7 @@ public:
 	FOnLevelChanged OnLevelChangedDelegate;
 	FOnPlayerStatChanged OnAttributePointsChangedDelegate;
 	FOnPlayerStatChanged OnSpellPointsChangedDelegate;
+	FOnPlayerStoredAbilitiesArrayChanged OnStoredAbilitiesArrayChangedDelegate;
 
 	FORCEINLINE int32 GetPlayerLevel() const { return Level; }
 	FORCEINLINE int32 GetXP() const { return XP; }
@@ -65,6 +80,9 @@ public:
 	// Team interface
 	virtual int32 GetTeamID_Implementation() override;
 	virtual void SetTeamID(int32 ID) override { TeamID = ID; }
+
+	void AddAbilityToStoredAbilities(FGameplayTag& AbilityTag, AActor* Unit, int32 AbilitySize, FVector TargetLocation, UDecalComponent* Decal);
+	void RemoveLastStoredAbility();
 
 protected:
 	
@@ -97,6 +115,9 @@ private:
 	UPROPERTY(VisibleAnywhere, ReplicatedUsing=OnRep_TeamID)
 	int32 TeamID = -1;
 
+	UPROPERTY(VisibleAnywhere, ReplicatedUsing = OnRep_StoredAbilities)
+	TArray<FStoredAbilityInfo> StoredAbilities;
+
 	UFUNCTION()
 	void OnRep_Level(int32 OldLevel);
 
@@ -111,4 +132,7 @@ private:
 
 	UFUNCTION()
 	void OnRep_TeamID(int32 OldTeamID);
+
+	UFUNCTION()
+	void OnRep_StoredAbilities(TArray<FStoredAbilityInfo>& OldStoredAbilities);
 };

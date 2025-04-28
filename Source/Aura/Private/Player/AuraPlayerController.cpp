@@ -21,12 +21,14 @@
 #include "UI/Widget/DamageTextComponent.h"
 #include "Player/AuraPlayerState.h"
 #include "Character/AuraUnitBase.h"
+#include "Actor/AbilityPreview.h"
 
 
 AAuraPlayerController::AAuraPlayerController()
 {
 	bReplicates = true;
 	//Spline = CreateDefaultSubobject<USplineComponent>("Spline");
+
 }
 
 void AAuraPlayerController::PlayerTick(float DeltaTime)
@@ -37,6 +39,7 @@ void AAuraPlayerController::PlayerTick(float DeltaTime)
 	UpdateMagicCircleLocation();
 }
 
+//Will replace these with show Preview
 void AAuraPlayerController::ShowMagicCircle(UMaterialInterface* DecalMaterial)
 {
 	if (!IsValid(MagicCircle))
@@ -56,6 +59,53 @@ void AAuraPlayerController::HideMagicCircle()
 		MagicCircle->Destroy();
 	}
 }
+
+void AAuraPlayerController::ShowAbilityPreview(UMaterialInterface* DecalMaterial)
+{
+	if (!IsValid(AbilityPreview))
+	{
+		AbilityPreview = GetWorld()->SpawnActor<AAbilityPreview>(AbilityPreviewClass);
+		if (DecalMaterial)
+		{
+			AbilityPreview->AbiltyTargetDecal->SetMaterial(0, DecalMaterial);
+		}
+	}
+}
+
+void AAuraPlayerController::HideAbilityPreview()
+{
+	if (IsValid(AbilityPreview))
+	{
+		AbilityPreview->Destroy();
+	}
+}
+
+void AAuraPlayerController::UpdateStoredAbilityPreviews(TArray<FStoredAbilityInfo>& StoredAbilities)
+{
+	if (StoredAbilities.IsEmpty()) return;
+	for (const FStoredAbilityInfo& StoredAbility : StoredAbilities)
+	{
+		if (IsValid(AbilityPreview))
+		{
+			AbilityPreview = GetWorld()->SpawnActor<AAbilityPreview>(AbilityPreviewClass);
+			if (StoredAbility.AbilityTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB))
+			{
+				
+			}
+			else
+			{
+		
+			}
+		}
+	}
+}
+
+void AAuraPlayerController::BindToStoredAbilitiesDelegate()
+{
+	GetPS()->OnStoredAbilitiesArrayChangedDelegate.AddUObject(this, &AAuraPlayerController::UpdateStoredAbilityPreviews);
+}
+
+
 
 void AAuraPlayerController::ShowDamageNumber_Implementation(float DamageAmount, ACharacter* TargetCharacter, bool bBlockedHit, bool bCriticalHit)
 {
@@ -91,6 +141,14 @@ void AAuraPlayerController::UpdateMagicCircleLocation()
 	if (IsValid(MagicCircle))
 	{
 		MagicCircle->SetActorLocation(CursorHit.ImpactPoint);
+	}
+}
+
+void AAuraPlayerController::UpdateAbilityPreviewLocation()
+{
+	if (IsValid(AbilityPreview))
+	{
+		AbilityPreview->SetActorLocation(CursorHit.ImpactPoint);
 	}
 }
 

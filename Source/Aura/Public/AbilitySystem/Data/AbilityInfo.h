@@ -9,19 +9,6 @@
 
 class UGameplayAbility;
 
-UENUM(BlueprintType)
-enum class EAbilityShape : uint8
-{
-	None,
-	Circle,
-	Cone,
-	Line,
-	Box,
-	Sphere,
-	Capsule,
-	Count
-};
-
 USTRUCT(BlueprintType)
 struct FAuraAbilityInfo
 {
@@ -55,7 +42,7 @@ struct FAuraAbilityInfo
 	TSubclassOf<UGameplayAbility> Ability;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	EAbilityShape Shape = EAbilityShape::Line;
+	TObjectPtr<UDecalComponent> AbilityPreviewDecal = nullptr;
 };
 
 /**

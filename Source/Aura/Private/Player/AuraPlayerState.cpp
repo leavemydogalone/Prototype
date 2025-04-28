@@ -29,6 +29,7 @@ void AAuraPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME(AAuraPlayerState, SpellPoints);
 	DOREPLIFETIME(AAuraPlayerState, SelectedUnit);
 	DOREPLIFETIME(AAuraPlayerState, TeamID);
+	DOREPLIFETIME(AAuraPlayerState, StoredAbilities);
 }
 
 UAbilitySystemComponent* AAuraPlayerState::GetAbilitySystemComponent() const
@@ -51,6 +52,21 @@ void AAuraPlayerState::SetSelectedUnit(AActor* NewUnit)
 int32 AAuraPlayerState::GetTeamID_Implementation()
 {
 	return TeamID;
+}
+
+void AAuraPlayerState::AddAbilityToStoredAbilities(FGameplayTag& AbilityTag, AActor* Unit, int32 AbilitySize, FVector TargetLocation, UDecalComponent* Decal)
+{
+	FStoredAbilityInfo NewAbility;
+	NewAbility.AbilityTag = AbilityTag;
+	NewAbility.Unit = Unit;
+	NewAbility.TargetLocation = TargetLocation;
+	StoredAbilities.Add(NewAbility);
+	OnStoredAbilitiesArrayChangedDelegate.Broadcast(StoredAbilities);
+
+}
+
+void AAuraPlayerState::RemoveLastStoredAbility()
+{
 }
 
 //void AAuraPlayerState::PassCommandToSelectedUnit(FGameplayTag& InputTag, const FGameplayAbilityTargetDataHandle& DataHandle)
@@ -136,6 +152,11 @@ void AAuraPlayerState::OnRep_TeamID(int32 OldTeamID)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Team ID changed from %d to %d"), OldTeamID, TeamID);
 	// OnTeamIDChangedDelegate.Broadcast(TeamID);
+}
+
+void AAuraPlayerState::OnRep_StoredAbilities(TArray<FStoredAbilityInfo>& OldStoredAbilities)
+{
+
 }
 
 void AAuraPlayerState::AddToAttributePoints(int32 InPoints)

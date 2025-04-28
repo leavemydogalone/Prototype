@@ -17,6 +17,8 @@ class UAuraInputConfig;
 class UAuraAbilitySystemComponent;
 class USplineComponent;
 class AMagicCircle;
+class AAbilityPreview;
+struct FStoredAbilityInfo;
 class AAuraPlayerState;
 
 enum class ETargetingStatus : uint8
@@ -46,7 +48,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void HideMagicCircle();
 
-	
+	void ShowAbilityPreview(UMaterialInterface* DecalMaterial = nullptr);
+	void HideAbilityPreview();
+	void UpdateStoredAbilityPreviews(TArray<FStoredAbilityInfo>& StoredAbilities);
+
+	void BindToStoredAbilitiesDelegate();
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
@@ -120,4 +127,16 @@ private:
 	TObjectPtr<AMagicCircle> MagicCircle;
 
 	void UpdateMagicCircleLocation();
+
+	//Ability Preview
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AAbilityPreview> AbilityPreviewClass;
+
+	UPROPERTY()
+	TObjectPtr<AAbilityPreview> AbilityPreview;
+
+	void UpdateAbilityPreviewLocation();
+
+	bool bIsStoredAbilitiesDelegateBound = false;
 };

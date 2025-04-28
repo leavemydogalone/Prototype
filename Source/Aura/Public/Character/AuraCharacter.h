@@ -39,6 +39,11 @@ public:
 	virtual void SaveProgress_Implementation(const FName& CheckpointTag) override;
 	virtual AActor* GetSelectedUnit_Implementation() const override;
 	virtual void SetSelectedUnit_Implementation(AActor* NewUnit) override;
+	virtual void ShowAbilityPreview_Implementation(const FGameplayTag& AbilityTag, AActor* Unit, const int32 AbilitySize, const int32 AbilityRange);
+	void CancelAbilityPreview_Implementation();
+	void AddAbilityToStoredAbilities_Implementation(FGameplayTag& AbilityTag, AActor* Unit, int32 AbilitySize, FVector TargetLocation);
+	void RemoveLastStoredAbility_Implementation();
+
 	/** end Player Interface */
 
 	/** Combat Interface */
@@ -69,4 +74,6 @@ private:
 
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastLevelUpParticles() const;
+
+	void BindPCToPlayerStateDelegates();
 };

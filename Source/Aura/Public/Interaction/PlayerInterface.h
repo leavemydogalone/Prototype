@@ -6,6 +6,8 @@
 #include "UObject/Interface.h"
 #include "PlayerInterface.generated.h"
 
+struct FGameplayTag;
+
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
 class UPlayerInterface : public UInterface
@@ -70,4 +72,16 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void SetSelectedUnit(AActor* Actor);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void ShowAbilityPreview(const FGameplayTag& AbilityTag, AActor* Unit, const int32 AbilitySize, const int32 AbilityRange);
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void CancelAbilityPreview();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void AddAbilityToStoredAbilities(const FGameplayTag& AbilityTag, AActor* Unit, FVector TargetLocation);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void RemoveLastStoredAbility();
 };
