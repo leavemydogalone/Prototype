@@ -91,11 +91,17 @@ void AAuraCharacter::SetSelectedUnit_Implementation(AActor* NewUnit)
 
 }
 
-void AAuraCharacter::ShowAbilityPreview_Implementation(UUnitAbilityPreviewContext* UnitAbilityPreviewContext)
+void AAuraCharacter::ShowAbilityPreview(UUnitAbilityPreviewContext* UnitAbilityPreviewContext)
 {
 	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
 	/*UAbilityInfo* AbilityInfo = UAuraAbilitySystemLibrary::GetAbilityInfo(this);
 	FAuraAbilityInfo Info = AbilityInfo->FindAbilityInfoForTag(AbilityTag);*/
+	
+	//UnitAbilityPreviewContext->AbilityTag = AbilityTag;
+	//UnitAbilityPreviewContext->Unit = Unit;
+	//UnitAbilityPreviewContext->AbilityRange = AbilityRange;
+	//UnitAbilityPreviewContext->AbilitySize = AbilitySize;
+
 
 	if (AAuraPlayerController* AuraPlayerController = Cast<AAuraPlayerController>(GetController()))
 	{
@@ -127,25 +133,6 @@ void AAuraCharacter::RemoveLastStoredAbility_Implementation()
 	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
 	check(AuraPlayerState);
 	AuraPlayerState->RemoveLastStoredAbility();
-}
-
-void AAuraCharacter::SendGameplayEventToClient_Implementation(AActor* Actor, FGameplayTag GameplayTag, FGameplayEventData GameplayEventData)
-{
-	if (HasAuthority())
-	{
-		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(this, GameplayTag, GameplayEventData);
-
-		Client_SendGameplayEventToClient(this, GameplayTag, GameplayEventData);
-	}
-	else
-	{
-		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(this, GameplayTag, GameplayEventData);
-	}
-}
-
-void AAuraCharacter::Client_SendGameplayEventToClient_Implementation(AActor* Actor, FGameplayTag GameplayTag, FGameplayEventData GameplayEventData)
-{
-	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Actor, GameplayTag, GameplayEventData);
 }
 
 void AAuraCharacter::InitAbilityActorInfo()

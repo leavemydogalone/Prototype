@@ -6,6 +6,7 @@
 #include "AbilitySystem/Abilities/AuraGameplayAbility.h"
 #include "Game/TurnSystemInterface.h"
 #include "Interaction/UnitInterface.h"
+#include "Interaction/PlayerInterface.h"
 #include "UnitGameplayAbilityBase.generated.h"
 
 /**
@@ -56,7 +57,10 @@ private:
 	void UnbindFromTurnPhaseDelegate();
 
 	TScriptInterface<IUnitInterface> GetUnitInterface();
+	TScriptInterface<IPlayerInterface> GetPlayerInterface();
 
 	UPROPERTY()
 	TScriptInterface<IUnitInterface> UnitInterface;
+	UPROPERTY()
+	TScriptInterface<IPlayerInterface> PlayerInterface;
 };

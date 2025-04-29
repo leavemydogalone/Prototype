@@ -16,7 +16,7 @@ void UUnitGameplayAbilityBase::ActivateAbility(const FGameplayAbilitySpecHandle 
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 	BindToTurnPhaseDelegate();
-	//StartAbilityPreview();
+	StartAbilityPreview();
 	//Wait for confirmation event
 }
 
@@ -66,14 +66,9 @@ void UUnitGameplayAbilityBase::StartAbilityPreview()
 	UnitAbilityPreviewContext->AbilityRange = AbilityRange;
 	UnitAbilityPreviewContext->AbilitySize = AbilitySize;
 
-	FGameplayEventData EventData;
-	EventData.Instigator = GetAvatarActorFromActorInfo();
-	EventData.OptionalObject = UnitAbilityPreviewContext;
+	GetPlayerInterface()->ShowAbilityPreview(UnitAbilityPreviewContext);
 
-	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(const_cast<AActor*>(CurrentEventData.Instigator.Get()), TagsManager.Event_Player_ShowAbilityPreview, EventData);
 	
-	//GetUnitInterface()->ShowAbilityPreview(AbilityTag, TargetLocation);
-	//Get 
 }
 
 void UUnitGameplayAbilityBase::BindToTurnPhaseDelegate()
@@ -97,4 +92,21 @@ TScriptInterface<IUnitInterface> UUnitGameplayAbilityBase::GetUnitInterface()
 	}
 
 	return UnitInterface;
+}
+
+TScriptInterface<IPlayerInterface> UUnitGameplayAbilityBase::GetPlayerInterface()
+{
+	if (!PlayerInterface.GetObject())
+	{
+		TObjectPtr<const AActor> Instigator = CurrentEventData.Instigator;
+		AActor* Player = const_cast<AActor*>(Instigator.Get());
+
+		if (Player->Implements<UPlayerInterface>())
+		{
+			PlayerInterface.SetObject(Player);
+			PlayerInterface.SetInterface(Cast<IPlayerInterface>(Player));
+		}
+	}
+
+	return PlayerInterface;
 }

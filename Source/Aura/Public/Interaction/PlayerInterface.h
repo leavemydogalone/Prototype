@@ -76,11 +76,8 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void SetSelectedUnit(AActor* Actor);
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void SendGameplayEventToClient(AActor* Actor, FGameplayTag GameplayTag, FGameplayEventData GameplayEventData);
-
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void ShowAbilityPreview(UUnitAbilityPreviewContext* UnitAbilityPreviewContext);
+	UFUNCTION()
+	virtual void ShowAbilityPreview(UUnitAbilityPreviewContext* UnitAbilityPreviewContext) = 0;
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void CancelAbilityPreview();

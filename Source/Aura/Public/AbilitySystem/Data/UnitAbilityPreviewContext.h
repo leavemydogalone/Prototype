@@ -21,7 +21,7 @@ public:
 	FGameplayTag AbilityTag;
 
 	UPROPERTY()
-	AActor* Unit = nullptr;
+	AActor* Unit;
 
 	UPROPERTY()
 	int32 AbilitySize = 1;

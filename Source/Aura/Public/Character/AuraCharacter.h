@@ -41,15 +41,12 @@ public:
 	virtual void SaveProgress_Implementation(const FName& CheckpointTag) override;
 	virtual AActor* GetSelectedUnit_Implementation() const override;
 	virtual void SetSelectedUnit_Implementation(AActor* NewUnit) override;
-	virtual void ShowAbilityPreview_Implementation(UUnitAbilityPreviewContext* UnitAbilityPreviewContext);
+	UFUNCTION()
+	virtual void ShowAbilityPreview(UUnitAbilityPreviewContext* UnitAbilityPreviewContext) override;
 	void CancelAbilityPreview_Implementation();
 	void AddAbilityToStoredAbilities_Implementation(FGameplayTag& AbilityTag, AActor* Unit, int32 AbilitySize, FVector TargetLocation);
 	void RemoveLastStoredAbility_Implementation();
-	void SendGameplayEventToClient_Implementation(AActor* Actor, FGameplayTag GameplayTag, FGameplayEventData GameplayEventData);
 	/** end Player Interface */
-
-	UFUNCTION(Client, Reliable)
-	void Client_SendGameplayEventToClient(AActor* Actor, FGameplayTag GameplayTag, FGameplayEventData GameplayEventData);
 
 	/** Combat Interface */
 	virtual int32 GetPlayerLevel_Implementation() override;
