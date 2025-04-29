@@ -21,6 +21,7 @@ void UUnitGameplayAbilityBase::ActivateAbility(const FGameplayAbilitySpecHandle 
 	BindToTurnPhaseDelegate();
 	ShowAbilityPreview();
 	WaitForCancelTag();
+	WaitForConfirmTag();
 	//Wait for confirmation event
 }
 
@@ -137,4 +138,26 @@ void UUnitGameplayAbilityBase::OnCancelTagAdded(FGameplayEventData Data)
 	if(GetAbilitySystemComponentFromActorInfo()->HasMatchingGameplayTag(ConfirmTag)) return;
 	HideAbilityPreview();
 	CancelAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true);
+}
+
+void UUnitGameplayAbilityBase::WaitForConfirmTag()
+{
+	FGameplayTag ConfirmTag = FAuraGameplayTags::Get().Event_Unit_Confirm;
+
+	UAbilityTask_WaitGameplayEvent* WaitForConfirmTagTask =
+		UAbilityTask_WaitGameplayEvent::WaitGameplayEvent(this, ConfirmTag);
+	if (WaitForConfirmTagTask)
+	{
+		WaitForConfirmTagTask->EventReceived.AddDynamic(this, &UUnitGameplayAbilityBase::OnConfirmTagAdded);
+		WaitForConfirmTagTask->ReadyForActivation();
+	}
+}
+
+void UUnitGameplayAbilityBase::OnConfirmTagAdded(FGameplayEventData Data)
+{
+	HideAbilityPreview();
+	bIsAbilityConfirmed = true;
+	//GetPlayerInterface()->AddAbilityToStoredAbilities(CurrentEventData.Instigator, CurrentEventData.EventTag);
+	//log that ability was confirmed
+	UE_LOG(LogTemp, Warning, TEXT("Ability confirmed"));
 }

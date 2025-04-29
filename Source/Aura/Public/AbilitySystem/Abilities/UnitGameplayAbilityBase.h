@@ -64,4 +64,12 @@ private:
 	void WaitForCancelTag();
 	UFUNCTION()
 	void OnCancelTagAdded(FGameplayEventData Data);
+
+	UFUNCTION()
+	void WaitForConfirmTag();
+	UFUNCTION()
+	void OnConfirmTagAdded(FGameplayEventData Data);
+
+	UPROPERTY()
+	bool bIsAbilityConfirmed = false;
 };
