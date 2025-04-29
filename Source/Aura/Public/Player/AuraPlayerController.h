@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "AbilitySystem/Data/AbilityInfo.h"
 #include "GameplayTagContainer.h"
 #include "AuraPlayerController.generated.h"
 
@@ -20,7 +21,6 @@ class AMagicCircle;
 class AAbilityPreview;
 struct FStoredAbilityInfo;
 class AAuraPlayerState;
-class UUnitAbilityPreviewContext;
 
 enum class ETargetingStatus : uint8
 {
@@ -52,16 +52,19 @@ public:
 	UFUNCTION(Client, Reliable)
 	void ShowAbilityPreview(const FUnitAbilityPreviewInfo& UnitAbilityPreviewInfo);
 
-	//UFUNCTION(Client, Reliable)
+	UFUNCTION(Client, Reliable)
 	void HideAbilityPreview();
 
+	//update this and PS function to use FUnitAbilityPreviewInfo
 	void UpdateStoredAbilityPreviews(TArray<FStoredAbilityInfo>& StoredAbilities);
 
 	void BindToStoredAbilitiesDelegate();
 
 protected:
+
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
+
 private:
 	UPROPERTY(EditAnywhere, Category="Input")
 	TObjectPtr<UInputMappingContext> AuraContext;
@@ -101,9 +104,6 @@ private:
 	TObjectPtr<AAuraPlayerState> AuraPlayerState;
 	AAuraPlayerState* GetPS();
 
-	/*UPROPERTY()
-	TObjectPtr<UAuraAbilitySystemComponent> SelectedUnitASC;
-	UAuraAbilitySystemComponent* GetSelectedUnitASC();*/
 	
 	//FVector CachedDestination = FVector::ZeroVector;
 	//float FollowTime = 0.f;
@@ -145,7 +145,8 @@ private:
 
 	bool bIsStoredAbilitiesDelegateBound = false;
 
-	void DrawLineToMouse(AActor* Unit);
+	void DrawLineToMouse(AActor* Unit, int32 MaxRange);
 
-	AActor* CurrentUnitBeingPreviewed;
+	FUnitAbilityPreviewInfo CurrentUnitAbilityPreviewInfo;
+	bool bAbilityPreviewIsActive = false;
 };

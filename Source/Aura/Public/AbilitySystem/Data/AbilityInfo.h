@@ -19,7 +19,7 @@ struct FUnitAbilityPreviewInfo
 	FGameplayTag AbilityTag;
 
 	UPROPERTY()
-	AActor* Unit;
+	TObjectPtr<AActor> Unit;
 
 	UPROPERTY()
 	int32 AbilitySize = 1;
@@ -29,6 +29,10 @@ struct FUnitAbilityPreviewInfo
 
 	UPROPERTY()
 	FVector TargetLocation = FVector::ZeroVector;
+
+	UPROPERTY()
+	TObjectPtr<UDecalComponent> Decal = nullptr;
+
 };
 
 USTRUCT(BlueprintType)

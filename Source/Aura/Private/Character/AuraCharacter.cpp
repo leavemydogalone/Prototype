@@ -104,7 +104,7 @@ void AAuraCharacter::ShowAbilityPreview(FUnitAbilityPreviewInfo& UnitAbilityPrev
 
 }
 
-void AAuraCharacter::CancelAbilityPreview_Implementation()
+void AAuraCharacter::HideAbilityPreview()
 {
 	if (AAuraPlayerController* AuraPlayerController = Cast<AAuraPlayerController>(GetController()))
 	{

@@ -43,7 +43,8 @@ public:
 	virtual void SetSelectedUnit_Implementation(AActor* NewUnit) override;
 	UFUNCTION()
 	virtual void ShowAbilityPreview(FUnitAbilityPreviewInfo& UnitAbilityPreviewInfo) override;
-	void CancelAbilityPreview_Implementation();
+	UFUNCTION()
+	virtual void HideAbilityPreview() override;
 	void AddAbilityToStoredAbilities_Implementation(FGameplayTag& AbilityTag, AActor* Unit, int32 AbilitySize, FVector TargetLocation);
 	void RemoveLastStoredAbility_Implementation();
 	/** end Player Interface */

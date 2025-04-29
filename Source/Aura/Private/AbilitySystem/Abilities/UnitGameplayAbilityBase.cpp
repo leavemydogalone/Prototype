@@ -17,7 +17,7 @@ void UUnitGameplayAbilityBase::ActivateAbility(const FGameplayAbilitySpecHandle 
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 	BindToTurnPhaseDelegate();
-	StartAbilityPreview();
+	ShowAbilityPreview();
 	//Wait for confirmation event
 }
 
@@ -25,6 +25,7 @@ void UUnitGameplayAbilityBase::EndAbility(const FGameplayAbilitySpecHandle Handl
 {
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 	UnbindFromTurnPhaseDelegate();
+	HideAbilityPreview();
 }
 
 
@@ -57,7 +58,7 @@ void UUnitGameplayAbilityBase::HandlePhaseEnumFromDelegate(EAuraTurnPhase TurnPh
 	
 }
 
-void UUnitGameplayAbilityBase::StartAbilityPreview()
+void UUnitGameplayAbilityBase::ShowAbilityPreview()
 {
 	FUnitAbilityPreviewInfo UnitAbilityPreviewInfo;
 	UnitAbilityPreviewInfo.AbilityTag = AbilityTags.First();
@@ -66,14 +67,18 @@ void UUnitGameplayAbilityBase::StartAbilityPreview()
 	UnitAbilityPreviewInfo.AbilitySize = AbilitySize;
 
 	GetPlayerInterface()->ShowAbilityPreview(UnitAbilityPreviewInfo);
+}
 
-	
+void UUnitGameplayAbilityBase::HideAbilityPreview()
+{
+	GetPlayerInterface()->HideAbilityPreview();
 }
 
 void UUnitGameplayAbilityBase::BindToTurnPhaseDelegate()
 {
 	GetTurnSystemInterface()->GetOnTurnPhaseChangeDelegate().AddUObject(this, &UUnitGameplayAbilityBase::HandlePhaseEnumFromDelegate);
 }
+
 void UUnitGameplayAbilityBase::UnbindFromTurnPhaseDelegate()
 {
 	GetTurnSystemInterface()->GetOnTurnPhaseChangeDelegate().RemoveAll(this);

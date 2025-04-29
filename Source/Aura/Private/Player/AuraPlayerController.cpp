@@ -21,7 +21,7 @@
 #include "UI/Widget/DamageTextComponent.h"
 #include "Player/AuraPlayerState.h"
 #include "Character/AuraUnitBase.h"
-#include "AbilitySystem/Data/UnitAbilityPreviewContext.h"
+//#include "AbilitySystem/Data/UnitAbilityPreviewContext.h"
 #include "AbilitySystem/Data/AbilityInfo.h"
 #include "Actor/AbilityPreview.h"
 
@@ -72,7 +72,7 @@ void AAuraPlayerController::ShowAbilityPreview_Implementation(const FUnitAbility
 
 	if (!IsValid(AbilityPreview))
 	{
-		CurrentUnitBeingPreviewed = UnitAbilityPreviewInfo.Unit;
+		CurrentUnitAbilityPreviewInfo = UnitAbilityPreviewInfo;
 		AbilityPreview = GetWorld()->SpawnActorDeferred<AAbilityPreview>(
 			AbilityPreviewClass,
 			FTransform::Identity,   
@@ -84,21 +84,24 @@ void AAuraPlayerController::ShowAbilityPreview_Implementation(const FUnitAbility
 		if (IsValid(AbilityPreview))
 		{
 			AbilityPreview->AbilityRangeDecal->SetWorldLocation(UnitAbilityPreviewInfo.Unit->GetActorLocation());
+			AbilityPreview->AbilityRangeDecal->SetWorldRotation(UnitAbilityPreviewInfo.Unit->GetActorRotation());
 			//AbilityPreview->AbiltyTargetDecal->SetScale(UnitAbilityPreviewContext->AbilitySize);
 		}
 		/*if (DecalMaterial)
 		{
 			AbilityPreview->AbiltyTargetDecal->SetMaterial(0, DecalMaterial);
 		}*/
+		bAbilityPreviewIsActive = true;
 	}
 }
 
-void AAuraPlayerController::HideAbilityPreview()
+void AAuraPlayerController::HideAbilityPreview_Implementation()
 {
 	if (IsValid(AbilityPreview))
 	{
 		AbilityPreview->Destroy();
 	}
+	bAbilityPreviewIsActive = false;
 }
 
 void AAuraPlayerController::UpdateAbilityPreviewLocation()
@@ -107,29 +110,37 @@ void AAuraPlayerController::UpdateAbilityPreviewLocation()
 	{
 		AbilityPreview->SetActorLocation(CursorHit.ImpactPoint);
 	}
-	if(CurrentUnitBeingPreviewed) DrawLineToMouse(CurrentUnitBeingPreviewed);
+	if(bAbilityPreviewIsActive) DrawLineToMouse(CurrentUnitAbilityPreviewInfo.Unit, CurrentUnitAbilityPreviewInfo.AbilityRange);
 }
 
-void AAuraPlayerController::DrawLineToMouse(AActor* Unit)
+void AAuraPlayerController::DrawLineToMouse(AActor* Unit, int32 MaxRange)
 {
 	FVector WorldLocation;
 	FVector WorldDirection;
 	if (DeprojectMousePositionToWorld(WorldLocation, WorldDirection))
 	{
-		// Find a point far away along the direction
+		// Trace from mouse into the world
 		FVector TraceEnd = WorldLocation + (WorldDirection * 10000.0f);
 
-		// Optionally: Do a trace to hit something (optional)
 		FHitResult HitResult;
 		FCollisionQueryParams QueryParams;
-		QueryParams.AddIgnoredActor(this); // Don't hit self
-		bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, WorldLocation, TraceEnd, ECC_Visibility, QueryParams);
+		QueryParams.AddIgnoredActor(this);
 
+		bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, WorldLocation, TraceEnd, ECC_Visibility, QueryParams);
 		FVector TargetPoint = bHit ? HitResult.Location : TraceEnd;
 
-		// Draw a line from actor location to the mouse world position
-		FVector ActorLocation = Unit->GetActorLocation();
-		DrawDebugLine(GetWorld(), ActorLocation, TargetPoint, FColor::Green, false, 2.0f, 0, 2.0f);
+		// Clamp the target point to MaxRange from the unit
+		FVector UnitLocation = Unit->GetActorLocation();
+		FVector DirectionToTarget = (TargetPoint - UnitLocation).GetSafeNormal();
+		float DistanceToTarget = FVector::Dist(UnitLocation, TargetPoint);
+
+		if (DistanceToTarget > MaxRange)
+		{
+			TargetPoint = UnitLocation + DirectionToTarget * MaxRange;
+		}
+
+		// Draw clamped line
+		DrawDebugLine(GetWorld(), UnitLocation, TargetPoint, FColor::Green, false, 2.0f, 0, 2.0f);
 	}
 }
 

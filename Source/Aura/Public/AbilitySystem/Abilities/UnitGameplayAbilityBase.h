@@ -38,8 +38,12 @@ protected:
 	UFUNCTION()
 	void HandlePhaseEnumFromDelegate(EAuraTurnPhase TurnPhase);
 
-	UFUNCTION(BlueprintCallable, Category = "Ability Steps")
-	void StartAbilityPreview();
+	UFUNCTION()
+	void ShowAbilityPreview();
+
+	UFUNCTION()
+	void HideAbilityPreview();
+
 
 	//UFUNCTION(BlueprintImplementableEvent, Category = "Ability Steps")
 	//void StartAbilityPreview();
