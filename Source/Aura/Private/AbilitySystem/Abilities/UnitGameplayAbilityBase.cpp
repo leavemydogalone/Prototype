@@ -2,14 +2,16 @@
 
 
 #include "AbilitySystem/Abilities/UnitGameplayAbilityBase.h"
-
+#include "AuraGameplayTags.h"
 #include "Game/TurnSystemInterface.h"
 #include "Game/AuraTurnPhase.h"
 #include "GameplayEffectTypes.h"
+#include "AbilitySystemComponent.h"
 #include "AuraGameplayTags.h"
 #include "AbilitySystem/Data/AbilityInfo.h"
 #include "AbilitySystem/Data/UnitAbilityPreviewContext.h"
 #include "AbilitySystemBlueprintLibrary.h"
+#include "Abilities/Tasks/AbilityTask_WaitGameplayEvent.h"
 #include "GameFramework/GameState.h"
 
 
@@ -18,6 +20,7 @@ void UUnitGameplayAbilityBase::ActivateAbility(const FGameplayAbilitySpecHandle 
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 	BindToTurnPhaseDelegate();
 	ShowAbilityPreview();
+	WaitForCancelTag();
 	//Wait for confirmation event
 }
 
@@ -113,4 +116,25 @@ TScriptInterface<IPlayerInterface> UUnitGameplayAbilityBase::GetPlayerInterface(
 	}
 
 	return PlayerInterface;
+}
+
+void UUnitGameplayAbilityBase::WaitForCancelTag()
+{
+	FGameplayTag CancelTag = FAuraGameplayTags::Get().Event_Unit_Cancel;
+
+	UAbilityTask_WaitGameplayEvent* WaitForCancelTagTask =
+		UAbilityTask_WaitGameplayEvent::WaitGameplayEvent(this, CancelTag);
+	if (WaitForCancelTagTask)
+	{
+		WaitForCancelTagTask->EventReceived.AddDynamic(this, &UUnitGameplayAbilityBase::OnCancelTagAdded);
+		WaitForCancelTagTask->ReadyForActivation();
+	}
+}
+
+void UUnitGameplayAbilityBase::OnCancelTagAdded(FGameplayEventData Data)
+{
+	FGameplayTag ConfirmTag = FAuraGameplayTags::Get().Event_Unit_Confirm;
+	if(GetAbilitySystemComponentFromActorInfo()->HasMatchingGameplayTag(ConfirmTag)) return;
+	HideAbilityPreview();
+	CancelAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true);
 }

@@ -45,19 +45,11 @@ protected:
 	void HideAbilityPreview();
 
 
-	//UFUNCTION(BlueprintImplementableEvent, Category = "Ability Steps")
-	//void StartAbilityPreview();
-
-	//UFUNCTION()
-	//void OnTickPreview(float DeltaTime);
-
-
 private:
 
 	TScriptInterface<ITurnSystemInterface> GetTurnSystemInterface();
 
 	void BindToTurnPhaseDelegate();
-
 	void UnbindFromTurnPhaseDelegate();
 
 	TScriptInterface<IUnitInterface> GetUnitInterface();
@@ -67,4 +59,9 @@ private:
 	TScriptInterface<IUnitInterface> UnitInterface;
 	UPROPERTY()
 	TScriptInterface<IPlayerInterface> PlayerInterface;
+
+	UFUNCTION()
+	void WaitForCancelTag();
+	UFUNCTION()
+	void OnCancelTagAdded(FGameplayEventData Data);
 };
