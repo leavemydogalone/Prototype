@@ -18,6 +18,12 @@ class AURA_API UUnitGameplayAbilityBase : public UAuraGameplayAbility
 	
 protected:
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Ability")
+	float AbilityRange = 0.0f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Ability")
+	float AbilitySize = 1.f;
+
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 
 	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
@@ -32,10 +38,10 @@ protected:
 	void HandlePhaseEnumFromDelegate(EAuraTurnPhase TurnPhase);
 
 	UFUNCTION(BlueprintCallable, Category = "Ability Steps")
-	void HandleAbilityPreview(FGameplayTag AbilityTag, FVector TargetLocation);
-
-	UFUNCTION(BlueprintImplementableEvent, Category = "Ability Steps")
 	void StartAbilityPreview();
+
+	//UFUNCTION(BlueprintImplementableEvent, Category = "Ability Steps")
+	//void StartAbilityPreview();
 
 	//UFUNCTION()
 	//void OnTickPreview(float DeltaTime);

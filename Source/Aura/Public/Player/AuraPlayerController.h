@@ -20,6 +20,7 @@ class AMagicCircle;
 class AAbilityPreview;
 struct FStoredAbilityInfo;
 class AAuraPlayerState;
+class UUnitAbilityPreviewContext;
 
 enum class ETargetingStatus : uint8
 {
@@ -48,8 +49,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void HideMagicCircle();
 
-	void ShowAbilityPreview(UMaterialInterface* DecalMaterial = nullptr);
+	UFUNCTION(Client, Reliable)
+	void ShowAbilityPreview(UUnitAbilityPreviewContext* UnitAbilityPreviewContext);
+
+	//UFUNCTION(Client, Reliable)
 	void HideAbilityPreview();
+
 	void UpdateStoredAbilityPreviews(TArray<FStoredAbilityInfo>& StoredAbilities);
 
 	void BindToStoredAbilitiesDelegate();

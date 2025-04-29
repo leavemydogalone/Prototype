@@ -10,6 +10,8 @@
 class UNiagaraComponent;
 class UCameraComponent;
 class USpringArmComponent;
+class UUnitAbilityPreviewContext;
+
 /**
  * 
  */
@@ -39,12 +41,15 @@ public:
 	virtual void SaveProgress_Implementation(const FName& CheckpointTag) override;
 	virtual AActor* GetSelectedUnit_Implementation() const override;
 	virtual void SetSelectedUnit_Implementation(AActor* NewUnit) override;
-	virtual void ShowAbilityPreview_Implementation(const FGameplayTag& AbilityTag, AActor* Unit, const int32 AbilitySize, const int32 AbilityRange);
+	virtual void ShowAbilityPreview_Implementation(UUnitAbilityPreviewContext* UnitAbilityPreviewContext);
 	void CancelAbilityPreview_Implementation();
 	void AddAbilityToStoredAbilities_Implementation(FGameplayTag& AbilityTag, AActor* Unit, int32 AbilitySize, FVector TargetLocation);
 	void RemoveLastStoredAbility_Implementation();
-
+	void SendGameplayEventToClient_Implementation(AActor* Actor, FGameplayTag GameplayTag, FGameplayEventData GameplayEventData);
 	/** end Player Interface */
+
+	UFUNCTION(Client, Reliable)
+	void Client_SendGameplayEventToClient(AActor* Actor, FGameplayTag GameplayTag, FGameplayEventData GameplayEventData);
 
 	/** Combat Interface */
 	virtual int32 GetPlayerLevel_Implementation() override;
@@ -53,7 +58,7 @@ public:
 
 	UPROPERTY(EditDefaultsOnly)
 	float DeathTime = 5.f;
-
+	
 	FTimerHandle DeathTimer;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)

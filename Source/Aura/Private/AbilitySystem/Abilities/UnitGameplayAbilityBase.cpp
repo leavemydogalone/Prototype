@@ -6,6 +6,9 @@
 #include "Game/TurnSystemInterface.h"
 #include "Game/AuraTurnPhase.h"
 #include "GameplayEffectTypes.h"
+#include "AuraGameplayTags.h"
+#include "AbilitySystem/Data/UnitAbilityPreviewContext.h"
+#include "AbilitySystemBlueprintLibrary.h"
 #include "GameFramework/GameState.h"
 
 
@@ -53,9 +56,24 @@ void UUnitGameplayAbilityBase::HandlePhaseEnumFromDelegate(EAuraTurnPhase TurnPh
 	
 }
 
-void UUnitGameplayAbilityBase::HandleAbilityPreview(FGameplayTag AbilityTag, FVector TargetLocation)
+void UUnitGameplayAbilityBase::StartAbilityPreview()
 {
-		GetUnitInterface()->ShowAbilityPreview(AbilityTag, TargetLocation);
+	const FAuraGameplayTags& TagsManager = FAuraGameplayTags::Get();
+
+	UUnitAbilityPreviewContext* UnitAbilityPreviewContext = NewObject<UUnitAbilityPreviewContext>(this);
+	UnitAbilityPreviewContext->AbilityTag = AbilityTags.First();
+	UnitAbilityPreviewContext->Unit = GetAvatarActorFromActorInfo();
+	UnitAbilityPreviewContext->AbilityRange = AbilityRange;
+	UnitAbilityPreviewContext->AbilitySize = AbilitySize;
+
+	FGameplayEventData EventData;
+	EventData.Instigator = GetAvatarActorFromActorInfo();
+	EventData.OptionalObject = UnitAbilityPreviewContext;
+
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(const_cast<AActor*>(CurrentEventData.Instigator.Get()), TagsManager.Event_Player_ShowAbilityPreview, EventData);
+	
+	//GetUnitInterface()->ShowAbilityPreview(AbilityTag, TargetLocation);
+	//Get 
 }
 
 void UUnitGameplayAbilityBase::BindToTurnPhaseDelegate()

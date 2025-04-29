@@ -21,6 +21,7 @@
 #include "UI/Widget/DamageTextComponent.h"
 #include "Player/AuraPlayerState.h"
 #include "Character/AuraUnitBase.h"
+#include "AbilitySystem/Data/UnitAbilityPreviewContext.h"
 #include "Actor/AbilityPreview.h"
 
 
@@ -37,6 +38,7 @@ void AAuraPlayerController::PlayerTick(float DeltaTime)
 	CursorTrace();
 	//AutoRun();
 	UpdateMagicCircleLocation();
+	UpdateAbilityPreviewLocation();
 }
 
 //Will replace these with show Preview
@@ -60,15 +62,25 @@ void AAuraPlayerController::HideMagicCircle()
 	}
 }
 
-void AAuraPlayerController::ShowAbilityPreview(UMaterialInterface* DecalMaterial)
+void AAuraPlayerController::ShowAbilityPreview_Implementation(UUnitAbilityPreviewContext* UnitAbilityPreviewContext)
 {
+	//if (!IsValid(UnitAbilityPreviewContext))
+	//{
+	//	return;
+	//}
+
+	if (!IsLocalController())
+	{
+		return;
+	}
+
 	if (!IsValid(AbilityPreview))
 	{
 		AbilityPreview = GetWorld()->SpawnActor<AAbilityPreview>(AbilityPreviewClass);
-		if (DecalMaterial)
+		/*if (DecalMaterial)
 		{
 			AbilityPreview->AbiltyTargetDecal->SetMaterial(0, DecalMaterial);
-		}
+		}*/
 	}
 }
 

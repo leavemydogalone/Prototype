@@ -12,6 +12,7 @@
 #include "Player/AuraPlayerState.h"
 #include "NiagaraComponent.h"
 #include "AbilitySystem/AuraAbilitySystemLibrary.h"
+#include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystem/AuraAttributeSet.h"
 #include "AbilitySystem/Data/AbilityInfo.h"
 #include "AbilitySystem/Debuff/DebuffNiagaraComponent.h"
@@ -90,15 +91,15 @@ void AAuraCharacter::SetSelectedUnit_Implementation(AActor* NewUnit)
 
 }
 
-void AAuraCharacter::ShowAbilityPreview_Implementation(const FGameplayTag& AbilityTag, AActor* Unit, const int32 AbilitySize, const int32 AbilityRange)
+void AAuraCharacter::ShowAbilityPreview_Implementation(UUnitAbilityPreviewContext* UnitAbilityPreviewContext)
 {
 	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
-	UAbilityInfo* AbilityInfo = UAuraAbilitySystemLibrary::GetAbilityInfo(this);
-	FAuraAbilityInfo Info = AbilityInfo->FindAbilityInfoForTag(AbilityTag);
+	/*UAbilityInfo* AbilityInfo = UAuraAbilitySystemLibrary::GetAbilityInfo(this);
+	FAuraAbilityInfo Info = AbilityInfo->FindAbilityInfoForTag(AbilityTag);*/
 
 	if (AAuraPlayerController* AuraPlayerController = Cast<AAuraPlayerController>(GetController()))
 	{
-		AuraPlayerController->ShowAbilityPreview();
+		AuraPlayerController->ShowAbilityPreview(UnitAbilityPreviewContext);
 		AuraPlayerController->bShowMouseCursor = false;
 	}
 
@@ -126,6 +127,25 @@ void AAuraCharacter::RemoveLastStoredAbility_Implementation()
 	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
 	check(AuraPlayerState);
 	AuraPlayerState->RemoveLastStoredAbility();
+}
+
+void AAuraCharacter::SendGameplayEventToClient_Implementation(AActor* Actor, FGameplayTag GameplayTag, FGameplayEventData GameplayEventData)
+{
+	if (HasAuthority())
+	{
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(this, GameplayTag, GameplayEventData);
+
+		Client_SendGameplayEventToClient(this, GameplayTag, GameplayEventData);
+	}
+	else
+	{
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(this, GameplayTag, GameplayEventData);
+	}
+}
+
+void AAuraCharacter::Client_SendGameplayEventToClient_Implementation(AActor* Actor, FGameplayTag GameplayTag, FGameplayEventData GameplayEventData)
+{
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Actor, GameplayTag, GameplayEventData);
 }
 
 void AAuraCharacter::InitAbilityActorInfo()

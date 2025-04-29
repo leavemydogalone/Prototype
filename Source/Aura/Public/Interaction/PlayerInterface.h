@@ -4,9 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+#include "AbilitySystem/Data/UnitAbilityPreviewContext.h"
+#include "Abilities/GameplayAbilityTypes.h"
 #include "PlayerInterface.generated.h"
 
 struct FGameplayTag;
+struct FGameplayEventData;
 
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
@@ -74,7 +77,10 @@ public:
 	void SetSelectedUnit(AActor* Actor);
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void ShowAbilityPreview(const FGameplayTag& AbilityTag, AActor* Unit, const int32 AbilitySize, const int32 AbilityRange);
+	void SendGameplayEventToClient(AActor* Actor, FGameplayTag GameplayTag, FGameplayEventData GameplayEventData);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void ShowAbilityPreview(UUnitAbilityPreviewContext* UnitAbilityPreviewContext);
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void CancelAbilityPreview();
