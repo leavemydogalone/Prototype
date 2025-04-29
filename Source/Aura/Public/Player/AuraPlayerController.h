@@ -144,4 +144,8 @@ private:
 	void UpdateAbilityPreviewLocation();
 
 	bool bIsStoredAbilitiesDelegateBound = false;
+
+	void DrawLineToMouse(AActor* Unit);
+
+	AActor* CurrentUnitBeingPreviewed;
 };

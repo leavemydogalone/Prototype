@@ -72,6 +72,7 @@ void AAuraPlayerController::ShowAbilityPreview_Implementation(const FUnitAbility
 
 	if (!IsValid(AbilityPreview))
 	{
+		CurrentUnitBeingPreviewed = UnitAbilityPreviewInfo.Unit;
 		AbilityPreview = GetWorld()->SpawnActorDeferred<AAbilityPreview>(
 			AbilityPreviewClass,
 			FTransform::Identity,   
@@ -82,7 +83,7 @@ void AAuraPlayerController::ShowAbilityPreview_Implementation(const FUnitAbility
 
 		if (IsValid(AbilityPreview))
 		{
-			//AbilityPreview->AbilityRangeDecal->SetWorldLocation(UnitAbilityPreviewContext->Unit->GetActorLocation());
+			AbilityPreview->AbilityRangeDecal->SetWorldLocation(UnitAbilityPreviewInfo.Unit->GetActorLocation());
 			//AbilityPreview->AbiltyTargetDecal->SetScale(UnitAbilityPreviewContext->AbilitySize);
 		}
 		/*if (DecalMaterial)
@@ -97,6 +98,38 @@ void AAuraPlayerController::HideAbilityPreview()
 	if (IsValid(AbilityPreview))
 	{
 		AbilityPreview->Destroy();
+	}
+}
+
+void AAuraPlayerController::UpdateAbilityPreviewLocation()
+{
+	if (IsValid(AbilityPreview))
+	{
+		AbilityPreview->SetActorLocation(CursorHit.ImpactPoint);
+	}
+	if(CurrentUnitBeingPreviewed) DrawLineToMouse(CurrentUnitBeingPreviewed);
+}
+
+void AAuraPlayerController::DrawLineToMouse(AActor* Unit)
+{
+	FVector WorldLocation;
+	FVector WorldDirection;
+	if (DeprojectMousePositionToWorld(WorldLocation, WorldDirection))
+	{
+		// Find a point far away along the direction
+		FVector TraceEnd = WorldLocation + (WorldDirection * 10000.0f);
+
+		// Optionally: Do a trace to hit something (optional)
+		FHitResult HitResult;
+		FCollisionQueryParams QueryParams;
+		QueryParams.AddIgnoredActor(this); // Don't hit self
+		bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, WorldLocation, TraceEnd, ECC_Visibility, QueryParams);
+
+		FVector TargetPoint = bHit ? HitResult.Location : TraceEnd;
+
+		// Draw a line from actor location to the mouse world position
+		FVector ActorLocation = Unit->GetActorLocation();
+		DrawDebugLine(GetWorld(), ActorLocation, TargetPoint, FColor::Green, false, 2.0f, 0, 2.0f);
 	}
 }
 
@@ -164,13 +197,7 @@ void AAuraPlayerController::UpdateMagicCircleLocation()
 	}
 }
 
-void AAuraPlayerController::UpdateAbilityPreviewLocation()
-{
-	if (IsValid(AbilityPreview))
-	{
-		AbilityPreview->SetActorLocation(CursorHit.ImpactPoint);
-	}
-}
+
 
 void AAuraPlayerController::HighlightActor(AActor* InActor)
 {
