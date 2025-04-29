@@ -55,8 +55,6 @@ public:
 	FGameplayTag Event_Unit_Confirm;
 	FGameplayTag Event_Unit_Cancel;
 
-	FGameplayTag Event_Player_ShowAbilityPreview;
-
 	FGameplayTag Damage;
 	FGameplayTag Damage_Fire;
 	FGameplayTag Damage_Lightning;
@@ -82,7 +80,11 @@ public:
 	
 	FGameplayTag Abilities_Attack;
 	FGameplayTag Abilities_Summon;
-	
+	FGameplayTag Abilities_Confirm;
+	FGameplayTag Abilities_Cancel;
+	FGameplayTag Abilities_Select;
+	FGameplayTag Abilities_Command_Unit;
+
 	FGameplayTag Abilities_HitReact;
 
 	FGameplayTag Abilities_Status_Locked;

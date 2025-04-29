@@ -266,6 +266,19 @@ void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 		return;
 	}
 
+	//if (GetASC() && GetASC()->HasMatchingGameplayTag(FAuraGameplayTags::Get().InputTag_LMB))
+	//{
+	//	TArray<FGameplayAbilitySpec*> ActiveSpecs;
+	//	GetASC()->GetActivatableGameplayAbilitySpecsByAllMatchingTags(FGameplayTagContainer(FAuraGameplayTags::Get().CommandUnit), ActiveSpecs, false);
+	//	for (FGameplayAbilitySpec* Spec : ActiveSpecs)
+	//	{
+	//		if (Spec && Spec->IsActive())
+	//		{
+	//			SendGameplayEvne;
+	//		}
+	//	}
+	//}
+
 	if (GetASC()) GetASC()->AbilityInputTagPressed(InputTag);
 
 	/*if (InputTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB))
@@ -333,11 +346,11 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 
 void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 {
-
 	if (GetASC() && GetASC()->HasMatchingGameplayTag(FAuraGameplayTags::Get().Player_Block_InputHeld))
 	{
 		return;
 	}
+
 	if (GetASC()) GetASC()->AbilityInputTagHeld(InputTag);
 
 	//if (GetSelectedUnitASC() && !InputTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_1))
@@ -392,18 +405,6 @@ AAuraPlayerState* AAuraPlayerController::GetPS()
 	}
 	return AuraPlayerState;
 }
-
-//UAuraAbilitySystemComponent* AAuraPlayerController::GetSelectedUnitASC()
-//{
-//	if (SelectedUnitASC == nullptr)
-//	{
-//		if (GetPS()->GetSelectedUnit())
-//		{
-//			SelectedUnitASC = Cast<UAuraAbilitySystemComponent>(GetPS()->GetSelectedUnit()->GetAbilitySystemComponent());
-//		}
-//	}
-//	return SelectedUnitASC;
-//}
 
 void AAuraPlayerController::BeginPlay()
 {

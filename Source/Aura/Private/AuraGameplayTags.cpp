@@ -187,15 +187,6 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 	);
 
 	/*
-	 * Player Event Types
-	 */
-
-	GameplayTags.Event_Player_ShowAbilityPreview = UGameplayTagsManager::Get().AddNativeGameplayTag(
-		FName("Event.Player.ShowAbilityPreview"),
-		FString("Player Event for showing ability preview")
-	);
-
-	/*
 	 * Damage Types
 	 */
 
@@ -327,6 +318,26 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 		FName("Abilities.Summon"),
 		FString("Summon Ability Tag")
 		);
+
+	GameplayTags.Abilities_Confirm = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.Confirm"),
+		FString("Confirm Ability Tag")
+	);
+
+	GameplayTags.Abilities_Cancel = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.Cancel"),
+		FString("Cancel Ability Tag")
+	);
+
+	GameplayTags.Abilities_Select = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.Select"),
+		FString("Select Ability Tag")
+	);
+
+	GameplayTags.Abilities_Command_Unit = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.Command.Unit"),
+		FString("Command Unit Ability Tag")
+	);
 
 	/*
 	 * Offensive Spells
