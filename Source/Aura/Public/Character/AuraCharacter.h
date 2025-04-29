@@ -10,7 +10,7 @@
 class UNiagaraComponent;
 class UCameraComponent;
 class USpringArmComponent;
-class UUnitAbilityPreviewContext;
+struct FUnitAbilityPreviewInfo;
 
 /**
  * 
@@ -42,7 +42,7 @@ public:
 	virtual AActor* GetSelectedUnit_Implementation() const override;
 	virtual void SetSelectedUnit_Implementation(AActor* NewUnit) override;
 	UFUNCTION()
-	virtual void ShowAbilityPreview(UUnitAbilityPreviewContext* UnitAbilityPreviewContext) override;
+	virtual void ShowAbilityPreview(FUnitAbilityPreviewInfo& UnitAbilityPreviewInfo) override;
 	void CancelAbilityPreview_Implementation();
 	void AddAbilityToStoredAbilities_Implementation(FGameplayTag& AbilityTag, AActor* Unit, int32 AbilitySize, FVector TargetLocation);
 	void RemoveLastStoredAbility_Implementation();

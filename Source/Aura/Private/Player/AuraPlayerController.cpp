@@ -22,6 +22,7 @@
 #include "Player/AuraPlayerState.h"
 #include "Character/AuraUnitBase.h"
 #include "AbilitySystem/Data/UnitAbilityPreviewContext.h"
+#include "AbilitySystem/Data/AbilityInfo.h"
 #include "Actor/AbilityPreview.h"
 
 
@@ -62,13 +63,8 @@ void AAuraPlayerController::HideMagicCircle()
 	}
 }
 
-void AAuraPlayerController::ShowAbilityPreview_Implementation(UUnitAbilityPreviewContext* UnitAbilityPreviewContext)
+void AAuraPlayerController::ShowAbilityPreview_Implementation(const FUnitAbilityPreviewInfo& UnitAbilityPreviewInfo)
 {
-	//if (!IsValid(UnitAbilityPreviewContext))
-	//{
-	//	return;
-	//}
-
 	if (!IsLocalController())
 	{
 		return;
@@ -76,7 +72,19 @@ void AAuraPlayerController::ShowAbilityPreview_Implementation(UUnitAbilityPrevie
 
 	if (!IsValid(AbilityPreview))
 	{
-		AbilityPreview = GetWorld()->SpawnActor<AAbilityPreview>(AbilityPreviewClass);
+		AbilityPreview = GetWorld()->SpawnActorDeferred<AAbilityPreview>(
+			AbilityPreviewClass,
+			FTransform::Identity,   
+			this,                  
+			nullptr,                
+			ESpawnActorCollisionHandlingMethod::AlwaysSpawn
+		);
+
+		if (IsValid(AbilityPreview))
+		{
+			//AbilityPreview->AbilityRangeDecal->SetWorldLocation(UnitAbilityPreviewContext->Unit->GetActorLocation());
+			//AbilityPreview->AbiltyTargetDecal->SetScale(UnitAbilityPreviewContext->AbilitySize);
+		}
 		/*if (DecalMaterial)
 		{
 			AbilityPreview->AbiltyTargetDecal->SetMaterial(0, DecalMaterial);

@@ -50,7 +50,7 @@ public:
 	void HideMagicCircle();
 
 	UFUNCTION(Client, Reliable)
-	void ShowAbilityPreview(UUnitAbilityPreviewContext* UnitAbilityPreviewContext);
+	void ShowAbilityPreview(const FUnitAbilityPreviewInfo& UnitAbilityPreviewInfo);
 
 	//UFUNCTION(Client, Reliable)
 	void HideAbilityPreview();

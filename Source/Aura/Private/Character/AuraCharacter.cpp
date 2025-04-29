@@ -91,21 +91,14 @@ void AAuraCharacter::SetSelectedUnit_Implementation(AActor* NewUnit)
 
 }
 
-void AAuraCharacter::ShowAbilityPreview(UUnitAbilityPreviewContext* UnitAbilityPreviewContext)
+void AAuraCharacter::ShowAbilityPreview(FUnitAbilityPreviewInfo& UnitAbilityPreviewInfo)
 {
 	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
-	/*UAbilityInfo* AbilityInfo = UAuraAbilitySystemLibrary::GetAbilityInfo(this);
-	FAuraAbilityInfo Info = AbilityInfo->FindAbilityInfoForTag(AbilityTag);*/
-	
-	//UnitAbilityPreviewContext->AbilityTag = AbilityTag;
-	//UnitAbilityPreviewContext->Unit = Unit;
-	//UnitAbilityPreviewContext->AbilityRange = AbilityRange;
-	//UnitAbilityPreviewContext->AbilitySize = AbilitySize;
-
 
 	if (AAuraPlayerController* AuraPlayerController = Cast<AAuraPlayerController>(GetController()))
 	{
-		AuraPlayerController->ShowAbilityPreview(UnitAbilityPreviewContext);
+		const FUnitAbilityPreviewInfo& ConstUnitAbilityPreviewInfo = UnitAbilityPreviewInfo;
+		AuraPlayerController->ShowAbilityPreview(ConstUnitAbilityPreviewInfo);
 		AuraPlayerController->bShowMouseCursor = false;
 	}
 

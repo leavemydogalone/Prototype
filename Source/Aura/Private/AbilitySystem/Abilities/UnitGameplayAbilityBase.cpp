@@ -7,6 +7,7 @@
 #include "Game/AuraTurnPhase.h"
 #include "GameplayEffectTypes.h"
 #include "AuraGameplayTags.h"
+#include "AbilitySystem/Data/AbilityInfo.h"
 #include "AbilitySystem/Data/UnitAbilityPreviewContext.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "GameFramework/GameState.h"
@@ -58,15 +59,13 @@ void UUnitGameplayAbilityBase::HandlePhaseEnumFromDelegate(EAuraTurnPhase TurnPh
 
 void UUnitGameplayAbilityBase::StartAbilityPreview()
 {
-	const FAuraGameplayTags& TagsManager = FAuraGameplayTags::Get();
+	FUnitAbilityPreviewInfo UnitAbilityPreviewInfo;
+	UnitAbilityPreviewInfo.AbilityTag = AbilityTags.First();
+	UnitAbilityPreviewInfo.Unit = GetAvatarActorFromActorInfo();
+	UnitAbilityPreviewInfo.AbilityRange = AbilityRange;
+	UnitAbilityPreviewInfo.AbilitySize = AbilitySize;
 
-	UUnitAbilityPreviewContext* UnitAbilityPreviewContext = NewObject<UUnitAbilityPreviewContext>(this);
-	UnitAbilityPreviewContext->AbilityTag = AbilityTags.First();
-	UnitAbilityPreviewContext->Unit = GetAvatarActorFromActorInfo();
-	UnitAbilityPreviewContext->AbilityRange = AbilityRange;
-	UnitAbilityPreviewContext->AbilitySize = AbilitySize;
-
-	GetPlayerInterface()->ShowAbilityPreview(UnitAbilityPreviewContext);
+	GetPlayerInterface()->ShowAbilityPreview(UnitAbilityPreviewInfo);
 
 	
 }

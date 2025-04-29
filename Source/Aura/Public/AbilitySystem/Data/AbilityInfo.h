@@ -9,6 +9,28 @@
 
 class UGameplayAbility;
 
+// This should be in its own file
+USTRUCT()
+struct FUnitAbilityPreviewInfo
+{
+	GENERATED_BODY()
+
+	UPROPERTY()
+	FGameplayTag AbilityTag;
+
+	UPROPERTY()
+	AActor* Unit;
+
+	UPROPERTY()
+	int32 AbilitySize = 1;
+
+	UPROPERTY()
+	int32 AbilityRange = 0;
+
+	UPROPERTY()
+	FVector TargetLocation = FVector::ZeroVector;
+};
+
 USTRUCT(BlueprintType)
 struct FAuraAbilityInfo
 {

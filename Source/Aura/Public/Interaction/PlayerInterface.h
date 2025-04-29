@@ -4,11 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "AbilitySystem/Data/UnitAbilityPreviewContext.h"
 #include "Abilities/GameplayAbilityTypes.h"
 #include "PlayerInterface.generated.h"
 
 struct FGameplayTag;
+struct FUnitAbilityPreviewInfo;
 struct FGameplayEventData;
 
 // This class does not need to be modified.
@@ -77,7 +77,7 @@ public:
 	void SetSelectedUnit(AActor* Actor);
 
 	UFUNCTION()
-	virtual void ShowAbilityPreview(UUnitAbilityPreviewContext* UnitAbilityPreviewContext) = 0;
+	virtual void ShowAbilityPreview(FUnitAbilityPreviewInfo& UnitAbilityPreviewInfo) = 0;
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void CancelAbilityPreview();

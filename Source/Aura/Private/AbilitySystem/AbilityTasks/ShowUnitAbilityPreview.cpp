@@ -18,7 +18,7 @@ void UShowUnitAbilityPreview::Activate()
     {
         if (AAuraPlayerController* PC = Cast<AAuraPlayerController>(Ability->GetCurrentActorInfo()->PlayerController.Get()))
         {
-            PC->ShowAbilityPreview(PreviewContext);
+            //PC->ShowAbilityPreview(PreviewContext);
         }
     }
     EndTask();
