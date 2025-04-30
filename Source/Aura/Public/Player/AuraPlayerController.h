@@ -146,6 +146,7 @@ private:
 	bool bIsStoredAbilitiesDelegateBound = false;
 
 	void DrawLineToMouse(AActor* Unit, int32 MaxRange);
+	void DrawDebugCircleAroundActor(AActor* TargetActor, float MaxRange, int32 Segments /*= 64*/, const FColor& Color /*= FColor::Green*/, float Duration /*= 0.f*/, float Thickness /*= 1.f*/);
 
 	FUnitAbilityPreviewInfo CurrentUnitAbilityPreviewInfo;
 	bool bAbilityPreviewIsActive = false;

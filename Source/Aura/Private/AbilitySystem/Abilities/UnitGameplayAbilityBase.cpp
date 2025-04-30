@@ -157,6 +157,7 @@ void UUnitGameplayAbilityBase::OnConfirmTagAdded(FGameplayEventData Data)
 {
 	HideAbilityPreview();
 	bIsAbilityConfirmed = true;
+	ConfirmedEventData = Data;
 	//GetPlayerInterface()->AddAbilityToStoredAbilities(CurrentEventData.Instigator, CurrentEventData.EventTag);
 	//log that ability was confirmed
 	UE_LOG(LogTemp, Warning, TEXT("Ability confirmed"));

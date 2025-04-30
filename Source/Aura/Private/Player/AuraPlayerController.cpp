@@ -110,7 +110,11 @@ void AAuraPlayerController::UpdateAbilityPreviewLocation()
 	{
 		AbilityPreview->SetActorLocation(CursorHit.ImpactPoint);
 	}
-	if(bAbilityPreviewIsActive) DrawLineToMouse(CurrentUnitAbilityPreviewInfo.Unit, CurrentUnitAbilityPreviewInfo.AbilityRange);
+	if (bAbilityPreviewIsActive)
+	{
+		DrawLineToMouse(CurrentUnitAbilityPreviewInfo.Unit, CurrentUnitAbilityPreviewInfo.AbilityRange);
+		DrawDebugCircleAroundActor(CurrentUnitAbilityPreviewInfo.Unit, CurrentUnitAbilityPreviewInfo.AbilityRange, 20, FColor::Blue, 0.1f, 1.f);
+	}
 }
 
 void AAuraPlayerController::DrawLineToMouse(AActor* Unit, int32 MaxRange)
@@ -139,9 +143,35 @@ void AAuraPlayerController::DrawLineToMouse(AActor* Unit, int32 MaxRange)
 			TargetPoint = UnitLocation + DirectionToTarget * MaxRange;
 		}
 
+		TargetPoint.Z = UnitLocation.Z;
+
 		// Draw clamped line
 		DrawDebugLine(GetWorld(), UnitLocation, TargetPoint, FColor::Green, false, 2.0f, 0, 2.0f);
 	}
+}
+
+void AAuraPlayerController::DrawDebugCircleAroundActor(AActor* TargetActor, float MaxRange, int32 Segments, const FColor& Color, float Duration, float Thickness)
+{
+    if (!TargetActor || !GetWorld()) return;
+
+    FVector Center = TargetActor->GetActorLocation();
+    FVector UpVector = FVector::UpVector;
+    FVector ForwardVector = TargetActor->GetActorForwardVector();
+    FVector RightVector = FVector::CrossProduct(UpVector, ForwardVector);
+
+    DrawDebugCircle(
+        GetWorld(),
+        Center,
+        MaxRange,
+        Segments,
+        Color,
+        false,        // persistent lines
+        Duration,
+        0,            // depth priority
+        Thickness,
+        RightVector,  // X-axis vector
+        ForwardVector // Y-axis vector
+    );
 }
 
 void AAuraPlayerController::UpdateStoredAbilityPreviews(TArray<FStoredAbilityInfo>& StoredAbilities)

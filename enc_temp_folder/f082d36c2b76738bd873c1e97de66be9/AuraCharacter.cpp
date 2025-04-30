@@ -99,6 +99,7 @@ void AAuraCharacter::ShowAbilityPreview(FUnitAbilityPreviewInfo& UnitAbilityPrev
 	{
 		const FUnitAbilityPreviewInfo& ConstUnitAbilityPreviewInfo = UnitAbilityPreviewInfo;
 		AuraPlayerController->ShowAbilityPreview(ConstUnitAbilityPreviewInfo);
+		AuraPlayerController->bShowMouseCursor = false;
 	}
 
 }
@@ -108,6 +109,7 @@ void AAuraCharacter::HideAbilityPreview()
 	if (AAuraPlayerController* AuraPlayerController = Cast<AAuraPlayerController>(GetController()))
 	{
 		AuraPlayerController->HideAbilityPreview();
+		AuraPlayerController->bShowMouseCursor = true;
 	}
 }
 

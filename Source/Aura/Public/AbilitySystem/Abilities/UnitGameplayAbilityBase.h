@@ -25,6 +25,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Ability")
 	float AbilitySize = 1.f;
 
+	UPROPERTY(BlueprintReadOnly)
+	FGameplayEventData ConfirmedEventData;
+
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 
 	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
@@ -71,5 +74,6 @@ private:
 	void OnConfirmTagAdded(FGameplayEventData Data);
 
 	UPROPERTY()
-	bool bIsAbilityConfirmed = false;
+	bool bIsAbilityConfirmed = false; 
+
 };
