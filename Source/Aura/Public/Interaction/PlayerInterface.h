@@ -76,6 +76,9 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void SetSelectedUnit(AActor* Actor);
 
+	/*UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	bool GetIsAbilityPreviewing();*/
+
 	UFUNCTION()
 	virtual void ShowAbilityPreview(FUnitAbilityPreviewInfo& UnitAbilityPreviewInfo) = 0;
 	

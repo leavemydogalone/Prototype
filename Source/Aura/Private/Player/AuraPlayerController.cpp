@@ -266,19 +266,6 @@ void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 		return;
 	}
 
-	//if (GetASC() && GetASC()->HasMatchingGameplayTag(FAuraGameplayTags::Get().InputTag_LMB))
-	//{
-	//	TArray<FGameplayAbilitySpec*> ActiveSpecs;
-	//	GetASC()->GetActivatableGameplayAbilitySpecsByAllMatchingTags(FGameplayTagContainer(FAuraGameplayTags::Get().CommandUnit), ActiveSpecs, false);
-	//	for (FGameplayAbilitySpec* Spec : ActiveSpecs)
-	//	{
-	//		if (Spec && Spec->IsActive())
-	//		{
-	//			SendGameplayEvne;
-	//		}
-	//	}
-	//}
-
 	if (GetASC()) GetASC()->AbilityInputTagPressed(InputTag);
 
 	/*if (InputTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB))
