@@ -158,7 +158,18 @@ void UUnitGameplayAbilityBase::OnConfirmTagAdded(FGameplayEventData Data)
 	HideAbilityPreview();
 	bIsAbilityConfirmed = true;
 	ConfirmedEventData = Data;
-	//GetPlayerInterface()->AddAbilityToStoredAbilities(CurrentEventData.Instigator, CurrentEventData.EventTag);
+	FVector TargetLocation = ConfirmedEventData.TargetData.Get(0)->GetHitResult()->Location;
+
+	// Will need to do the calculation for actual target location (at max range) in ability. 
+	// Maybe like, if beyong max range then set to max range
+
+
+	FUnitAbilityPreviewInfo UnitAbilityPreviewInfo;
+	UnitAbilityPreviewInfo.AbilityTag = AbilityTags.First();
+	UnitAbilityPreviewInfo.Unit = GetAvatarActorFromActorInfo();
+	UnitAbilityPreviewInfo.TargetLocation = TargetLocation;
+	UnitAbilityPreviewInfo.AbilitySize = AbilitySize;
+	GetPlayerInterface()->AddAbilityToStoredAbilities(UnitAbilityPreviewInfo);
 	//log that ability was confirmed
 	UE_LOG(LogTemp, Warning, TEXT("Ability confirmed"));
 }

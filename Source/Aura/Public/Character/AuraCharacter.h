@@ -45,7 +45,7 @@ public:
 	virtual void ShowAbilityPreview(FUnitAbilityPreviewInfo& UnitAbilityPreviewInfo) override;
 	UFUNCTION()
 	virtual void HideAbilityPreview() override;
-	void AddAbilityToStoredAbilities_Implementation(FGameplayTag& AbilityTag, AActor* Unit, int32 AbilitySize, FVector TargetLocation);
+	virtual void AddAbilityToStoredAbilities(FUnitAbilityPreviewInfo& UnitAbilityPreviewInfo) override;
 	void RemoveLastStoredAbility_Implementation();
 	/** end Player Interface */
 

@@ -85,8 +85,8 @@ public:
 	UFUNCTION()
 	virtual void HideAbilityPreview() = 0;
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void AddAbilityToStoredAbilities(const FGameplayTag& AbilityTag, AActor* Unit, FVector TargetLocation);
+	UFUNCTION()
+	virtual void AddAbilityToStoredAbilities(FUnitAbilityPreviewInfo& UnitAbilityPreviewInfo) = 0;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void RemoveLastStoredAbility();

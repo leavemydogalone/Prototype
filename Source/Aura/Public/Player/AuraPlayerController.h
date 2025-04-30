@@ -56,7 +56,8 @@ public:
 	void HideAbilityPreview();
 
 	//update this and PS function to use FUnitAbilityPreviewInfo
-	void UpdateStoredAbilityPreviews(TArray<FStoredAbilityInfo>& StoredAbilities);
+	UFUNCTION(Client, Reliable)
+	void UpdateStoredAbilityPreviews(const TArray<FUnitAbilityPreviewInfo>& StoredAbilities);
 
 	void BindToStoredAbilitiesDelegate();
 

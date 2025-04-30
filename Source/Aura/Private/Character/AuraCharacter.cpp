@@ -57,6 +57,7 @@ void AAuraCharacter::PossessedBy(AController* NewController)
 	// Init ability actor info for the Server
 	InitAbilityActorInfo();
 	AddCharacterAbilities();
+	BindPCToPlayerStateDelegates();
 
 	//LoadProgress();
 
@@ -111,12 +112,10 @@ void AAuraCharacter::HideAbilityPreview()
 	}
 }
 
-void AAuraCharacter::AddAbilityToStoredAbilities_Implementation(FGameplayTag& AbilityTag, AActor* Unit, int32 AbilitySize, FVector TargetLocation)
+void AAuraCharacter::AddAbilityToStoredAbilities(FUnitAbilityPreviewInfo& UnitAbilityPreviewInfo)
 {
 	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
-	UAbilityInfo* AbilityInfo = UAuraAbilitySystemLibrary::GetAbilityInfo(this);
-	FAuraAbilityInfo Info = AbilityInfo->FindAbilityInfoForTag(AbilityTag);
-	AuraPlayerState->AddAbilityToStoredAbilities(AbilityTag, Unit, AbilitySize, TargetLocation, Info.AbilityPreviewDecal);
+	AuraPlayerState->AddAbilityToStoredAbilities(UnitAbilityPreviewInfo);
 }
 
 void AAuraCharacter::RemoveLastStoredAbility_Implementation()

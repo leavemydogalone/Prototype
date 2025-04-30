@@ -7,6 +7,7 @@
 #include "GameFramework/PlayerState.h"
 #include "Interaction/TeamInterface.h"
 #include "AuraGameplayTags.h"
+#include "AbilitySystem/Data/AbilityInfo.h"
 #include "AuraPlayerState.generated.h"
 
 
@@ -20,19 +21,7 @@ class IUnitInterface;
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnPlayerStatChanged, int32 /*StatValue*/)
 DECLARE_MULTICAST_DELEGATE_TwoParams(FOnLevelChanged, int32 /*StatValue*/, bool /*bLevelUp*/)
 
-USTRUCT()
-struct FStoredAbilityInfo
-{
-	GENERATED_BODY()
-
-	FGameplayTag AbilityTag;
-	TObjectPtr<AActor> Unit;
-	int32 AbilitySize = 1;
-	FVector TargetLocation;
-	TObjectPtr<UDecalComponent> Decal;
-};
-
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnPlayerStoredAbilitiesArrayChanged, TArray<FStoredAbilityInfo>&)
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnPlayerStoredAbilitiesArrayChanged, const TArray<FUnitAbilityPreviewInfo>&)
 
 /**
  * 
@@ -81,7 +70,7 @@ public:
 	virtual int32 GetTeamID_Implementation() override;
 	virtual void SetTeamID(int32 ID) override { TeamID = ID; }
 
-	void AddAbilityToStoredAbilities(FGameplayTag& AbilityTag, AActor* Unit, int32 AbilitySize, FVector TargetLocation, UDecalComponent* Decal);
+	void AddAbilityToStoredAbilities(FUnitAbilityPreviewInfo& UnitAbilityPreviewInfo);
 	void RemoveLastStoredAbility();
 
 protected:
@@ -116,7 +105,7 @@ private:
 	int32 TeamID = -1;
 
 	UPROPERTY(VisibleAnywhere, ReplicatedUsing = OnRep_StoredAbilities)
-	TArray<FStoredAbilityInfo> StoredAbilities;
+	TArray<FUnitAbilityPreviewInfo> StoredAbilities;
 
 	UFUNCTION()
 	void OnRep_Level(int32 OldLevel);
@@ -134,5 +123,5 @@ private:
 	void OnRep_TeamID(int32 OldTeamID);
 
 	UFUNCTION()
-	void OnRep_StoredAbilities(TArray<FStoredAbilityInfo>& OldStoredAbilities);
+	void OnRep_StoredAbilities(TArray<FUnitAbilityPreviewInfo>& OldStoredAbilities);
 };

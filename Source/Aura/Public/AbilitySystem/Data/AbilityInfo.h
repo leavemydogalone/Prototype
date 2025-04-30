@@ -15,11 +15,13 @@ struct FUnitAbilityPreviewInfo
 {
 	GENERATED_BODY()
 
-	UPROPERTY()
-	FGameplayTag AbilityTag;
+	FUnitAbilityPreviewInfo() {}
 
 	UPROPERTY()
-	TObjectPtr<AActor> Unit;
+	FGameplayTag AbilityTag = FGameplayTag();
+
+	UPROPERTY()
+	TObjectPtr<AActor> Unit = nullptr;
 
 	UPROPERTY()
 	int32 AbilitySize = 1;

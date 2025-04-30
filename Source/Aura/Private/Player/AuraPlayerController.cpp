@@ -112,6 +112,7 @@ void AAuraPlayerController::UpdateAbilityPreviewLocation()
 	}
 	if (bAbilityPreviewIsActive)
 	{
+		//Only drawline will exist here. Debug circle will be handled in ability preview
 		DrawLineToMouse(CurrentUnitAbilityPreviewInfo.Unit, CurrentUnitAbilityPreviewInfo.AbilityRange);
 		DrawDebugCircleAroundActor(CurrentUnitAbilityPreviewInfo.Unit, CurrentUnitAbilityPreviewInfo.AbilityRange, 20, FColor::Blue, 0.1f, 1.f);
 	}
@@ -174,32 +175,31 @@ void AAuraPlayerController::DrawDebugCircleAroundActor(AActor* TargetActor, floa
     );
 }
 
-void AAuraPlayerController::UpdateStoredAbilityPreviews(TArray<FStoredAbilityInfo>& StoredAbilities)
+void AAuraPlayerController::UpdateStoredAbilityPreviews_Implementation(const TArray<FUnitAbilityPreviewInfo>& StoredAbilities)
 {
 	if (StoredAbilities.IsEmpty()) return;
-	for (const FStoredAbilityInfo& StoredAbility : StoredAbilities)
+	for (const FUnitAbilityPreviewInfo& StoredAbility : StoredAbilities)
 	{
-		if (IsValid(AbilityPreview))
+		/*if (IsValid(AbilityPreview))
 		{
 			AbilityPreview = GetWorld()->SpawnActor<AAbilityPreview>(AbilityPreviewClass);
-			if (StoredAbility.AbilityTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB))
-			{
-				
-			}
-			else
-			{
-		
-			}
+			
+		}*/
+
+		// Check that the stored ability properties are valid
+		if (!IsValid(StoredAbility.Unit) || StoredAbility.TargetLocation == FVector::ZeroVector)
+		{
+			continue;
 		}
+		DrawDebugLine(GetWorld(), StoredAbility.Unit->GetActorLocation(), StoredAbility.TargetLocation, FColor::Yellow, false, 10.0f, 0, 2.0f);
 	}
 }
 
+//This is being called in the Character, in the OnRep_PlayerState, to ensure PS exists
 void AAuraPlayerController::BindToStoredAbilitiesDelegate()
 {
 	GetPS()->OnStoredAbilitiesArrayChangedDelegate.AddUObject(this, &AAuraPlayerController::UpdateStoredAbilityPreviews);
 }
-
-
 
 void AAuraPlayerController::ShowDamageNumber_Implementation(float DamageAmount, ACharacter* TargetCharacter, bool bBlockedHit, bool bCriticalHit)
 {
@@ -237,8 +237,6 @@ void AAuraPlayerController::UpdateMagicCircleLocation()
 		MagicCircle->SetActorLocation(CursorHit.ImpactPoint);
 	}
 }
-
-
 
 void AAuraPlayerController::HighlightActor(AActor* InActor)
 {

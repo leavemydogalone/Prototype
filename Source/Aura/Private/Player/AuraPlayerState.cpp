@@ -17,6 +17,8 @@ AAuraPlayerState::AAuraPlayerState()
 	AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>("AttributeSet");
 	
 	NetUpdateFrequency = 100.f;
+
+	StoredAbilities.SetNum(0);
 }
 
 void AAuraPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -54,15 +56,10 @@ int32 AAuraPlayerState::GetTeamID_Implementation()
 	return TeamID;
 }
 
-void AAuraPlayerState::AddAbilityToStoredAbilities(FGameplayTag& AbilityTag, AActor* Unit, int32 AbilitySize, FVector TargetLocation, UDecalComponent* Decal)
+void AAuraPlayerState::AddAbilityToStoredAbilities(FUnitAbilityPreviewInfo& UnitAbilityPreviewInfo)
 {
-	FStoredAbilityInfo NewAbility;
-	NewAbility.AbilityTag = AbilityTag;
-	NewAbility.Unit = Unit;
-	NewAbility.TargetLocation = TargetLocation;
-	StoredAbilities.Add(NewAbility);
+	StoredAbilities.Add(UnitAbilityPreviewInfo);
 	OnStoredAbilitiesArrayChangedDelegate.Broadcast(StoredAbilities);
-
 }
 
 void AAuraPlayerState::RemoveLastStoredAbility()
@@ -154,7 +151,7 @@ void AAuraPlayerState::OnRep_TeamID(int32 OldTeamID)
 	// OnTeamIDChangedDelegate.Broadcast(TeamID);
 }
 
-void AAuraPlayerState::OnRep_StoredAbilities(TArray<FStoredAbilityInfo>& OldStoredAbilities)
+void AAuraPlayerState::OnRep_StoredAbilities(TArray<FUnitAbilityPreviewInfo>& OldStoredAbilities)
 {
 
 }
