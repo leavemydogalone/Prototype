@@ -14,6 +14,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "Kismet/GameplayStatics.h"
+#include "Components/SphereComponent.h"
 #include "Aura/Aura.h"
 
 AAuraUnitBase::AAuraUnitBase()
@@ -33,7 +34,6 @@ AAuraUnitBase::AAuraUnitBase()
 
 	GetMesh()->SetCustomDepthStencilValue(CUSTOM_DEPTH_BLUE);
 	GetMesh()->MarkRenderStateDirty();
-
 }
 
 //void AAuraUnitBase::PossessedBy(AController* NewController)

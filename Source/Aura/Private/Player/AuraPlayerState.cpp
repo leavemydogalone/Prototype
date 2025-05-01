@@ -41,14 +41,14 @@ UAbilitySystemComponent* AAuraPlayerState::GetAbilitySystemComponent() const
 
 void AAuraPlayerState::SetSelectedUnit(AActor* NewUnit)
 {
-	if (HasAuthority())
-	{
+	/*if (HasAuthority())
+	{*/
 		if (IsValid(NewUnit) && NewUnit->Implements<UUnitInterface>())
 		{
 			SelectedUnit = NewUnit;
 			UE_LOG(LogTemp, Warning, TEXT("Selected Unit: %s"), *GetNameSafe(SelectedUnit));
 		}
-	}
+	//}
 }
 
 int32 AAuraPlayerState::GetTeamID_Implementation()

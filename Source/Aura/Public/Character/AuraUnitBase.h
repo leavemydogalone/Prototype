@@ -12,6 +12,7 @@
 class UBehaviorTree;
 class AAuraAIController;
 struct FGameplayTag;
+class USphereComponent;
 
 /**
  * 

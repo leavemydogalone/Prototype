@@ -47,7 +47,6 @@ protected:
 	UFUNCTION()
 	void HideAbilityPreview();
 
-
 private:
 
 	TScriptInterface<ITurnSystemInterface> GetTurnSystemInterface();

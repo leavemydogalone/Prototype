@@ -122,6 +122,13 @@ private:
 	UFUNCTION()
 	void OnRep_TeamID(int32 OldTeamID);
 
+	// This probably isnt needed, unless I intend
 	UFUNCTION()
 	void OnRep_StoredAbilities(TArray<FUnitAbilityPreviewInfo>& OldStoredAbilities);
+
+	//Use these three together
+	void PopFirstStoredAbility();
+
+	void BindToTurnPhaseDelegate();
+	void UnbindFromTurnPhaseDelegate();
 };

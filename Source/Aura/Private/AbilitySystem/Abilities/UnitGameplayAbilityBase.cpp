@@ -54,7 +54,7 @@ void UUnitGameplayAbilityBase::HandlePhaseEnumFromDelegate(EAuraTurnPhase TurnPh
 	FGameplayTagContainer& InstigatorTags = CurrentEventData.InstigatorTags;
 	for (const FGameplayTag& Tag : InstigatorTags)
 	{
-		if (Tag.MatchesTag(TurnTag))
+		if (Tag.MatchesTag(TurnTag) && bIsAbilityConfirmed)
 		{
 			ActivateUnitAbility();
 		}
@@ -145,7 +145,8 @@ void UUnitGameplayAbilityBase::WaitForConfirmTag()
 	FGameplayTag ConfirmTag = FAuraGameplayTags::Get().Event_Unit_Confirm;
 
 	UAbilityTask_WaitGameplayEvent* WaitForConfirmTagTask =
-		UAbilityTask_WaitGameplayEvent::WaitGameplayEvent(this, ConfirmTag);
+		UAbilityTask_WaitGameplayEvent::WaitGameplayEvent(this, ConfirmTag, nullptr, true);
+
 	if (WaitForConfirmTagTask)
 	{
 		WaitForConfirmTagTask->EventReceived.AddDynamic(this, &UUnitGameplayAbilityBase::OnConfirmTagAdded);

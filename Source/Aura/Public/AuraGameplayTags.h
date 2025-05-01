@@ -123,6 +123,7 @@ public:
 	TMap<FGameplayTag, FGameplayTag> DamageTypesToDebuffs;
 
 	FGameplayTag Effects_HitReact;
+	FGameplayTag Effects_Moving;
 
 	FGameplayTag Player_Block_Select;
 	FGameplayTag Player_Block_InputPressed;
