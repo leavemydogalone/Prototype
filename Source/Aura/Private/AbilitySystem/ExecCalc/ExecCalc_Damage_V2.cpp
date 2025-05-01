@@ -10,13 +10,13 @@
 #include "AbilitySystem/AuraAttributeSet.h"
 #include "AbilitySystem/Data/CharacterClassInfo.h"
 
-struct AuraDamageStatics
+struct AuraDamageStaticsV2
 {
 	DECLARE_ATTRIBUTE_CAPTUREDEF(Armor);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(ArmorPenetration);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(PhysicalResistance);
 
-	AuraDamageStatics()
+	AuraDamageStaticsV2()
 	{
 		DEFINE_ATTRIBUTE_CAPTUREDEF(UAuraAttributeSet, Armor, Target, false);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(UAuraAttributeSet, ArmorPenetration, Source, false);
@@ -24,9 +24,9 @@ struct AuraDamageStatics
 	}
 };
 
-static const AuraDamageStatics& DamageStatics()
+static const AuraDamageStaticsV2& DamageStatics()
 {
-	static AuraDamageStatics DStatics;
+	static AuraDamageStaticsV2 DStatics;
 	return DStatics;
 }
 
@@ -90,4 +90,23 @@ void UExecCalc_Damage_V2::Execute_Implementation(const FGameplayEffectCustomExec
 	float SourceArmorPenetration = 0.f;
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().ArmorPenetrationDef, EvaluationParameters, SourceArmorPenetration);
 	SourceArmorPenetration = FMath::Max<float>(SourceArmorPenetration, 0.f);
+
+	// Will want to go in and update this curve
+	const UCharacterClassInfo* CharacterClassInfo = UAuraAbilitySystemLibrary::GetCharacterClassInfo(SourceAvatar);
+	const FRealCurve* ArmorPenetrationCurve = CharacterClassInfo->DamageCalculationCoefficients->FindCurve(FName("ArmorPenetration"), FString());
+	const float ArmorPenetrationCoefficient = ArmorPenetrationCurve->Eval(SourcePlayerLevel);
+
+
+	// ArmorPenetration ignores a percentage of the Target's Armor.	
+	const float EffectiveArmor = TargetArmor * (100 - SourceArmorPenetration * ArmorPenetrationCoefficient) / 100.f;
+
+	const FRealCurve* EffectiveArmorCurve = CharacterClassInfo->DamageCalculationCoefficients->FindCurve(FName("EffectiveArmor"), FString());
+	const float EffectiveArmorCoefficient = EffectiveArmorCurve->Eval(TargetPlayerLevel);
+	// Armor ignores a percentage of incoming Damage.
+	Damage *= (100 - EffectiveArmor * EffectiveArmorCoefficient) / 100.f;
+
+
+
+	const FGameplayModifierEvaluatedData EvaluatedData(UAuraAttributeSet::GetIncomingDamageAttribute(), EGameplayModOp::Additive, Damage);
+	OutExecutionOutput.AddOutputModifier(EvaluatedData);
 }
