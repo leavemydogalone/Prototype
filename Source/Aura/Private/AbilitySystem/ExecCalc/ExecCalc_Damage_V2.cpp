@@ -24,7 +24,7 @@ struct AuraDamageStaticsV2
 	}
 };
 
-static const AuraDamageStaticsV2& DamageStatics()
+static const AuraDamageStaticsV2& DamageStaticsV2()
 {
 	static AuraDamageStaticsV2 DStatics;
 	return DStatics;
@@ -32,9 +32,9 @@ static const AuraDamageStaticsV2& DamageStatics()
 
 UExecCalc_Damage_V2::UExecCalc_Damage_V2()
 {
-	RelevantAttributesToCapture.Add(DamageStatics().ArmorDef);
-	RelevantAttributesToCapture.Add(DamageStatics().ArmorPenetrationDef);
-	RelevantAttributesToCapture.Add(DamageStatics().PhysicalResistanceDef);
+	RelevantAttributesToCapture.Add(DamageStaticsV2().ArmorDef);
+	RelevantAttributesToCapture.Add(DamageStaticsV2().ArmorPenetrationDef);
+	RelevantAttributesToCapture.Add(DamageStaticsV2().PhysicalResistanceDef);
 }
 
 void UExecCalc_Damage_V2::DetermineDebuff(const FGameplayEffectCustomExecutionParameters& ExecutionParams, const FGameplayEffectSpec& Spec, FAggregatorEvaluateParameters EvaluationParameters, const TMap<FGameplayTag, FGameplayEffectAttributeCaptureDefinition>& InTagsToDefs) const
@@ -46,9 +46,9 @@ void UExecCalc_Damage_V2::Execute_Implementation(const FGameplayEffectCustomExec
 	TMap<FGameplayTag, FGameplayEffectAttributeCaptureDefinition> TagsToCaptureDefs;
 	const FAuraGameplayTags& Tags = FAuraGameplayTags::Get();
 
-	TagsToCaptureDefs.Add(Tags.Attributes_Secondary_Armor, DamageStatics().ArmorDef);
-	TagsToCaptureDefs.Add(Tags.Attributes_Secondary_ArmorPenetration, DamageStatics().ArmorPenetrationDef);
-	TagsToCaptureDefs.Add(Tags.Attributes_Resistance_Physical, DamageStatics().PhysicalResistanceDef);
+	TagsToCaptureDefs.Add(Tags.Attributes_Secondary_Armor, DamageStaticsV2().ArmorDef);
+	TagsToCaptureDefs.Add(Tags.Attributes_Secondary_ArmorPenetration, DamageStaticsV2().ArmorPenetrationDef);
+	TagsToCaptureDefs.Add(Tags.Attributes_Resistance_Physical, DamageStaticsV2().PhysicalResistanceDef);
 
 	const UAbilitySystemComponent* SourceASC = ExecutionParams.GetSourceAbilitySystemComponent();
 	const UAbilitySystemComponent* TargetASC = ExecutionParams.GetTargetAbilitySystemComponent();
@@ -84,11 +84,11 @@ void UExecCalc_Damage_V2::Execute_Implementation(const FGameplayEffectCustomExec
 	// Can add resistance calculations here
 
 	float TargetArmor = 0.f;
-	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().ArmorDef, EvaluationParameters, TargetArmor);
+	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStaticsV2().ArmorDef, EvaluationParameters, TargetArmor);
 	TargetArmor = FMath::Max<float>(TargetArmor, 0.f);
 
 	float SourceArmorPenetration = 0.f;
-	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().ArmorPenetrationDef, EvaluationParameters, SourceArmorPenetration);
+	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStaticsV2().ArmorPenetrationDef, EvaluationParameters, SourceArmorPenetration);
 	SourceArmorPenetration = FMath::Max<float>(SourceArmorPenetration, 0.f);
 
 	// Will want to go in and update this curve

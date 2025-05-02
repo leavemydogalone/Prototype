@@ -29,6 +29,26 @@ FGameplayTag AAuraGameStateBase::GetGameplayTagForTurnPhase(EAuraTurnPhase& Turn
 	return TurnPhaseToGameplayTagMap.Contains(TurnPhase) ? TurnPhaseToGameplayTagMap[TurnPhase] : FGameplayTag();
 }
 
+int8 AAuraGameStateBase::GetRemainingGameTime()
+{
+    return RemainingGameTime;
+}
+
+int8 AAuraGameStateBase::GetRemainingQuarterTime()
+{
+    return int8();
+}
+
+int8 AAuraGameStateBase::GetRemainingRoundTime()
+{
+    return int8();
+}
+
+int8 AAuraGameStateBase::GetQuarter()
+{
+    return int8();
+}
+
 void AAuraGameStateBase::Server_AdvanceTurnPhase_Implementation()
 {
     switch (CurrentTurnPhase)
