@@ -36,12 +36,12 @@ int8 AAuraGameStateBase::GetRemainingGameTime()
 
 int8 AAuraGameStateBase::GetRemainingQuarterTime()
 {
-    return int8();
+    return RemainingQuarterTime;
 }
 
 int8 AAuraGameStateBase::GetRemainingRoundTime()
 {
-    return int8();
+    return RemainingRoundTime;
 }
 
 int8 AAuraGameStateBase::GetQuarter()
