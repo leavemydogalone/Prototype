@@ -29,25 +29,18 @@ FGameplayTag AAuraGameStateBase::GetGameplayTagForTurnPhase(EAuraTurnPhase& Turn
 	return TurnPhaseToGameplayTagMap.Contains(TurnPhase) ? TurnPhaseToGameplayTagMap[TurnPhase] : FGameplayTag();
 }
 
-int8 AAuraGameStateBase::GetRemainingGameTime()
+void AAuraGameStateBase::StartRound()
 {
-    return RemainingGameTime;
 }
 
-int8 AAuraGameStateBase::GetRemainingQuarterTime()
+void AAuraGameStateBase::StartRoundTime()
 {
-    return RemainingQuarterTime;
 }
 
-int8 AAuraGameStateBase::GetRemainingRoundTime()
+void AAuraGameStateBase::AdvanceCurrentRound()
 {
-    return RemainingRoundTime;
 }
 
-int8 AAuraGameStateBase::GetQuarter()
-{
-    return int8();
-}
 
 void AAuraGameStateBase::Server_AdvanceTurnPhase_Implementation()
 {

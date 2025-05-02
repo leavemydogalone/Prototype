@@ -47,6 +47,7 @@ public:
 	virtual void HideAbilityPreview() override;
 	virtual void AddAbilityToStoredAbilities(FUnitAbilityPreviewInfo& UnitAbilityPreviewInfo) override;
 	void RemoveLastStoredAbility_Implementation();
+	FGameplayTag GetTurnPhaseTagToSendToUnit_Implementation() const;
 	/** end Player Interface */
 
 	/** Combat Interface */

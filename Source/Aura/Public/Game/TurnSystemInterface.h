@@ -38,4 +38,11 @@ virtual void AdvanceTurnPhase() {};
 // New method to relate turn phases with gameplay tags
 UFUNCTION(BlueprintCallable, Category = "Turn System")
 virtual FGameplayTag GetGameplayTagForTurnPhase(EAuraTurnPhase& TurnPhase) const = 0;
+
+//UFUNCTION()
+//virtual int32 GetRemainingTurnTime() = 0;
+//
+//UFUNCTION()
+//virtual void StartTurnTime() = 0;
+
 };

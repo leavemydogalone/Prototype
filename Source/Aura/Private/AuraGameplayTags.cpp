@@ -11,6 +11,10 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 	/*
 	 * Phases
 	 */
+	GameplayTags.Phase_None = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Phase.None"),
+		FString("No Phase")
+	);
 	GameplayTags.Phase_Planning = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Phase.Planning"),
 		FString("Planning Phase")

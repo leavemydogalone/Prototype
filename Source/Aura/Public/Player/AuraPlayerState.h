@@ -72,6 +72,7 @@ public:
 
 	void AddAbilityToStoredAbilities(FUnitAbilityPreviewInfo& UnitAbilityPreviewInfo);
 	void RemoveLastStoredAbility();
+	int32 GetStoredAbilitiesCount() const { return StoredAbilities.Num(); }
 
 protected:
 	

@@ -125,6 +125,21 @@ void AAuraCharacter::RemoveLastStoredAbility_Implementation()
 	AuraPlayerState->RemoveLastStoredAbility();
 }
 
+FGameplayTag AAuraCharacter::GetTurnPhaseTagToSendToUnit_Implementation() const
+{
+	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
+	int32 count = AuraPlayerState->GetStoredAbilitiesCount();
+	if (count == 0)
+	{
+		return FAuraGameplayTags::Get().Phase_Action_1;
+	}
+	else if (count == 1)
+	{
+		return FAuraGameplayTags::Get().Phase_Action_2;
+	}
+	return FAuraGameplayTags::Get().Phase_None;
+}
+
 void AAuraCharacter::InitAbilityActorInfo()
 {
 	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
