@@ -92,5 +92,5 @@ public:
 	void RemoveLastStoredAbility();
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	FGameplayTag GetTurnPhaseTagToSendToUnit();
+	FGameplayTag GetTurnPhaseTagToSendToUnit() const;
 };
