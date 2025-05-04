@@ -7,11 +7,13 @@
 #include "Interaction/UnitInterface.h"
 #include "Interaction/TeamInterface.h"
 #include "Interaction/HighlightInterface.h"
+#include "UI/WidgetController/OverlayWidgetController.h"
 #include "AuraUnitBase.generated.h"
 
 class UBehaviorTree;
 class AAuraAIController;
 struct FGameplayTag;
+class UWidgetComponent;
 class USphereComponent;
 
 /**
@@ -32,6 +34,12 @@ public:
 	virtual void UnHighlightActor_Implementation() override;
 	/** end Highlight Interface */
 
+	UPROPERTY(BlueprintAssignable)
+	FOnAttributeChangedSignature OnHealthChanged;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnAttributeChangedSignature OnMaxHealthChanged;
+
 protected:
 
 	virtual void BeginPlay() override;
@@ -51,5 +59,8 @@ protected:
 
 	//UPROPERTY()
 	//TObjectPtr<AAuraAIController> AuraAIController;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<UWidgetComponent> HealthBar;
 
 };
