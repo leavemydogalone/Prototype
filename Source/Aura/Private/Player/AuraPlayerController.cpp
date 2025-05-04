@@ -180,7 +180,7 @@ void AAuraPlayerController::UpdateStoredAbilityPreviews_Implementation(const TAr
 	if (StoredAbilities.IsEmpty()) return;
 	for (const FUnitAbilityPreviewInfo& StoredAbility : StoredAbilities)
 	{
-		/*if (IsValid(AbilityPreview))
+	/*	if (IsValid(AbilityPreview))
 		{
 			AbilityPreview = GetWorld()->SpawnActor<AAbilityPreview>(AbilityPreviewClass);
 			

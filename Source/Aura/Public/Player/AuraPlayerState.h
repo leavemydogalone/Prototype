@@ -71,6 +71,8 @@ public:
 	virtual void SetTeamID(int32 ID) override { TeamID = ID; }
 
 	void AddAbilityToStoredAbilities(FUnitAbilityPreviewInfo& UnitAbilityPreviewInfo);
+	//const TArray<FUnitAbilityPreviewInfo>& GetStoredAbilities() const { return StoredAbilities; };
+	void RemoveFirstStoredAbility();
 	void RemoveLastStoredAbility();
 	int32 GetStoredAbilitiesCount() const { return StoredAbilities.Num(); }
 
@@ -127,9 +129,4 @@ private:
 	UFUNCTION()
 	void OnRep_StoredAbilities(TArray<FUnitAbilityPreviewInfo>& OldStoredAbilities);
 
-	//Use these three together
-	void PopFirstStoredAbility();
-
-	void BindToTurnPhaseDelegate();
-	void UnbindFromTurnPhaseDelegate();
 };

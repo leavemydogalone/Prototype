@@ -59,27 +59,22 @@ int32 AAuraPlayerState::GetTeamID_Implementation()
 void AAuraPlayerState::AddAbilityToStoredAbilities(FUnitAbilityPreviewInfo& UnitAbilityPreviewInfo)
 {
 	StoredAbilities.Add(UnitAbilityPreviewInfo);
-	OnStoredAbilitiesArrayChangedDelegate.Broadcast(StoredAbilities);
 }
+
+void AAuraPlayerState::RemoveFirstStoredAbility()
+{
+	if (StoredAbilities.Num() > 0)
+	{
+		StoredAbilities.RemoveAt(0);
+	}
+}
+
 
 void AAuraPlayerState::RemoveLastStoredAbility()
 {
+
 }
 
-//void AAuraPlayerState::PassCommandToSelectedUnit(FGameplayTag& InputTag, const FGameplayAbilityTargetDataHandle& DataHandle)
-//{
-//	if (SelectedUnit)
-//	{
-//		if (DataHandle.IsValid(0))
-//		{
-//			const FGameplayAbilityTargetData_SingleTargetHit* TargetData = static_cast<const FGameplayAbilityTargetData_SingleTargetHit*>(DataHandle.Get(0));
-//			if (TargetData)
-//			{
-//				SelectedUnit->ReceiveCommand(InputTag, TargetData->HitResult);
-//			}
-//		}
-//	}
-//}
 
 void AAuraPlayerState::OnRep_SelectedUnit()
 {
@@ -153,7 +148,8 @@ void AAuraPlayerState::OnRep_TeamID(int32 OldTeamID)
 
 void AAuraPlayerState::OnRep_StoredAbilities(TArray<FUnitAbilityPreviewInfo>& OldStoredAbilities)
 {
-
+	OnStoredAbilitiesArrayChangedDelegate.Broadcast(StoredAbilities);
+	UE_LOG(LogTemp, Warning, TEXT("Stored Abilities length changed from %d to %d"), OldStoredAbilities.Num(), StoredAbilities.Num());
 }
 
 void AAuraPlayerState::AddToAttributePoints(int32 InPoints)
@@ -167,3 +163,5 @@ void AAuraPlayerState::AddToSpellPoints(int32 InPoints)
 	SpellPoints += InPoints;
 	OnSpellPointsChangedDelegate.Broadcast(SpellPoints);
 }
+
+

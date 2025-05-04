@@ -18,6 +18,7 @@
 #include "AbilitySystem/Debuff/DebuffNiagaraComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Game/AuraGameModeBase.h"
+#include "Game/AuraGameStateBase.h"
 #include "Game/LoadScreenSaveGame.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -58,13 +59,14 @@ void AAuraCharacter::PossessedBy(AController* NewController)
 	InitAbilityActorInfo();
 	AddCharacterAbilities();
 	BindPCToPlayerStateDelegates();
+	BindToTurnPhaseDelegate();
 
 	//LoadProgress();
 
-	/*if (AAuraGameModeBase* AuraGameMode = Cast<AAuraGameModeBase>(UGameplayStatics::GetGameMode(this)))
-	{
-		AuraGameMode->LoadWorldState(GetWorld());
-	}*/
+	///*if (AAuraGameModeBase* AuraGameMode = Cast<AAuraGameModeBase>(UGameplayStatics::GetGameMode(this)))
+	//{
+	//	AuraGameMode->LoadWorldState(GetWorld());
+	//}*/
 }
 
 void AAuraCharacter::OnRep_PlayerState()
@@ -170,6 +172,24 @@ void AAuraCharacter::BindPCToPlayerStateDelegates()
 		AuraPlayerController->BindToStoredAbilitiesDelegate();
 	}
 
+}
+
+void AAuraCharacter::BindToTurnPhaseDelegate()
+{
+	AAuraGameStateBase* GSB = GetWorld()->GetGameState<AAuraGameStateBase>();
+	check(GSB);
+	GSB->GetOnTurnPhaseChangeDelegate().AddUObject(this, &AAuraCharacter::OnTurnPhaseChanged);
+}
+
+void AAuraCharacter::OnTurnPhaseChanged(EAuraTurnPhase TurnPhase)
+{
+	if (AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>())
+	{
+		if (TurnPhase == EAuraTurnPhase::Action_1 || TurnPhase == EAuraTurnPhase::Action_2)
+		{
+			AuraPlayerState->RemoveFirstStoredAbility();
+		}
+	}
 }
 
 

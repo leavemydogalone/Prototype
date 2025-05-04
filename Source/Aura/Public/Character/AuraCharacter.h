@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Character/AuraCharacterBase.h"
 #include "Interaction/PlayerInterface.h"
+#include "Game/AuraTurnPhase.h"
 #include "AuraCharacter.generated.h"
 
 class UNiagaraComponent;
@@ -80,4 +81,7 @@ private:
 	void MulticastLevelUpParticles() const;
 
 	void BindPCToPlayerStateDelegates();
+
+	void BindToTurnPhaseDelegate();
+	void OnTurnPhaseChanged(EAuraTurnPhase TurnPhase);
 };
