@@ -15,11 +15,11 @@ AAuraBall::AAuraBall()
 	PrimaryActorTick.bCanEverTick = true;
 	bReplicates = true;
 
-	AbilitySystemComponent = CreateDefaultSubobject<UAuraAbilitySystemComponent>("AbilitySystemComponent");
-	AbilitySystemComponent->SetIsReplicated(true);
-	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
+	//AbilitySystemComponent = CreateDefaultSubobject<UAuraAbilitySystemComponent>("AbilitySystemComponent");
+	//AbilitySystemComponent->SetIsReplicated(true);
+	//AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
 
-	AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>("AttributeSet");
+	//AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>("AttributeSet");
 
 	const FAuraGameplayTags& GameplayTags = FAuraGameplayTags::Get();
 
@@ -29,10 +29,10 @@ AAuraBall::AAuraBall()
 	BallMesh->SetupAttachment(RootComponent);
 }
 
-UAbilitySystemComponent* AAuraBall::GetAbilitySystemComponent() const
-{
-	return AbilitySystemComponent;
-}
+//UAbilitySystemComponent* AAuraBall::GetAbilitySystemComponent() const
+//{
+//	return AbilitySystemComponent;
+//}
 
 void AAuraBall::BeginPlay()
 {
@@ -44,7 +44,7 @@ void AAuraBall::BeginPlay()
 		OnTurnPhaseChange.AddUObject(this, &AAuraBall::HandleTurnPhaseChange);
 	}
 
-	InitAbilityActorInfo();
+	//InitAbilityActorInfo();
 
 }
 
@@ -70,52 +70,52 @@ void AAuraBall::FreezeBall()
 {
 	if (BallMesh->IsSimulatingPhysics())
 	{
-		StoredLinearVelocity = BallMesh->GetPhysicsLinearVelocity();
+		/*StoredLinearVelocity = BallMesh->GetPhysicsLinearVelocity();
 		StoredAngularVelocity = BallMesh->GetPhysicsAngularVelocityInDegrees();
-		BallMesh->SetSimulatePhysics(false);
+		BallMesh->SetSimulatePhysics(false);*/
 	}
 }
 
 void AAuraBall::UnFreezeBall()
 {
-	BallMesh->SetSimulatePhysics(true);
+	/*BallMesh->SetSimulatePhysics(true);
 	BallMesh->SetPhysicsLinearVelocity(StoredLinearVelocity);
-	BallMesh->SetPhysicsAngularVelocityInDegrees(StoredAngularVelocity);
+	BallMesh->SetPhysicsAngularVelocityInDegrees(StoredAngularVelocity);*/
 }
 
 
-void AAuraBall::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float Level) const
-{
-	check(IsValid(GetAbilitySystemComponent()));
-	check(GameplayEffectClass);
-	FGameplayEffectContextHandle ContextHandle = GetAbilitySystemComponent()->MakeEffectContext();
-	ContextHandle.AddSourceObject(this);
-	const FGameplayEffectSpecHandle SpecHandle = GetAbilitySystemComponent()->MakeOutgoingSpec(GameplayEffectClass, Level, ContextHandle);
-	GetAbilitySystemComponent()->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), GetAbilitySystemComponent());
-}
+//void AAuraBall::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float Level) const
+//{
+//	check(IsValid(GetAbilitySystemComponent()));
+//	check(GameplayEffectClass);
+//	FGameplayEffectContextHandle ContextHandle = GetAbilitySystemComponent()->MakeEffectContext();
+//	ContextHandle.AddSourceObject(this);
+//	const FGameplayEffectSpecHandle SpecHandle = GetAbilitySystemComponent()->MakeOutgoingSpec(GameplayEffectClass, Level, ContextHandle);
+//	GetAbilitySystemComponent()->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), GetAbilitySystemComponent());
+//}
 
-void AAuraBall::InitAbilityActorInfo()
-{
-	AbilitySystemComponent->InitAbilityActorInfo(this, this);
-	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
+//void AAuraBall::InitAbilityActorInfo()
+//{
+//	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+//	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
+//
+//	if (HasAuthority())
+//	{
+//		//InitializeDefaultAttributes();
+//		AddCharacterAbilities();
+//	}
+//	//~ Can add the below if I want to attach the niagara and debuff components
+//	//OnAscRegistered.Broadcast(AbilitySystemComponent);
+//}
 
-	if (HasAuthority())
-	{
-		//InitializeDefaultAttributes();
-		AddCharacterAbilities();
-	}
-	//~ Can add the below if I want to attach the niagara and debuff components
-	//OnAscRegistered.Broadcast(AbilitySystemComponent);
-}
-
-void AAuraBall::AddCharacterAbilities()
-{
-	UAuraAbilitySystemComponent* AuraASC = CastChecked<UAuraAbilitySystemComponent>(AbilitySystemComponent);
-	if (!HasAuthority()) return;
-
-	AuraASC->AddCharacterAbilities(StartupAbilities);
-	AuraASC->AddCharacterPassiveAbilities(StartupPassiveAbilities);
-}
+//void AAuraBall::AddCharacterAbilities()
+//{
+//	UAuraAbilitySystemComponent* AuraASC = CastChecked<UAuraAbilitySystemComponent>(AbilitySystemComponent);
+//	if (!HasAuthority()) return;
+//
+//	AuraASC->AddCharacterAbilities(StartupAbilities);
+//	AuraASC->AddCharacterPassiveAbilities(StartupPassiveAbilities);
+//}
 
 //void AAuraBall::InitializeDefaultAttributes() const
 //{

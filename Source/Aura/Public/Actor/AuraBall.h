@@ -14,15 +14,16 @@ class UGameplayAbility;
 class UGameplayEffect;
 
 UCLASS()
-class AURA_API AAuraBall : public AActor, public IAbilitySystemInterface
+class AURA_API AAuraBall : public AActor
+	//, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 	
 public:	
 	AAuraBall();
 
-	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
-	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
+	/*virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	UAttributeSet* GetAttributeSet() const { return AttributeSet; }*/
 
 protected:
 	virtual void BeginPlay() override;
@@ -32,17 +33,17 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ball Components")
 	TObjectPtr<UStaticMeshComponent> BallMesh;
 
-	UPROPERTY()
-	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
+	/*UPROPERTY()
+	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;*/
 
-	UPROPERTY()
-	TObjectPtr<UAttributeSet> AttributeSet;
+	//UPROPERTY()
+	//TObjectPtr<UAttributeSet> AttributeSet;
 
-	void ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float Level) const;
+	//void ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float Level) const;
 
-	virtual void InitAbilityActorInfo();
+	//virtual void InitAbilityActorInfo();
 
-	void AddCharacterAbilities();
+	//void AddCharacterAbilities();
 
 	//virtual void InitializeDefaultAttributes() const;
 
@@ -51,16 +52,18 @@ protected:
 
 private:
 
-    FVector StoredLinearVelocity;  
-    FVector StoredAngularVelocity;
+   /* FVector StoredLinearVelocity;  
+    FVector StoredAngularVelocity;*/
 
 	void FreezeBall();
 	void UnFreezeBall();
 
-	UPROPERTY(EditAnywhere, Category = "Abilities")
-	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
+	//UPROPERTY(EditAnywhere, Category = "Abilities")
+	//TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
 
-	UPROPERTY(EditAnywhere, Category = "Abilities")
-	TArray<TSubclassOf<UGameplayAbility>> StartupPassiveAbilities;
+	//UPROPERTY(EditAnywhere, Category = "Abilities")
+	//TArray<TSubclassOf<UGameplayAbility>> StartupPassiveAbilities;
+
+
 
 };
