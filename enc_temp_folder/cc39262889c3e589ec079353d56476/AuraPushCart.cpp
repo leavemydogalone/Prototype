@@ -44,7 +44,7 @@ void AAuraPushCart::BeginPlay()
 void AAuraPushCart::HandleTurnPhaseChange(EAuraTurnPhase NewTurnPhase)
 {
 	if (!HasAuthority()) return;
-	if (NewTurnPhase == EAuraTurnPhase::Planning)
+	if (NewTurnPhase != EAuraTurnPhase::Action_1 || NewTurnPhase != EAuraTurnPhase::Action_2)
 	{
 		AuraAIController->GetBlackboardComponent()->SetValueAsBool(FName("PushIsLocked"), true);
 		return;

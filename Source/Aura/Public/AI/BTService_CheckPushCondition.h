@@ -24,7 +24,7 @@ protected:
     float DetectionRadius = 600.0f;
 
     UPROPERTY(BlueprintReadOnly, EditAnywhere)
-    FBlackboardKeySelector bShouldPushKey;
+    FBlackboardKeySelector ShouldPush;
 
     UPROPERTY(BlueprintReadOnly, EditAnywhere)
     FBlackboardKeySelector PushSpeedMultiplier;

@@ -48,5 +48,5 @@ void UBTService_CheckPushCondition::TickNode(UBehaviorTreeComponent& OwnerComp, 
 	/*UBTFunctionLibrary::SetBlackboardValueAsInt(this, PushSpeedMultiplier, OffenseVsDefenseDifference);
 	UBTFunctionLibrary::SetBlackboardValueAsBool(this, bShouldPushKey, bShouldPush);*/
 
-	OwnerComp.GetBlackboardComponent()->SetValueAsBool(bShouldPushKey.SelectedKeyName, bShouldPush);
+	OwnerComp.GetBlackboardComponent()->SetValueAsBool(ShouldPush.SelectedKeyName, bShouldPush);
 }
