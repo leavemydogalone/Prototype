@@ -30,10 +30,12 @@ void UBTService_CheckPushCondition::TickNode(UBehaviorTreeComponent& OwnerComp, 
     int32 OffenseCount = 0;
     int32 DefenseCount = 0;
 
+	float CurrentDetectionRadius = OwnerComp.GetBlackboardComponent()->GetValueAsFloat(DetectionRadius.SelectedKeyName);
+
     for (AActor* Actor : NearbyActors)
     {
 		if (!Actor || Actor == CartPawn) continue;
-		if (FVector::Dist(Actor->GetActorLocation(), Origin) > DetectionRadius) continue;
+		if (FVector::Dist(Actor->GetActorLocation(), Origin) > CurrentDetectionRadius) continue;
 
 		// Will definitely need to find a different way to handle team assignments (based on offense and defense)
 		if (ITeamInterface::Execute_GetTeamID(Actor) == 0)

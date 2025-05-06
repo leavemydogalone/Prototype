@@ -28,6 +28,10 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI")
 	float DetectionRadius = 600.0f;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI")
+	float BaseMoveSpeed = 80.0f;
+
+
 private:
 	void HandleTurnPhaseChange(EAuraTurnPhase NewTurnPhase);
 

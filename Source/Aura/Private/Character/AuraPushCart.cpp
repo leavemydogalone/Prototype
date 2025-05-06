@@ -13,7 +13,7 @@ AAuraPushCart::AAuraPushCart()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	bReplicates = true;
 }
 
 void AAuraPushCart::PossessedBy(AController* NewController)
@@ -26,7 +26,9 @@ void AAuraPushCart::PossessedBy(AController* NewController)
 	AuraAIController->RunBehaviorTree(BehaviorTree);
 	//AuraAIController->GetBlackboardComponent()->SetValueAsBool(FName("HitReacting"), false);
 	AuraAIController->GetBlackboardComponent()->SetValueAsFloat(FName("DetectionRadius"), DetectionRadius);
+	AuraAIController->GetBlackboardComponent()->SetValueAsFloat(FName("BaseMoveSpeed"), BaseMoveSpeed);
 	AuraAIController->GetBlackboardComponent()->SetValueAsBool(FName("PushIsLocked"), true);
+
 }
 
 // Called when the game starts or when spawned

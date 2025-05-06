@@ -20,8 +20,8 @@ public:
 protected:
     virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 
-    UPROPERTY(EditDefaultsOnly, Category = "Detection")
-    float DetectionRadius = 600.0f;
+    UPROPERTY(BlueprintReadOnly, EditAnywhere)
+    FBlackboardKeySelector DetectionRadius;
 
     UPROPERTY(BlueprintReadOnly, EditAnywhere)
     FBlackboardKeySelector ShouldPush;
