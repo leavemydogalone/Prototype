@@ -189,6 +189,10 @@ void AAuraCharacter::OnTurnPhaseChanged(EAuraTurnPhase TurnPhase)
 		{
 			AuraPlayerState->RemoveFirstStoredAbility();
 		}
+		else if (TurnPhase == EAuraTurnPhase::Cleanup)
+		{
+			AuraPlayerState->ClearStoredAbilities();
+		}
 	}
 }
 

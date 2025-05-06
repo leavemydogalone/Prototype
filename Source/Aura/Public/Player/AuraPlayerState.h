@@ -74,6 +74,7 @@ public:
 	//const TArray<FUnitAbilityPreviewInfo>& GetStoredAbilities() const { return StoredAbilities; };
 	void RemoveFirstStoredAbility();
 	void RemoveLastStoredAbility();
+	void ClearStoredAbilities() { StoredAbilities.Empty(); }
 	int32 GetStoredAbilitiesCount() const { return StoredAbilities.Num(); }
 
 protected:
