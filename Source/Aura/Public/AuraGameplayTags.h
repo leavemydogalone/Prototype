@@ -110,6 +110,7 @@ public:
 
 	FGameplayTag Cooldown_Fire_FireBolt;
 
+	FGameplayTag CombatSocket_Default;
 	FGameplayTag CombatSocket_Weapon;
 	FGameplayTag CombatSocket_RightHand;
 	FGameplayTag CombatSocket_LeftHand;

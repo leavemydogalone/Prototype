@@ -446,6 +446,11 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 	/*
 	 * Combat Sockets
 	 */
+	
+	GameplayTags.CombatSocket_Default = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("CombatSocket.Default"),
+		FString("Default Combat Socket")
+	);
 
 	GameplayTags.CombatSocket_Weapon = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("CombatSocket.Weapon"),

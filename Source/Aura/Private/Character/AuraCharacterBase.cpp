@@ -141,6 +141,13 @@ void AAuraCharacterBase::BeginPlay()
 FVector AAuraCharacterBase::GetCombatSocketLocation_Implementation(const FGameplayTag& MontageTag)
 {
 	const FAuraGameplayTags& GameplayTags = FAuraGameplayTags::Get();
+	if (MontageTag.MatchesTagExact(GameplayTags.CombatSocket_Default))
+	{
+		return GetMesh()->GetSocketLocation(DefaultCombatSocketname);
+	}
+
+	// I'm not sure if i will ever need to use the below items, but just in case I will keep it
+	// I might later have spells coming from the weapon tip
 	if (MontageTag.MatchesTagExact(GameplayTags.CombatSocket_Weapon) && IsValid(Weapon))
 	{
 		return Weapon->GetSocketLocation(WeaponTipSocketName);
