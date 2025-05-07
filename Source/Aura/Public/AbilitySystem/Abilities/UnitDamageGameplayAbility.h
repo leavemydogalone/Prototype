@@ -16,6 +16,7 @@ class AURA_API UUnitDamageGameplayAbility : public UUnitGameplayAbilityBase
 {
 	GENERATED_BODY()
 	
+public:
 	UFUNCTION(BlueprintCallable)
 	void CauseDamage(AActor* TargetActor);
 
