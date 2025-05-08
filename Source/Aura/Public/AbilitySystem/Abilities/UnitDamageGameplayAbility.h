@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "AbilitySystem/Abilities/UnitGameplayAbilityBase.h"
 #include "AuraAbilityTypes.h"
-
+#include "Interaction/CombatInterface.h"
 #include "UnitDamageGameplayAbility.generated.h"
 
 /**
@@ -46,7 +46,7 @@ protected:
 	FScalableFloat Damage;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Damage")
-	float DebuffChance = 100.f;
+	float DebuffChance = 0.f;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Damage")
 	float DebuffDamage = 5.f;
@@ -76,6 +76,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Damage")
 	float RadialDamageOuterRadius = 0.f;
 
-	//UFUNCTION(BlueprintPure)
-	//FTaggedMontage GetRandomTaggedMontageFromArray(const TArray<FTaggedMontage>& TaggedMontages) const;
+	UFUNCTION(BlueprintPure)
+	FTaggedMontage GetRandomTaggedMontageFromArray(const TArray<FTaggedMontage>& TaggedMontages) const;
 };

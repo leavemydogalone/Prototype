@@ -2,8 +2,8 @@
 
 
 #include "AbilitySystem/Abilities/UnitDamageGameplayAbility.h"
-
 #include "AbilitySystemBlueprintLibrary.h"
+//#include "Interaction/CombatInterface.h"
 #include "AbilitySystemComponent.h"
 
 void UUnitDamageGameplayAbility::CauseDamage(AActor* TargetActor)
@@ -89,4 +89,15 @@ float UUnitDamageGameplayAbility::GetDamageAtLevel() const
 {
 	return Damage.GetValueAtLevel(GetAbilityLevel());
 
+}
+
+FTaggedMontage UUnitDamageGameplayAbility::GetRandomTaggedMontageFromArray(const TArray<FTaggedMontage>& TaggedMontages) const
+{
+	if (TaggedMontages.Num() > 0)
+	{
+		const int32 Selection = FMath::RandRange(0, TaggedMontages.Num() - 1);
+		return TaggedMontages[Selection];
+	}
+
+	return FTaggedMontage();
 }
