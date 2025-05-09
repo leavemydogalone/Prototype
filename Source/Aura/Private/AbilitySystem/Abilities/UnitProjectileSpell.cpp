@@ -14,7 +14,9 @@ void UUnitProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocati
 	const FVector SocketLocation = ICombatInterface::Execute_GetCombatSocketLocation(
 		GetAvatarActorFromActorInfo(),
 		SocketTag);
-	FRotator Rotation = (ProjectileTargetLocation - SocketLocation).Rotation();
+	FVector NewProjectileTargetLocation = ProjectileTargetLocation;
+	NewProjectileTargetLocation.Z = SocketLocation.Z;
+	FRotator Rotation = (NewProjectileTargetLocation - SocketLocation).Rotation();
 	if (bOverridePitch)
 	{
 		Rotation.Pitch = PitchOverride;
