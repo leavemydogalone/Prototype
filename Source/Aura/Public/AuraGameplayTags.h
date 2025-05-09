@@ -53,6 +53,8 @@ public:
 	FGameplayTag Event_Unit_RMB;
 	FGameplayTag Event_Unit_Input1;
 	FGameplayTag Event_Unit_Input2;
+	FGameplayTag Event_Unit_Input3;
+	FGameplayTag Event_Unit_Input4;
 	FGameplayTag Event_Unit_Confirm;
 	FGameplayTag Event_Unit_Cancel;
 

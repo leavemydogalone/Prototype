@@ -180,6 +180,16 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 		FString("Unit Event for Input 2")
 	);
 
+	GameplayTags.Event_Unit_Input3 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.Unit.Input3"),
+		FString("Unit Event for Input 3")
+	);
+
+	GameplayTags.Event_Unit_Input4 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.Unit.Input4"),
+		FString("Unit Event for Input 4")
+	);
+
 	GameplayTags.Event_Unit_Confirm = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Event.Unit.Confirm"),
 		FString("Unit Event for Confirm")

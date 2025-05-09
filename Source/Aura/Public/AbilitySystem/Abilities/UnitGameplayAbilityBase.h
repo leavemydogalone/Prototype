@@ -17,6 +17,9 @@ class AURA_API UUnitGameplayAbilityBase : public UAuraGameplayAbility
 {
 	GENERATED_BODY()
 	
+public:
+	UUnitGameplayAbilityBase();
+
 protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Ability")
