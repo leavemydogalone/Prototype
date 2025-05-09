@@ -489,6 +489,59 @@ void UAuraAbilitySystemLibrary::GetLivePlayersWithinRadius(const UObject* WorldC
 	}
 }
 
+void UAuraAbilitySystemLibrary::GetLivePlayersWithinBox(const UObject* WorldContextObject, TArray<AActor*>& OutActors, const TArray<AActor*>& ActorsToIgnore, const FVector& BoxExtent, const FVector& BoxCenterOffset, const FVector& ActorLocation, const FRotator& ActorRotation)
+{
+	FCollisionQueryParams QueryParams;
+	QueryParams.AddIgnoredActors(ActorsToIgnore);
+
+	if (const UWorld* World = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull))
+	{
+		// Calculate the box center in world space
+		const FVector BoxCenterWorld = ActorLocation + ActorRotation.RotateVector(BoxCenterOffset);
+		const FQuat BoxRotationQuat = ActorRotation.Quaternion();
+		const FTransform BoxTransform(BoxRotationQuat, BoxCenterWorld);
+
+		TArray<FOverlapResult> Overlaps;
+		World->OverlapMultiByObjectType(
+			Overlaps,
+			BoxTransform.GetLocation(),
+			BoxTransform.GetRotation(),
+			FCollisionObjectQueryParams(FCollisionObjectQueryParams::InitType::AllDynamicObjects),
+			FCollisionShape::MakeBox(BoxExtent),
+			QueryParams
+		);
+
+#if !(UE_BUILD_SHIPPING || UE_BUILD_TEST)
+		DrawDebugBox(
+			World,
+			BoxCenterWorld,
+			BoxExtent,
+			BoxRotationQuat,
+			FColor::Green,
+			false, // Persistent lines
+			2.0f,  // Lifetime
+			0,     // Depth priority
+			2.0f   // Line thickness
+		);
+#endif
+
+		for (const FOverlapResult& Result : Overlaps)
+		{
+			AActor* Target = Result.GetActor();
+			if (!Target || !Target->Implements<UCombatInterface>())
+				continue;
+
+			if (ICombatInterface::Execute_IsDead(Target))
+				continue;
+
+			AActor* Avatar = ICombatInterface::Execute_GetAvatar(Target);
+			OutActors.AddUnique(Avatar);
+		}
+	}
+}
+
+
+
 void UAuraAbilitySystemLibrary::GetClosestTargets(int32 MaxTargets, const TArray<AActor*>& Actors, TArray<AActor*>& OutClosestTargets, const FVector& Origin)
 {
 	if (Actors.Num() <= MaxTargets)
