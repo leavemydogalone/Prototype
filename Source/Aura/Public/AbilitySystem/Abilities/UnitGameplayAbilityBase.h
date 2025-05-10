@@ -76,6 +76,10 @@ private:
 	void OnConfirmTagAdded(FGameplayEventData Data);
 
 	UPROPERTY()
-	bool bIsAbilityConfirmed = false; 
+	bool bAbilityIsConfirmed = false;
+
+
+	/*UPROPERTY()
+	bool bAbilityPreviewIsActive = false;*/
 
 };

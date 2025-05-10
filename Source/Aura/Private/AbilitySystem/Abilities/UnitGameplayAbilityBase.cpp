@@ -59,7 +59,7 @@ void UUnitGameplayAbilityBase::HandlePhaseEnumFromDelegate(EAuraTurnPhase TurnPh
 	FGameplayTagContainer& InstigatorTags = CurrentEventData.InstigatorTags;
 	for (const FGameplayTag& Tag : InstigatorTags)
 	{
-		if (Tag.MatchesTag(TurnTag) && bIsAbilityConfirmed)
+		if (Tag.MatchesTag(TurnTag) && bAbilityIsConfirmed)
 		{
 			ActivateUnitAbility();
 		}
@@ -76,11 +76,13 @@ void UUnitGameplayAbilityBase::ShowAbilityPreview()
 	UnitAbilityPreviewInfo.AbilitySize = AbilitySize;
 
 	GetPlayerInterface()->ShowAbilityPreview(UnitAbilityPreviewInfo);
+	//bAbilityPreviewIsActive = true;
 }
 
 void UUnitGameplayAbilityBase::HideAbilityPreview()
 {
 	GetPlayerInterface()->HideAbilityPreview();
+	//bAbilityPreviewIsActive = false;
 }
 
 void UUnitGameplayAbilityBase::BindToTurnPhaseDelegate()
@@ -162,7 +164,7 @@ void UUnitGameplayAbilityBase::WaitForConfirmTag()
 void UUnitGameplayAbilityBase::OnConfirmTagAdded(FGameplayEventData Data)
 {
 	HideAbilityPreview();
-	bIsAbilityConfirmed = true;
+	bAbilityIsConfirmed = true;
 	ConfirmedEventData = Data;
 	FVector TargetLocation = ConfirmedEventData.TargetData.Get(0)->GetHitResult()->Location;
 

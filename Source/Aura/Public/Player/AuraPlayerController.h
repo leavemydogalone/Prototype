@@ -61,6 +61,8 @@ public:
 
 	void BindToStoredAbilitiesDelegate();
 
+	bool GetAbilityPreviewIsActive() const { return bAbilityPreviewIsActive; }
+
 protected:
 
 	virtual void BeginPlay() override;

@@ -96,7 +96,7 @@ void AAuraCharacter::SetSelectedUnit_Implementation(AActor* NewUnit)
 
 void AAuraCharacter::ShowAbilityPreview(FUnitAbilityPreviewInfo& UnitAbilityPreviewInfo)
 {
-	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
+	//AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
 
 	if (AAuraPlayerController* AuraPlayerController = Cast<AAuraPlayerController>(GetController()))
 	{

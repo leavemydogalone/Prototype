@@ -53,6 +53,9 @@ void AAuraGameStateBase::Server_AdvanceTurnPhase_Implementation()
         CurrentTurnPhase = EAuraTurnPhase::Action_2;
         break;
     case EAuraTurnPhase::Action_2:
+        CurrentTurnPhase = EAuraTurnPhase::Cleanup;
+        break;
+    case EAuraTurnPhase::Cleanup:
         CurrentTurnPhase = EAuraTurnPhase::Planning;
         break;
     default:
