@@ -24,6 +24,7 @@
 //#include "AbilitySystem/Data/UnitAbilityPreviewContext.h"
 #include "AbilitySystem/Data/AbilityInfo.h"
 #include "Actor/AbilityPreview.h"
+#include "AbilitySystem/AuraAbilitySystemLibrary.h"
 
 
 AAuraPlayerController::AAuraPlayerController()
@@ -39,7 +40,7 @@ void AAuraPlayerController::PlayerTick(float DeltaTime)
 	CursorTrace();
 	//AutoRun();
 	//UpdateMagicCircleLocation();
-	UpdateAbilityPreviewLocation();
+	UpdateActiveAbilityPreview();
 }
 
 //Will replace these with show Preview
@@ -73,18 +74,20 @@ void AAuraPlayerController::ShowAbilityPreview_Implementation(const FUnitAbility
 	if (!IsValid(AbilityPreview))
 	{
 		CurrentUnitAbilityPreviewInfo = UnitAbilityPreviewInfo;
-		AbilityPreview = GetWorld()->SpawnActorDeferred<AAbilityPreview>(
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Owner = this;
+		SpawnParams.Instigator = nullptr;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		AbilityPreview = GetWorld()->SpawnActor<AAbilityPreview>(
 			AbilityPreviewClass,
-			FTransform::Identity,   
-			this,                  
-			nullptr,                
-			ESpawnActorCollisionHandlingMethod::AlwaysSpawn
+			FTransform::Identity,
+			SpawnParams
 		);
 
 		if (IsValid(AbilityPreview))
 		{
-			AbilityPreview->AbilityRangeDecal->SetWorldLocation(UnitAbilityPreviewInfo.Unit->GetActorLocation());
-			AbilityPreview->AbilityRangeDecal->SetWorldRotation(UnitAbilityPreviewInfo.Unit->GetActorRotation());
+			/*AbilityPreview->AbilityRangeDecal->SetWorldLocation(UnitAbilityPreviewInfo.Unit->GetActorLocation());
+			AbilityPreview->AbilityRangeDecal->SetWorldRotation(UnitAbilityPreviewInfo.Unit->GetActorRotation());*/
 			//AbilityPreview->AbiltyTargetDecal->SetScale(UnitAbilityPreviewContext->AbilitySize);
 		}
 		/*if (DecalMaterial)
@@ -104,17 +107,25 @@ void AAuraPlayerController::HideAbilityPreview_Implementation()
 	bAbilityPreviewIsActive = false;
 }
 
-void AAuraPlayerController::UpdateAbilityPreviewLocation()
-{
+void AAuraPlayerController::UpdateActiveAbilityPreview()
+{/*
 	if (IsValid(AbilityPreview))
 	{
 		AbilityPreview->SetActorLocation(CursorHit.ImpactPoint);
-	}
-	if (bAbilityPreviewIsActive)
+	}*/
+	if (bAbilityPreviewIsActive && AbilityPreview)
 	{
-		//Only drawline will exist here. Debug circle will be handled in ability preview
-		DrawLineToMouse(CurrentUnitAbilityPreviewInfo.Unit, CurrentUnitAbilityPreviewInfo.AbilityRange);
 		DrawDebugCircleAroundActor(CurrentUnitAbilityPreviewInfo.Unit, CurrentUnitAbilityPreviewInfo.AbilityRange, 20, FColor::Blue, 0.1f, 1.f);
+
+
+		//DrawLineToMouse(CurrentUnitAbilityPreviewInfo.Unit, CurrentUnitAbilityPreviewInfo.AbilityRange);
+		FVector OutLocation;
+		const bool TargetPointValid = UAuraAbilitySystemLibrary::GetReachablePointWithinMaxRange(CurrentUnitAbilityPreviewInfo.Unit, CurrentUnitAbilityPreviewInfo.Unit->GetActorLocation(), CursorHit.ImpactPoint, CurrentUnitAbilityPreviewInfo.AbilityRange, OutLocation);
+
+		if (UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(CurrentUnitAbilityPreviewInfo.Unit, CurrentUnitAbilityPreviewInfo.Unit->GetActorLocation(), OutLocation))
+		{
+			AbilityPreview->UpdateSpline(NavPath->PathPoints);
+		}	
 	}
 }
 

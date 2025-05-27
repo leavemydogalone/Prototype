@@ -55,7 +55,6 @@ public:
 	UFUNCTION(Client, Reliable)
 	void HideAbilityPreview();
 
-	//update this and PS function to use FUnitAbilityPreviewInfo
 	UFUNCTION(Client, Reliable)
 	void UpdateStoredAbilityPreviews(const TArray<FUnitAbilityPreviewInfo>& StoredAbilities);
 
@@ -144,7 +143,10 @@ private:
 	UPROPERTY()
 	TObjectPtr<AAbilityPreview> AbilityPreview;
 
-	void UpdateAbilityPreviewLocation();
+	UPROPERTY()
+	TArray<TObjectPtr<AAbilityPreview>> StoredAbilityPreviews;
+
+	void UpdateActiveAbilityPreview();
 
 	bool bIsStoredAbilitiesDelegateBound = false;
 

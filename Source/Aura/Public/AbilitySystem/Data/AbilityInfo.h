@@ -7,6 +7,15 @@
 #include "GameplayTagContainer.h"
 #include "AbilityInfo.generated.h"
 
+UENUM()
+enum class EUnitAbilityPreviewType : uint8
+{
+	Movement,
+	RangedAttack,
+	MeleeAttack,
+};
+
+
 class UGameplayAbility;
 
 // This should be in its own file
@@ -19,6 +28,9 @@ struct FUnitAbilityPreviewInfo
 
 	UPROPERTY()
 	FGameplayTag AbilityTag = FGameplayTag();
+
+	UPROPERTY()
+	EUnitAbilityPreviewType AbilityPreviewType;
 
 	UPROPERTY()
 	TObjectPtr<AActor> Unit = nullptr;

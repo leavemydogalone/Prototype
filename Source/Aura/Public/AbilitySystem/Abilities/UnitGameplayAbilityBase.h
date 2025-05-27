@@ -7,9 +7,8 @@
 #include "Game/TurnSystemInterface.h"
 #include "Interaction/UnitInterface.h"
 #include "Interaction/PlayerInterface.h"
+#include "AbilitySystem/Data/AbilityInfo.h"
 #include "UnitGameplayAbilityBase.generated.h"
-
-class USplineComponent;
 
 /**
  * 
@@ -29,6 +28,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Ability")
 	float AbilitySize = 1.f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Ability")
+	EUnitAbilityPreviewType AbilityPreviewType = EUnitAbilityPreviewType::Movement;
 
 	UPROPERTY(BlueprintReadOnly)
 	FGameplayEventData ConfirmedEventData;

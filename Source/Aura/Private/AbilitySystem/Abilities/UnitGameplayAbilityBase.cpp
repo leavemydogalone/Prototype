@@ -74,6 +74,7 @@ void UUnitGameplayAbilityBase::ShowAbilityPreview()
 	UnitAbilityPreviewInfo.Unit = GetAvatarActorFromActorInfo();
 	UnitAbilityPreviewInfo.AbilityRange = AbilityRange;
 	UnitAbilityPreviewInfo.AbilitySize = AbilitySize;
+	UnitAbilityPreviewInfo.AbilityPreviewType = AbilityPreviewType;
 
 	GetPlayerInterface()->ShowAbilityPreview(UnitAbilityPreviewInfo);
 	//bAbilityPreviewIsActive = true;
@@ -177,6 +178,8 @@ void UUnitGameplayAbilityBase::OnConfirmTagAdded(FGameplayEventData Data)
 	UnitAbilityPreviewInfo.Unit = GetAvatarActorFromActorInfo();
 	UnitAbilityPreviewInfo.TargetLocation = TargetLocation;
 	UnitAbilityPreviewInfo.AbilitySize = AbilitySize;
+	UnitAbilityPreviewInfo.AbilityPreviewType = AbilityPreviewType;
+
 	GetPlayerInterface()->AddAbilityToStoredAbilities(UnitAbilityPreviewInfo);
 	//log that ability was confirmed
 	UE_LOG(LogTemp, Warning, TEXT("Ability confirmed"));
