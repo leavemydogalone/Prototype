@@ -84,16 +84,6 @@ void AAuraPlayerController::ShowAbilityPreview_Implementation(const FUnitAbility
 			SpawnParams
 		);
 
-		if (IsValid(AbilityPreview))
-		{
-			/*AbilityPreview->AbilityRangeDecal->SetWorldLocation(UnitAbilityPreviewInfo.Unit->GetActorLocation());
-			AbilityPreview->AbilityRangeDecal->SetWorldRotation(UnitAbilityPreviewInfo.Unit->GetActorRotation());*/
-			//AbilityPreview->AbiltyTargetDecal->SetScale(UnitAbilityPreviewContext->AbilitySize);
-		}
-		/*if (DecalMaterial)
-		{
-			AbilityPreview->AbiltyTargetDecal->SetMaterial(0, DecalMaterial);
-		}*/
 		bAbilityPreviewIsActive = true;
 	}
 }
@@ -108,17 +98,11 @@ void AAuraPlayerController::HideAbilityPreview_Implementation()
 }
 
 void AAuraPlayerController::UpdateActiveAbilityPreview()
-{/*
-	if (IsValid(AbilityPreview))
-	{
-		AbilityPreview->SetActorLocation(CursorHit.ImpactPoint);
-	}*/
+{
 	if (bAbilityPreviewIsActive && AbilityPreview)
 	{
 		DrawDebugCircleAroundActor(CurrentUnitAbilityPreviewInfo.Unit, CurrentUnitAbilityPreviewInfo.AbilityRange, 20, FColor::Blue, 0.1f, 1.f);
 
-
-		//DrawLineToMouse(CurrentUnitAbilityPreviewInfo.Unit, CurrentUnitAbilityPreviewInfo.AbilityRange);
 		FVector OutLocation;
 		const bool TargetPointValid = UAuraAbilitySystemLibrary::GetReachablePointWithinMaxRange(CurrentUnitAbilityPreviewInfo.Unit, CurrentUnitAbilityPreviewInfo.Unit->GetActorLocation(), CursorHit.ImpactPoint, CurrentUnitAbilityPreviewInfo.AbilityRange, OutLocation);
 

@@ -27,17 +27,6 @@ AAbilityPreview::AAbilityPreview()
 void AAbilityPreview::BeginPlay()
 {
     Super::BeginPlay();
-
-    TArray<FVector> TestPoints;
-    FVector Origin = GetActorLocation();
-
-    TestPoints.Add(Origin);
-    TestPoints.Add(Origin + FVector(200.f, 30.f, 0.f));
-    TestPoints.Add(Origin + FVector(400.f, 100.f, 0.f));
-    TestPoints.Add(Origin + FVector(600.f, -100.f, 0.f));
-    TestPoints.Add(Origin + FVector(800.f, 0.f, 0.f));
-
-    UpdateSpline(TestPoints);
 }
 
 void AAbilityPreview::UpdateSpline(const TArray<FVector>& Points)
