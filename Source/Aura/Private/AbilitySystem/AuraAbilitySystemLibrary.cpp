@@ -13,6 +13,9 @@
 #include "Player/AuraPlayerState.h"
 #include "UI/HUD/AuraHUD.h"
 #include "UI/WidgetController/AuraWidgetController.h"
+#include "NavigationSystem.h"
+#include "NavMesh/RecastNavMesh.h"
+#include "Kismet/KismetMathLibrary.h"
 
 bool UAuraAbilitySystemLibrary::MakeWidgetControllerParams(const UObject* WorldContextObject, FWidgetControllerParams& OutWCParams, AAuraHUD*& OutAuraHUD)
 {
@@ -231,6 +234,63 @@ float UAuraAbilitySystemLibrary::GetAttributeValueByGameplayTag(const UObject* W
 		}
 	}
 	return 0.f;
+}
+
+bool UAuraAbilitySystemLibrary::GetReachablePointWithinMaxRange(UObject* WorldContextObject, const FVector& StartLocation, const FVector& RawTargetLocation, float MaxRange, FVector& OutLocation)
+{
+	if (!WorldContextObject) return false;
+
+	UWorld* World = GEngine->GetWorldFromContextObjectChecked(WorldContextObject);
+	UNavigationSystemV1* NavSys = FNavigationSystem::GetCurrent<UNavigationSystemV1>(World);
+	if (!NavSys) return false;
+
+	// Project the target location onto the navmesh
+	FNavLocation ProjectedTarget;
+	const FVector QueryExtent(1000.f, 1000.f, 1000.f); // Large extent
+	bool bProjected = NavSys->ProjectPointToNavigation(
+		RawTargetLocation,
+		ProjectedTarget,
+		QueryExtent
+	);
+
+	if (!bProjected)
+	{
+		return false; // Could not find valid navmesh point near target
+	}
+
+	// Find path from start to the projected target
+	UNavigationPath* NavPath = NavSys->FindPathToLocationSynchronously(
+		World,
+		StartLocation,
+		ProjectedTarget.Location
+	);
+
+	if (!NavPath || NavPath->PathPoints.Num() == 0) return false;
+
+	// Walk the path and stop at max range
+	float AccumulatedDistance = 0.f;
+	FVector LastPoint = StartLocation;
+
+	for (const FVector& PathPoint : NavPath->PathPoints)
+	{
+		float SegmentLength = FVector::Dist(LastPoint, PathPoint);
+
+		if (AccumulatedDistance + SegmentLength > MaxRange)
+		{
+			// Interpolate along this segment
+			float Remaining = MaxRange - AccumulatedDistance;
+			FVector Direction = (PathPoint - LastPoint).GetSafeNormal();
+			OutLocation = LastPoint + Direction * Remaining;
+			return true;
+		}
+
+		AccumulatedDistance += SegmentLength;
+		LastPoint = PathPoint;
+	}
+
+	// Entire path is within MaxRange
+	OutLocation = NavPath->PathPoints.Last();
+	return true;
 }
 
 

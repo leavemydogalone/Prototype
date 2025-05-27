@@ -9,6 +9,8 @@
 #include "Interaction/PlayerInterface.h"
 #include "UnitGameplayAbilityBase.generated.h"
 
+class USplineComponent;
+
 /**
  * 
  */
@@ -77,7 +79,6 @@ private:
 
 	UPROPERTY()
 	bool bAbilityIsConfirmed = false;
-
 
 	/*UPROPERTY()
 	bool bAbilityPreviewIsActive = false;*/

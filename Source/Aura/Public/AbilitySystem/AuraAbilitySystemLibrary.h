@@ -74,6 +74,15 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "AuraAbilitySystemLibrary|GameplayAttributeAccessor")
 	static float GetAttributeValueByGameplayTag(const UObject* WorldContextObject, FGameplayTag AttributeTag);
+
+	UFUNCTION(BlueprintPure, Category = "Navigation")
+	static bool GetReachablePointWithinMaxRange(
+		UObject* WorldContextObject,
+		const FVector& StartLocation,
+		const FVector& RawTargetLocation,
+		float MaxRange,
+		FVector& OutLocation
+	);
 	
 	/*
 	 * Effect Context Getters
