@@ -73,6 +73,8 @@ public:
 	FGameplayTag Debuff_Stun;
 	FGameplayTag Debuff_Arcane;
 	FGameplayTag Debuff_Physical;
+	FGameplayTag Debuff_Primed;
+	FGameplayTag Debuff_Slow;
 
 	FGameplayTag Debuff_Chance;
 	FGameplayTag Debuff_Damage;

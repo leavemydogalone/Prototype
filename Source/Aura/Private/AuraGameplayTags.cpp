@@ -262,6 +262,15 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 		FName("Debuff.Stun"),
 		FString("Debuff for Lightning damage")
 		);
+	GameplayTags.Debuff_Primed = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Debuff.Primed"),
+		FString("Primed Debuff, used to trigger other effects when consumed")
+	);
+	GameplayTags.Debuff_Slow = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Debuff.Slow"),
+		FString("Slows the target's movement speed")
+	);
+
 
 	GameplayTags.Debuff_Chance = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Debuff.Chance"),

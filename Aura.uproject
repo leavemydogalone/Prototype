@@ -39,6 +39,14 @@
 		{
 			"Name": "ModelViewViewModel",
 			"Enabled": true
+		},
+		{
+			"Name": "LocalizableMessage",
+			"Enabled": false
+		},
+		{
+			"Name": "StructUtils",
+			"Enabled": true
 		}
 	]
 }
