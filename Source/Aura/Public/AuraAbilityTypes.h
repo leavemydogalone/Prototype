@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GameplayEffectTypes.h"
+#include "InstancedStruct.h"
 #include "AuraAbilityTypes.generated.h"
 
 class UGameplayEffect;
@@ -75,6 +76,33 @@ struct FDamageEffectParams
 };
 
 USTRUCT(BlueprintType)
+struct FCustomContextDataBase
+{
+	GENERATED_BODY()
+
+	virtual ~FCustomContextDataBase() = default;
+
+	/** Overridden to serialize new fields */
+	virtual bool NetSerialize(FArchive& Ar, class UPackageMap* Map, bool& bOutSuccess)
+	{
+		return true;
+	};
+
+	FCustomContextDataBase() {}
+};
+
+template <>
+struct TStructOpsTypeTraits<FCustomContextDataBase> : public TStructOpsTypeTraitsBase2<FCustomContextDataBase>
+{
+	enum
+	{
+		WithNetSerializer = true,
+		WithCopy = true // Necessary so that TSharedPtr<STRUCT> Data is copied around
+	};
+};
+
+
+USTRUCT(BlueprintType)
 struct FAuraGameplayEffectContext : public FGameplayEffectContext
 {
 	GENERATED_BODY()
@@ -109,6 +137,18 @@ public:
 	void SetRadialDamageOuterRadius(float InRadialDamageOuterRadius) { RadialDamageOuterRadius = InRadialDamageOuterRadius; }
 	void SetRadialDamageOrigin(const FVector& InRadialDamageOrigin) { RadialDamageOrigin = InRadialDamageOrigin; }
 	
+	/** Adds a Context Fragment to the ContextFragments array */
+	template <typename T>
+	void AddCustomContextData(const T& Fragment)
+	{
+		TInstancedStruct<FCustomContextDataBase> InstancedStruct;
+		InstancedStruct.InitializeAs<T>();
+		T& Mutable = InstancedStruct.GetMutable<T>();
+		Mutable = Fragment;
+
+		CustomContextData.Add(MoveTemp(InstancedStruct));
+	}
+
 	/** Returns the actual struct used for serialization, subclasses must override this! */
 	virtual UScriptStruct* GetScriptStruct() const
 	{
@@ -132,6 +172,9 @@ public:
 	virtual bool NetSerialize(FArchive& Ar, class UPackageMap* Map, bool& bOutSuccess);
 	
 protected:
+
+	UPROPERTY(EditAnywhere, meta = (ExcludeBaseStruct))
+	TArray<FInstancedStruct> CustomContextData{};
 
 	UPROPERTY()
 	bool bIsBlockedHit = false;

@@ -315,6 +315,27 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.DamageTypesToDebuffs.Add(GameplayTags.Damage_Fire, GameplayTags.Debuff_Burn);
 
 	/*
+	 * Turn Based Effects
+	 */
+
+	GameplayTags.Effect_Type_TurnBased = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Effect.Type.TurnBased"),
+		FString("Turn Based Effect Type")
+	);
+	GameplayTags.Effect_Modifier_InhibitionTurn = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Effect.Modifier.InhibitionTurn"),
+		FString("Inhibition Turn Modifier")
+	);
+	GameplayTags.Effect_Modifier_DurationTurn = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Effect.Modifier.DurationTurns"),
+		FString("Duration Turns Modifier")
+	);
+	GameplayTags.Effect_Modifier_MaxPeriodicApplications = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Effect.Modifier.MaxPeriodicApplications"),
+		FString("Max Periodic Applications Modifier")
+	);
+
+	/*
 	 * Effects
 	 */
 

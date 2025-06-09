@@ -128,6 +128,11 @@ public:
 	TMap<FGameplayTag, FGameplayTag> DamageTypesToResistances;
 	TMap<FGameplayTag, FGameplayTag> DamageTypesToDebuffs;
 
+	FGameplayTag Effect_Type_TurnBased;
+	FGameplayTag Effect_Modifier_InhibitionTurn;
+	FGameplayTag Effect_Modifier_DurationTurn;
+	FGameplayTag Effect_Modifier_MaxPeriodicApplications;
+
 	FGameplayTag Effects_HitReact;
 	FGameplayTag Effects_Moving;
 
