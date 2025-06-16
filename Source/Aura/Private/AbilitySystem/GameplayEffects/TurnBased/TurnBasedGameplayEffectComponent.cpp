@@ -442,7 +442,8 @@ void UTurnBasedGameplayEffectComponent::OnTurnChange(const int32 NewTurn, FActiv
 	if (bWasInhibited)
 	{
 		// Unhibit the effect if it has started inhibited
-		OwnerASC->SetActiveGameplayEffectInhibit(MoveTemp(Handle), false, true);
+		// In 5.4 they have updated this to InhibitActiveGameplayEffect
+		OwnerASC->InhibitActiveGameplayEffect(MoveTemp(Handle), false, true);
 
 		if (OwnerASC->IsOwnerActorAuthoritative())
 		{
@@ -487,7 +488,7 @@ void UTurnBasedGameplayEffectComponent::OnGameplayEffectRemoved(const FGameplayE
 	// Don't forget to remove the callback from the 'global' OnTurnChange delegate
 	if (ITurnSystemInterface* const TurnSystem = UTurnBasedAbilitySystemBPLibrary::GetTurnSystem(ASC))
 	{
-		TurnSystem->GetOnTurnChangeDelegate().Remove(DelegateHandle);
+		TurnSystem->GetOnActionTurnCountChangeDelegate().Remove(DelegateHandle);
 	}
 
 	if (!ASC->IsOwnerActorAuthoritative() || !RemovalInfo.ActiveEffect)
