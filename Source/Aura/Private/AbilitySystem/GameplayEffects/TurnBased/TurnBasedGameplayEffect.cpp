@@ -118,7 +118,7 @@ bool UTurnBasedGameplayEffect::UpdateTurnBasedEffectContext(
 		return false;
 	}
 
-	FGameplayEffectContext* const ContextData = EffectContextHandle.Get();
+	FAuraGameplayEffectContext* const ContextData = static_cast<FAuraGameplayEffectContext*>(EffectContextHandle.Get());
 	if (!ContextData)
 	{
 		return false;
@@ -184,7 +184,8 @@ bool UTurnBasedGameplayEffect::UpdateTurnBasedEffectContext(
 	MutableContextData.Emplace(
 		FInstancedStruct::Make(
 			FCustomContextData_TurnBaseEffect(
-				TurnSystem->GetCurrentTurn(),
+				//TurnSystem->GetCurrentTurn(),
+				TurnSystem->GetCurrentActionTurnCount(),
 				FMath::Max(InhibTurn, 0),
 				FMath::Max(DurationTurns, 1),
 				FMath::Max(MaxPeriodicApplications, 1)

@@ -51,9 +51,11 @@ void AAuraGameStateBase::Server_AdvanceTurnPhase_Implementation()
         break;
     case EAuraTurnPhase::Action_1:
         CurrentTurnPhase = EAuraTurnPhase::Action_2;
+        CurrentActionTurnCount++;
         break;
     case EAuraTurnPhase::Action_2:
         CurrentTurnPhase = EAuraTurnPhase::Cleanup;
+        CurrentActionTurnCount++;
         break;
     case EAuraTurnPhase::Cleanup:
         CurrentTurnPhase = EAuraTurnPhase::Planning;
@@ -75,4 +77,5 @@ void AAuraGameStateBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 	Params.Condition = COND_None;
 
 	DOREPLIFETIME_WITH_PARAMS_FAST(AAuraGameStateBase, CurrentTurnPhase, Params);
+	DOREPLIFETIME_WITH_PARAMS_FAST(AAuraGameStateBase, CurrentActionTurnCount, Params);
 }

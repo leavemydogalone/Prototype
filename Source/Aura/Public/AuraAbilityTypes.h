@@ -107,6 +107,9 @@ struct FAuraGameplayEffectContext : public FGameplayEffectContext
 {
 	GENERATED_BODY()
 
+	const TArray<FInstancedStruct>& GetAllCustomContextData() const { return CustomContextData; }
+	TArray<FInstancedStruct>& GetMutableAllCustomContextData() { return CustomContextData; }
+
 public:
 
 	bool IsCriticalHit() const { return bIsCriticalHit; }
@@ -155,7 +158,11 @@ public:
 		return StaticStruct();
 	}
 
-	/** Creates a copy of this context, used to duplicate for later modifications */
+	/**
+	Creates a copy of this context, used to duplicate for later modifications 
+	Mine differs from Narxim's because I don't have the TargetActor. Will need to handle differently.
+	*/
+	
 	virtual FGameplayEffectContext* Duplicate() const
 	{
 		FGameplayEffectContext* NewContext = new FGameplayEffectContext();

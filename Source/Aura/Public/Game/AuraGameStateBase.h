@@ -28,6 +28,9 @@ public:
 
 	UFUNCTION(Server, Reliable)
 	virtual void Server_AdvanceTurnPhase();
+
+	virtual int32 GetCurrentActionTurnCount() const override { return CurrentActionTurnCount; };
+	virtual FOnActionTurnCountChange& GetOnActionTurnCountChangeDelegate() { return OnActionTurnCountChange; };
 	// End ITurnSystemInterface
 
 
@@ -94,16 +97,9 @@ protected:
 		OnTurnPhaseChangeDelegate.Broadcast(CurrentTurnPhase);
 	}
 
-	/*UFUCNTION()
-		OnRep_CurrentTurnTime() const
-	{
-		OnTurnPhaseChange.Broadcast(CurrentTurnPhase);
-		OnTurnPhaseChangeDelegate.Broadcast(CurrentTurnPhase);
-	}*/
+	FOnActionTurnCountChange OnActionTurnCountChange;
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-
-
 
 private:
 
@@ -111,4 +107,7 @@ private:
 
 	UPROPERTY()
 	int32 StartingTurnTime = 10;
+
+	UPROPERTY(Replicated)
+	int32 CurrentActionTurnCount = 0;
 };

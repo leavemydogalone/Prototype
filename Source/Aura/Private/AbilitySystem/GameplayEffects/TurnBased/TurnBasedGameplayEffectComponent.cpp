@@ -345,10 +345,10 @@ bool UTurnBasedGameplayEffectComponent::OnActiveGameplayEffectAdded(FActiveGamep
 
 	FCustomContextData_TurnBaseEffect Data = UTurnBasedAbilitySystemBPLibrary::GetTurnBasedEffectInstanceDataFromSpec(ActiveGE.Spec);
 
-	const int32 CurrentTurn = TurnSystem->GetCurrentTurn();
+	const int32 CurrentTurn = TurnSystem->GetCurrentActionTurnCount();
 
 	// Add the OnTurnChange event. Store the handle.
-	FDelegateHandle DelegateHandle = TurnSystem->GetOnTurnChangeDelegate().AddUObject(
+	FDelegateHandle DelegateHandle = TurnSystem->GetOnActionTurnCountChangeDelegate().AddUObject(
 		this,
 		&UTurnBasedGameplayEffectComponent::OnTurnChange,
 		ActiveGE.Handle
@@ -372,7 +372,7 @@ bool UTurnBasedGameplayEffectComponent::OnActiveGameplayEffectAdded(FActiveGamep
 	if (!ActiveGE.EventSet.OnEffectRemoved.IsBound())
 	{
 		UE_LOG(LogTurnSystem, Error, TEXT("OnActiveGameplayEffectAdded: Failed to add OnEffectRemoved delegate."));
-		TurnSystem->GetOnTurnChangeDelegate().Remove(DelegateHandle); // Clean up the OnTurnChange delegate.
+		TurnSystem->GetOnActionTurnCountChangeDelegate().Remove(DelegateHandle); // Clean up the OnTurnChange delegate.
 		return false;
 	}
 

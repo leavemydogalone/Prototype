@@ -110,7 +110,7 @@ FCustomContextData_TurnBaseEffect UTurnBasedAbilitySystemBPLibrary::GetUpdatedTu
 			UE_LOG(LogTurnSystem, Warning, TEXT("UpdateTurnData: TurnSystem is invalid."));
 			return FCustomContextData_TurnBaseEffect();
 		}
-		CurrentTurn = TurnSystem->GetCurrentTurn();
+		CurrentTurn = TurnSystem->GetCurrentActionTurnCount();
 	}
 
 	FCustomContextData_TurnBaseEffect Updated = TurnBaseData;
@@ -124,7 +124,7 @@ FCustomContextData_TurnBaseEffect UTurnBasedAbilitySystemBPLibrary::GetUpdatedTu
 
 FCustomContextData_TurnBaseEffect UTurnBasedAbilitySystemBPLibrary::GetTurnBasedEffectInstanceDataFromSpec(const FGameplayEffectSpec& Spec)
 {
-	const FCustomGameplayEffectContext* const EffectContext = static_cast<const FCustomGameplayEffectContext*>(Spec.GetContext().Get());
+	const FAuraGameplayEffectContext* const EffectContext = static_cast<const FAuraGameplayEffectContext*>(Spec.GetContext().Get());
 	if (!EffectContext)
 	{
 		return FCustomContextData_TurnBaseEffect();
