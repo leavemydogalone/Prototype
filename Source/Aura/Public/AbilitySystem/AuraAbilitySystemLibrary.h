@@ -83,6 +83,9 @@ public:
 		float MaxRange,
 		FVector& OutLocation
 	);
+
+	UFUNCTION(BlueprintPure)
+	static void ApplyTurnBasedEffect(const FDamageEffectParams& DamageEffectParams);
 	
 	/*
 	 * Effect Context Getters
@@ -169,7 +172,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "AuraAbilitySystemLibrary|GameplayEffects")
 	static void SetRadialDamageOrigin(UPARAM(ref) FGameplayEffectContextHandle& EffectContextHandle, const FVector& InOrigin);
-	
+
 	/*
 	 * Gameplay Mechanics
 	 */

@@ -4,6 +4,7 @@
 #include "AbilitySystem/AuraAbilitySystemLibrary.h"
 #include "AbilitySystem/AuraAttributeSet.h"
 #include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystem/GameplayEffects/TurnBased/TurnBasedGameplayEffect.h"
 #include "AuraAbilityTypes.h"
 #include "AuraGameplayTags.h"
 #include "Game/AuraGameModeBase.h"
@@ -659,14 +660,38 @@ FGameplayEffectContextHandle UAuraAbilitySystemLibrary::ApplyDamageEffect(const 
 	const FGameplayEffectSpecHandle SpecHandle = DamageEffectParams.SourceAbilitySystemComponent->MakeOutgoingSpec(DamageEffectParams.DamageGameplayEffectClass, DamageEffectParams.AbilityLevel, EffectContexthandle);
 
 	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle, DamageEffectParams.DamageType, DamageEffectParams.BaseDamage);
+
+	// No longer using
 	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle, GameplayTags.Debuff_Chance, DamageEffectParams.DebuffChance);
 	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle, GameplayTags.Debuff_Damage, DamageEffectParams.DebuffDamage);
 	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle, GameplayTags.Debuff_Duration, DamageEffectParams.DebuffDuration);
 	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle, GameplayTags.Debuff_Frequency, DamageEffectParams.DebuffFrequency);
+	// End no longer using
 	
 	DamageEffectParams.TargetAbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data);
+
+	if (DamageEffectParams.bHasTurnBasedEffect)
+	{
+		ApplyTurnBasedEffect(DamageEffectParams);
+	}
+
 	return EffectContexthandle;
 }
+
+
+void UAuraAbilitySystemLibrary::ApplyTurnBasedEffect(const FDamageEffectParams& DamageEffectParams)
+{
+
+	FGameplayEffectContextHandle TurnBasedContextHandle = UTurnBasedGameplayEffect::MakeTurnBasedEffectContext(
+		DamageEffectParams.AbilityLevel,
+		DamageEffectParams.SourceAbilitySystemComponent,
+		nullptr, 
+		nullptr, 
+		nullptr,
+		DamageEffectParams.TurnBasedGameplayEffect
+	);
+}
+
 
 TArray<FRotator> UAuraAbilitySystemLibrary::EvenlySpacedRotators(const FVector& Forward, const FVector& Axis, float Spread, int32 NumRotators)
 {

@@ -73,7 +73,13 @@ struct FDamageEffectParams
 	UPROPERTY(BlueprintReadWrite)
 	FVector RadialDamageOrigin = FVector::ZeroVector;
 	
+	UPROPERTY(BlueprintReadWrite)
+	bool bHasTurnBasedEffect = false;
+
+	UPROPERTY(BlueprintReadWrite)
+	const TSubclassOf<UGameplayEffect> TurnBasedGameplayEffect = nullptr;
 };
+
 
 USTRUCT(BlueprintType)
 struct FCustomContextDataBase
@@ -140,6 +146,9 @@ public:
 	void SetRadialDamageOuterRadius(float InRadialDamageOuterRadius) { RadialDamageOuterRadius = InRadialDamageOuterRadius; }
 	void SetRadialDamageOrigin(const FVector& InRadialDamageOrigin) { RadialDamageOrigin = InRadialDamageOrigin; }
 	
+	void SetHasTurnBasedEffect(bool bInHasTurnBasedEffect) { bHasTurnBasedEffect = bInHasTurnBasedEffect; }
+	void SetTurnBasedGameplayEffect(TSubclassOf<UGameplayEffect> InTurnBasedGameplayEffect) { TurnBasedGameplayEffect = InTurnBasedGameplayEffect; }
+
 	/** Adds a Context Fragment to the ContextFragments array */
 	template <typename T>
 	void AddCustomContextData(const T& Fragment)
@@ -156,6 +165,18 @@ public:
 	virtual UScriptStruct* GetScriptStruct() const
 	{
 		return StaticStruct();
+	}
+
+	template <typename T>
+	const T* FindCustomContextData() const
+	{
+		for (const auto& Fragment : CustomContextData)
+		{
+			if (const T* TypedFragment = Fragment.GetPtr<T>())
+				return TypedFragment;
+		}
+
+		return nullptr;
 	}
 
 	/**
@@ -220,6 +241,12 @@ protected:
 
 	UPROPERTY()
 	FVector RadialDamageOrigin = FVector::ZeroVector;
+
+	UPROPERTY()
+	bool bHasTurnBasedEffect = false;
+
+	UPROPERTY()
+	TSubclassOf<UGameplayEffect> TurnBasedGameplayEffect = nullptr;
 };
 
 template<>
