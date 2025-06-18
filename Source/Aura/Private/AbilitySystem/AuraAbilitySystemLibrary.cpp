@@ -693,7 +693,7 @@ void UAuraAbilitySystemLibrary::ApplyTurnBasedEffect(const FDamageEffectParams& 
 			TurnBasedGEClass 
 		);
 		const FGameplayEffectSpecHandle SpecHandle = DamageEffectParams.SourceAbilitySystemComponent->MakeOutgoingSpec(TurnBasedGEClass, DamageEffectParams.AbilityLevel, ContextHandle);
-
+		UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle, DamageEffectParams.DamageType, DamageEffectParams.BaseDamage);
 		DamageEffectParams.TargetAbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data);
 	}
 	
