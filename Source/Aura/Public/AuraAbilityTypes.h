@@ -77,7 +77,7 @@ struct FDamageEffectParams
 	bool bHasTurnBasedEffect = false;
 
 	UPROPERTY(BlueprintReadWrite)
-	const TSubclassOf<UGameplayEffect> TurnBasedGameplayEffect = nullptr;
+	TSubclassOf<UGameplayEffect> TurnBasedGameplayEffect = nullptr;
 };
 
 

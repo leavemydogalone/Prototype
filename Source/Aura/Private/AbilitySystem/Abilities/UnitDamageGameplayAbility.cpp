@@ -32,6 +32,9 @@ FDamageEffectParams UUnitDamageGameplayAbility::MakeDamageEffectParamsFromClassD
 	Params.KnockbackForceMagnitude = KnockbackForceMagnitude;
 	Params.KnockbackChance = KnockbackChance;
 
+	Params.bHasTurnBasedEffect = bHasTurnBasedEffect;
+	Params.TurnBasedGameplayEffect = TurnBasedEffectClass;
+
 	if (IsValid(TargetActor))
 	{
 		FRotator Rotation = (TargetActor->GetActorLocation() - GetAvatarActorFromActorInfo()->GetActorLocation()).Rotation();

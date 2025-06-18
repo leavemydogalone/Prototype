@@ -681,15 +681,22 @@ FGameplayEffectContextHandle UAuraAbilitySystemLibrary::ApplyDamageEffect(const 
 
 void UAuraAbilitySystemLibrary::ApplyTurnBasedEffect(const FDamageEffectParams& DamageEffectParams)
 {
+	TSubclassOf<UTurnBasedGameplayEffect> TurnBasedGEClass = *DamageEffectParams.TurnBasedGameplayEffect;
+	if (TurnBasedGEClass)
+	{
+		FGameplayEffectContextHandle ContextHandle = UTurnBasedGameplayEffect::MakeTurnBasedEffectContext(
+			DamageEffectParams.AbilityLevel,
+			DamageEffectParams.SourceAbilitySystemComponent,
+			nullptr,
+			FGameplayAbilitySpecHandle(),
+			FGameplayAbilityActorInfo(),
+			TurnBasedGEClass 
+		);
+		const FGameplayEffectSpecHandle SpecHandle = DamageEffectParams.SourceAbilitySystemComponent->MakeOutgoingSpec(TurnBasedGEClass, DamageEffectParams.AbilityLevel, ContextHandle);
 
-	FGameplayEffectContextHandle TurnBasedContextHandle = UTurnBasedGameplayEffect::MakeTurnBasedEffectContext(
-		DamageEffectParams.AbilityLevel,
-		DamageEffectParams.SourceAbilitySystemComponent,
-		nullptr, 
-		nullptr, 
-		nullptr,
-		DamageEffectParams.TurnBasedGameplayEffect
-	);
+		DamageEffectParams.TargetAbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data);
+	}
+	
 }
 
 
