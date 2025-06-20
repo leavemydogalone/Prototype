@@ -99,8 +99,14 @@ protected:
 
 	FOnActionTurnCountChange OnActionTurnCountChange;
 
-	UPROPERTY(Replicated)
+	UPROPERTY(ReplicatedUsing = OnRep_CurrentActionTurnCount)
 	int32 CurrentActionTurnCount = 0;
+
+	UFUNCTION()
+	void OnRep_CurrentActionTurnCount() const
+	{
+		OnActionTurnCountChange.Broadcast(CurrentActionTurnCount);
+	}
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
@@ -110,4 +116,7 @@ private:
 
 	UPROPERTY()
 	int32 StartingTurnTime = 10;
+
+	UFUNCTION()
+	void HandleActionTurnCountChange();
 };

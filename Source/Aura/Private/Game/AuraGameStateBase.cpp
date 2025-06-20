@@ -48,14 +48,14 @@ void AAuraGameStateBase::Server_AdvanceTurnPhase_Implementation()
     {
     case EAuraTurnPhase::Planning:
         CurrentTurnPhase = EAuraTurnPhase::Action_1;
+        HandleActionTurnCountChange();
         break;
     case EAuraTurnPhase::Action_1:
         CurrentTurnPhase = EAuraTurnPhase::Action_2;
-        CurrentActionTurnCount++;
+        HandleActionTurnCountChange();
         break;
     case EAuraTurnPhase::Action_2:
         CurrentTurnPhase = EAuraTurnPhase::Cleanup;
-        CurrentActionTurnCount++;
         break;
     case EAuraTurnPhase::Cleanup:
         CurrentTurnPhase = EAuraTurnPhase::Planning;
@@ -65,6 +65,7 @@ void AAuraGameStateBase::Server_AdvanceTurnPhase_Implementation()
         break;
     }
 	MARK_PROPERTY_DIRTY_FROM_NAME(AAuraGameStateBase, CurrentTurnPhase, this);
+
 	OnRep_CurrentTurnPhase();
 }
 
@@ -77,5 +78,13 @@ void AAuraGameStateBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 	Params.Condition = COND_None;
 
 	DOREPLIFETIME_WITH_PARAMS_FAST(AAuraGameStateBase, CurrentTurnPhase, Params);
-	//DOREPLIFETIME_WITH_PARAMS_FAST(AAuraGameStateBase, CurrentActionTurnCount, Params);
+	DOREPLIFETIME_WITH_PARAMS_FAST(AAuraGameStateBase, CurrentActionTurnCount, Params);
+}
+
+void AAuraGameStateBase::HandleActionTurnCountChange()
+{
+    CurrentActionTurnCount = CurrentActionTurnCount + 1;
+    OnRep_CurrentActionTurnCount();
+    MARK_PROPERTY_DIRTY_FROM_NAME(AAuraGameStateBase, CurrentActionTurnCount, this);
+
 }
