@@ -245,32 +245,46 @@ bool UAuraAbilitySystemLibrary::GetReachablePointWithinMaxRange(UObject* WorldCo
 	UNavigationSystemV1* NavSys = FNavigationSystem::GetCurrent<UNavigationSystemV1>(World);
 	if (!NavSys) return false;
 
-	// Project the target location onto the navmesh
-	FNavLocation ProjectedTarget;
-	const FVector QueryExtent(1000.f, 1000.f, 1000.f); // Large extent
+	FNavLocation ProjectedUnitLocation;
+	const FVector UnitQueryExtent(300.f, 300.f, 300.f); // Large extent
 	bool bProjected = NavSys->ProjectPointToNavigation(
-		RawTargetLocation,
-		ProjectedTarget,
-		QueryExtent
+		StartLocation,
+		ProjectedUnitLocation,
+		UnitQueryExtent
 	);
 
 	if (!bProjected)
 	{
-		return false; // Could not find valid navmesh point near target
+		UE_LOG(LogTemp, Warning, TEXT("Could not project unit location onto navmesh. Check if the navmesh is built and accessible."));
+		return false; 
+	}
+
+	// Project the target location onto the navmesh
+	FNavLocation ProjectedTargetLocation;
+	const FVector TargetQueryExtent(1000.f, 1000.f, 1000.f); // Large extent
+	bProjected = NavSys->ProjectPointToNavigation(
+		RawTargetLocation,
+		ProjectedTargetLocation,
+		TargetQueryExtent
+	);
+
+	if (!bProjected)
+	{
+		return false;
 	}
 
 	// Find path from start to the projected target
 	UNavigationPath* NavPath = NavSys->FindPathToLocationSynchronously(
 		World,
-		StartLocation,
-		ProjectedTarget.Location
+		ProjectedUnitLocation,
+		ProjectedTargetLocation.Location
 	);
 
 	if (!NavPath || NavPath->PathPoints.Num() == 0) return false;
 
 	// Walk the path and stop at max range
 	float AccumulatedDistance = 0.f;
-	FVector LastPoint = StartLocation;
+	FVector LastPoint = ProjectedUnitLocation;
 
 	for (const FVector& PathPoint : NavPath->PathPoints)
 	{

@@ -103,13 +103,40 @@ void AAuraPlayerController::UpdateActiveAbilityPreview()
 	{
 		DrawDebugCircleAroundActor(CurrentUnitAbilityPreviewInfo.Unit, CurrentUnitAbilityPreviewInfo.AbilityRange, 20, FColor::Blue, 0.1f, 1.f);
 
-		FVector OutLocation;
-		const bool TargetPointValid = UAuraAbilitySystemLibrary::GetReachablePointWithinMaxRange(CurrentUnitAbilityPreviewInfo.Unit, CurrentUnitAbilityPreviewInfo.Unit->GetActorLocation(), CursorHit.ImpactPoint, CurrentUnitAbilityPreviewInfo.AbilityRange, OutLocation);
-
-		if (UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(CurrentUnitAbilityPreviewInfo.Unit, CurrentUnitAbilityPreviewInfo.Unit->GetActorLocation(), OutLocation))
+		switch (CurrentUnitAbilityPreviewInfo.AbilityPreviewType)
 		{
-			AbilityPreview->UpdateSpline(NavPath->PathPoints);
-		}	
+			case
+			EUnitAbilityPreviewType::Movement:
+			{
+				FVector OutLocation;
+				const bool TargetPointValid = UAuraAbilitySystemLibrary::GetReachablePointWithinMaxRange(CurrentUnitAbilityPreviewInfo.Unit, CurrentUnitAbilityPreviewInfo.Unit->GetActorLocation(), CursorHit.ImpactPoint, CurrentUnitAbilityPreviewInfo.AbilityRange, OutLocation);
+
+				if (UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(CurrentUnitAbilityPreviewInfo.Unit, CurrentUnitAbilityPreviewInfo.Unit->GetActorLocation(), OutLocation))
+				{
+					for (FVector& Point : NavPath->PathPoints)
+					{
+						Point.Z = CurrentUnitAbilityPreviewInfo.Unit->GetActorLocation().Z; // Ensure the path points are at the same height as the unit
+					}
+					AbilityPreview->UpdateSpline(NavPath->PathPoints);
+				}
+				break;
+			}
+			case
+			EUnitAbilityPreviewType::RangedAttack:
+			{
+				FVector OutLocation;
+				const bool TargetPointValid = UAuraAbilitySystemLibrary::GetReachablePointWithinMaxRange(CurrentUnitAbilityPreviewInfo.Unit, CurrentUnitAbilityPreviewInfo.Unit->GetActorLocation(), CursorHit.ImpactPoint, CurrentUnitAbilityPreviewInfo.AbilityRange, OutLocation);
+
+				if (UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(CurrentUnitAbilityPreviewInfo.Unit, CurrentUnitAbilityPreviewInfo.Unit->GetActorLocation(), OutLocation))
+				{
+					
+					AbilityPreview->UpdateSpline(NavPath->PathPoints);
+				}
+				break;
+			}
+			default:
+				break;
+		}
 	}
 }
 
@@ -150,7 +177,8 @@ void AAuraPlayerController::DrawDebugCircleAroundActor(AActor* TargetActor, floa
 {
     if (!TargetActor || !GetWorld()) return;
 
-    FVector Center = TargetActor->GetActorLocation();
+    //FVector Center = TargetActor->GetActorLocation();
+	FVector Center = FVector(TargetActor->GetActorLocation().X, TargetActor->GetActorLocation().Y, 0.f);
     FVector UpVector = FVector::UpVector;
     FVector ForwardVector = TargetActor->GetActorForwardVector();
     FVector RightVector = FVector::CrossProduct(UpVector, ForwardVector);
