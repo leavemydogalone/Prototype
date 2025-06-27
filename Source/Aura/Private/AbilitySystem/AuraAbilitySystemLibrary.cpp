@@ -377,7 +377,7 @@ FVector UAuraAbilitySystemLibrary::GetDeathImpulse(const FGameplayEffectContextH
 
 FVector UAuraAbilitySystemLibrary::GetKnockbackForce(const FGameplayEffectContextHandle& EffectContextHandle)
 {
-	const FGameplayEffectContext* BaseContext = EffectContextHandle.Get();
+	const FGameplayEffectContext* BaseContext = EffectContextHandle.Get(); 
 	if (BaseContext && BaseContext->GetScriptStruct() == FAuraGameplayEffectContext::StaticStruct())
 	{
 		if (const FAuraGameplayEffectContext* AuraEffectContext = static_cast<const FAuraGameplayEffectContext*>(EffectContextHandle.Get()))

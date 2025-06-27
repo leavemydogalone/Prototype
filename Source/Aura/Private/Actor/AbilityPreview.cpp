@@ -75,12 +75,14 @@ void AAbilityPreview::RebuildSplineMeshSegments()
             Mesh = NewObject<USplineMeshComponent>(this);
             Mesh->SetMobility(EComponentMobility::Movable);
             Mesh->SetStaticMesh(SplineMesh);
-            Mesh->SetMaterial(0, PreviewMaterial);
             Mesh->RegisterComponent();
             Mesh->AttachToComponent(SplineComponent, FAttachmentTransformRules::KeepRelativeTransform);
        
             SplineMeshes.Add(Mesh);
         }
+
+        Mesh->SetMaterial(0, PreviewMaterial);
+
 
         FVector StartPos, StartTangent, EndPos, EndTangent;
         SplineComponent->GetLocationAndTangentAtSplinePoint(i, StartPos, StartTangent, ESplineCoordinateSpace::Local);
