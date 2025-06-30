@@ -104,7 +104,7 @@ private:
 	//My Additions
 	UPROPERTY()
 	TObjectPtr<AAuraPlayerState> AuraPlayerState;
-	AAuraPlayerState* GetPS();
+	TObjectPtr<AAuraPlayerState> GetPS();
 
 	
 	//FVector CachedDestination = FVector::ZeroVector;

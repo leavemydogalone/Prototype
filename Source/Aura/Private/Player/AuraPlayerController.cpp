@@ -30,7 +30,6 @@
 AAuraPlayerController::AAuraPlayerController()
 {
 	bReplicates = true;
-	//Spline = CreateDefaultSubobject<USplineComponent>("Spline");
 
 }
 
@@ -39,7 +38,6 @@ void AAuraPlayerController::PlayerTick(float DeltaTime)
 	Super::PlayerTick(DeltaTime);
 	CursorTrace();
 	//AutoRun();
-	//UpdateMagicCircleLocation();
 	UpdateActiveAbilityPreview();
 }
 
@@ -380,7 +378,7 @@ UAuraAbilitySystemComponent* AAuraPlayerController::GetASC()
 	return AuraAbilitySystemComponent;
 }
 
-AAuraPlayerState* AAuraPlayerController::GetPS()
+TObjectPtr<AAuraPlayerState> AAuraPlayerController::GetPS()
 {
 	if (AuraPlayerState == nullptr)
 	{

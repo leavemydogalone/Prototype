@@ -41,14 +41,28 @@ UAbilitySystemComponent* AAuraPlayerState::GetAbilitySystemComponent() const
 
 void AAuraPlayerState::SetSelectedUnit(AActor* NewUnit)
 {
-	/*if (HasAuthority())
-	{*/
-		if (IsValid(NewUnit) && NewUnit->Implements<UUnitInterface>())
+	if (SelectedUnit) {
+		LastSelectedUnit = SelectedUnit;
+		if (IsValid(LastSelectedUnit) && LastSelectedUnit->Implements<UHighlightInterface>())
 		{
-			SelectedUnit = NewUnit;
-			UE_LOG(LogTemp, Warning, TEXT("Selected Unit: %s"), *GetNameSafe(SelectedUnit));
+			IHighlightInterface::Execute_SetUnselectedHighlight(LastSelectedUnit);
 		}
-	//}
+
+		if (NewUnit == LastSelectedUnit)
+		{
+			return;
+		}
+	}
+
+	if (IsValid(NewUnit) && NewUnit->Implements<UUnitInterface>())
+	{
+		SelectedUnit = NewUnit;
+		UE_LOG(LogTemp, Warning, TEXT("Selected Unit: %s"), *GetNameSafe(SelectedUnit));
+
+		if (!HasAuthority() && IsValid(NewUnit) && NewUnit->Implements<UHighlightInterface>()) {
+			IHighlightInterface::Execute_SetSelectedHighlight(NewUnit);
+		}
+	}
 }
 
 int32 AAuraPlayerState::GetTeamID_Implementation()

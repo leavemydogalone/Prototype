@@ -32,6 +32,8 @@ public:
 	/** Highlight Interface */
 	virtual void HighlightActor_Implementation() override;
 	virtual void UnHighlightActor_Implementation() override;
+	virtual void SetSelectedHighlight_Implementation() override;
+	virtual void SetUnselectedHighlight_Implementation() override;
 	/** end Highlight Interface */
 
 	UPROPERTY(BlueprintAssignable)
@@ -63,4 +65,5 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UWidgetComponent> HealthBar;
 
+	bool bIsSelected = false;
 };

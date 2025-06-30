@@ -88,6 +88,9 @@ protected:
 	UPROPERTY(ReplicatedUsing = OnRep_SelectedUnit)
 	TObjectPtr<AActor> SelectedUnit;
 
+	UPROPERTY()
+	TObjectPtr<AActor> LastSelectedUnit;
+
 	UFUNCTION()
 	void OnRep_SelectedUnit();
 

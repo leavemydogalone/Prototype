@@ -113,6 +113,22 @@ void AAuraUnitBase::HighlightActor_Implementation()
 
 void AAuraUnitBase::UnHighlightActor_Implementation()
 {
+	if (bIsSelected) return;
 	GetMesh()->SetRenderCustomDepth(false);
 }
 
+void AAuraUnitBase::SetSelectedHighlight_Implementation()
+{
+	if (bIsSelected) return;
+	bIsSelected = true;
+	GetMesh()->SetCustomDepthStencilValue(CUSTOM_DEPTH_TAN);
+	GetMesh()->SetRenderCustomDepth(true);
+}
+
+void AAuraUnitBase::SetUnselectedHighlight_Implementation()
+{
+	if (!bIsSelected) return;
+	bIsSelected = false;
+	GetMesh()->SetCustomDepthStencilValue(CUSTOM_DEPTH_BLUE);
+	GetMesh()->SetRenderCustomDepth(false);
+}
