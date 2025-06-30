@@ -73,7 +73,6 @@ void AAuraPlayerController::ShowAbilityPreview_Implementation(const FUnitAbility
 
 	if (!IsValid(AbilityPreview))
 	{
-		CurrentUnitAbilityPreviewInfo = UnitAbilityPreviewInfo;
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.Owner = this;
 		SpawnParams.Instigator = nullptr;
@@ -84,7 +83,14 @@ void AAuraPlayerController::ShowAbilityPreview_Implementation(const FUnitAbility
 			SpawnParams
 		);
 
-		bAbilityPreviewIsActive = true;
+		if (AbilityPreview)
+		{
+			// Set the abilitypreviewinfo on the AbilityPreview
+			AbilityPreview->SetUnitAbilityPreviewInfo(UnitAbilityPreviewInfo);
+			bAbilityPreviewIsActive = true;
+
+		}
+
 	}
 }
 
@@ -101,42 +107,7 @@ void AAuraPlayerController::UpdateActiveAbilityPreview()
 {
 	if (bAbilityPreviewIsActive && AbilityPreview)
 	{
-		DrawDebugCircleAroundActor(CurrentUnitAbilityPreviewInfo.Unit, CurrentUnitAbilityPreviewInfo.AbilityRange, 20, FColor::Blue, 0.1f, 1.f);
-
-		switch (CurrentUnitAbilityPreviewInfo.AbilityPreviewType)
-		{
-			case
-			EUnitAbilityPreviewType::Movement:
-			{
-				FVector OutLocation;
-				const bool TargetPointValid = UAuraAbilitySystemLibrary::GetReachablePointWithinMaxRange(CurrentUnitAbilityPreviewInfo.Unit, CurrentUnitAbilityPreviewInfo.Unit->GetActorLocation(), CursorHit.ImpactPoint, CurrentUnitAbilityPreviewInfo.AbilityRange, OutLocation);
-
-				if (UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(CurrentUnitAbilityPreviewInfo.Unit, CurrentUnitAbilityPreviewInfo.Unit->GetActorLocation(), OutLocation))
-				{
-					for (FVector& Point : NavPath->PathPoints)
-					{
-						Point.Z = CurrentUnitAbilityPreviewInfo.Unit->GetActorLocation().Z; // Ensure the path points are at the same height as the unit
-					}
-					AbilityPreview->UpdateSpline(NavPath->PathPoints);
-				}
-				break;
-			}
-			case
-			EUnitAbilityPreviewType::RangedAttack:
-			{
-				FVector OutLocation;
-				const bool TargetPointValid = UAuraAbilitySystemLibrary::GetReachablePointWithinMaxRange(CurrentUnitAbilityPreviewInfo.Unit, CurrentUnitAbilityPreviewInfo.Unit->GetActorLocation(), CursorHit.ImpactPoint, CurrentUnitAbilityPreviewInfo.AbilityRange, OutLocation);
-
-				if (UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(CurrentUnitAbilityPreviewInfo.Unit, CurrentUnitAbilityPreviewInfo.Unit->GetActorLocation(), OutLocation))
-				{
-					
-					AbilityPreview->UpdateSpline(NavPath->PathPoints);
-				}
-				break;
-			}
-			default:
-				break;
-		}
+		AbilityPreview->UpdateAbilityPreview(CursorHit);
 	}
 }
 
@@ -171,31 +142,6 @@ void AAuraPlayerController::DrawLineToMouse(AActor* Unit, int32 MaxRange)
 		// Draw clamped line
 		DrawDebugLine(GetWorld(), UnitLocation, TargetPoint, FColor::Green, false, 2.0f, 0, 2.0f);
 	}
-}
-
-void AAuraPlayerController::DrawDebugCircleAroundActor(AActor* TargetActor, float MaxRange, int32 Segments, const FColor& Color, float Duration, float Thickness)
-{
-    if (!TargetActor || !GetWorld()) return;
-
-    //FVector Center = TargetActor->GetActorLocation();
-	FVector Center = FVector(TargetActor->GetActorLocation().X, TargetActor->GetActorLocation().Y, 0.f);
-    FVector UpVector = FVector::UpVector;
-    FVector ForwardVector = TargetActor->GetActorForwardVector();
-    FVector RightVector = FVector::CrossProduct(UpVector, ForwardVector);
-
-    DrawDebugCircle(
-        GetWorld(),
-        Center,
-        MaxRange,
-        Segments,
-        Color,
-        false,        // persistent lines
-        Duration,
-        0,            // depth priority
-        Thickness,
-        RightVector,  // X-axis vector
-        ForwardVector // Y-axis vector
-    );
 }
 
 void AAuraPlayerController::UpdateStoredAbilityPreviews_Implementation(const TArray<FUnitAbilityPreviewInfo>& StoredAbilities)

@@ -5,6 +5,9 @@
 #include "Components/DecalComponent.h"
 #include "Components/SplineComponent.h"
 #include "Components/SplineMeshComponent.h"
+#include "AbilitySystem/AuraAbilitySystemLibrary.h"
+#include "NavigationSystem.h"
+#include "NavigationPath.h"
 
 // Sets default values
 AAbilityPreview::AAbilityPreview()
@@ -13,7 +16,6 @@ AAbilityPreview::AAbilityPreview()
 	PrimaryActorTick.bCanEverTick = true;
     SplineComponent = CreateDefaultSubobject<USplineComponent>(TEXT("SplineComponent"));
     SetRootComponent(SplineComponent);
-
   
 
    /* AbiltyTargetDecal = CreateDefaultSubobject<UDecalComponent>("AbiltyTargetDecal");
@@ -27,6 +29,46 @@ AAbilityPreview::AAbilityPreview()
 void AAbilityPreview::BeginPlay()
 {
     Super::BeginPlay();
+}
+
+void AAbilityPreview::UpdateAbilityPreview(FHitResult& CursorHit)
+{
+    DrawDebugCircleAroundActor(UnitAbilityPreviewInfo.Unit, UnitAbilityPreviewInfo.AbilityRange, 20, FColor::Blue, 0.1f, 1.f);
+
+    switch (UnitAbilityPreviewInfo.AbilityPreviewType)
+    {
+        case
+        EUnitAbilityPreviewType::Movement:
+        {
+            FVector OutLocation;
+            const bool TargetPointValid = UAuraAbilitySystemLibrary::GetReachablePointWithinMaxRange(UnitAbilityPreviewInfo.Unit, UnitAbilityPreviewInfo.Unit->GetActorLocation(), CursorHit.ImpactPoint, UnitAbilityPreviewInfo.AbilityRange, OutLocation);
+
+            if (UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(UnitAbilityPreviewInfo.Unit, UnitAbilityPreviewInfo.Unit->GetActorLocation(), OutLocation))
+            {
+                for (FVector& Point : NavPath->PathPoints)
+                {
+                    Point.Z = UnitAbilityPreviewInfo.Unit->GetActorLocation().Z; // Ensure the path points are at the same height as the unit
+                }
+               UpdateSpline(NavPath->PathPoints);
+            }
+            break;
+        }
+        case
+        EUnitAbilityPreviewType::RangedAttack:
+        {
+            FVector OutLocation;
+            const bool TargetPointValid = UAuraAbilitySystemLibrary::GetReachablePointWithinMaxRange(UnitAbilityPreviewInfo.Unit, UnitAbilityPreviewInfo.Unit->GetActorLocation(), CursorHit.ImpactPoint, UnitAbilityPreviewInfo.AbilityRange, OutLocation);
+
+            if (UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(UnitAbilityPreviewInfo.Unit, UnitAbilityPreviewInfo.Unit->GetActorLocation(), OutLocation))
+            {
+
+               UpdateSpline(NavPath->PathPoints);
+            }
+            break;
+        }
+        default:
+            break;
+    }
 }
 
 void AAbilityPreview::UpdateSpline(const TArray<FVector>& Points)
@@ -93,6 +135,31 @@ void AAbilityPreview::RebuildSplineMeshSegments()
         Mesh->SetEndScale(FVector2D(1.f, 1.f));
         Mesh->SetVisibility(true);
     }
+}
+
+void AAbilityPreview::DrawDebugCircleAroundActor(AActor* TargetActor, float MaxRange, int32 Segments, const FColor& Color, float Duration, float Thickness)
+{
+    if (!TargetActor || !GetWorld()) return;
+
+    //FVector Center = TargetActor->GetActorLocation();
+    FVector Center = FVector(TargetActor->GetActorLocation().X, TargetActor->GetActorLocation().Y, 0.f);
+    FVector UpVector = FVector::UpVector;
+    FVector ForwardVector = TargetActor->GetActorForwardVector();
+    FVector RightVector = FVector::CrossProduct(UpVector, ForwardVector);
+
+    DrawDebugCircle(
+        GetWorld(),
+        Center,
+        MaxRange,
+        Segments,
+        Color,
+        false,        // persistent lines
+        Duration,
+        0,            // depth priority
+        Thickness,
+        RightVector,  // X-axis vector
+        ForwardVector // Y-axis vector
+    );
 }
 
 
