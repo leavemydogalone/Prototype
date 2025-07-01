@@ -72,7 +72,7 @@ int32 AAuraPlayerState::GetTeamID_Implementation()
 
 void AAuraPlayerState::AddAbilityToStoredAbilities(FUnitAbilityPreviewInfo& UnitAbilityPreviewInfo)
 {
-	StoredAbilities.Add(UnitAbilityPreviewInfo);
+	StoredAbilities.Emplace(UnitAbilityPreviewInfo);
 }
 
 void AAuraPlayerState::RemoveFirstStoredAbility()

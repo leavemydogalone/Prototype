@@ -31,9 +31,13 @@ void AAbilityPreview::BeginPlay()
     Super::BeginPlay();
 }
 
-void AAbilityPreview::UpdateAbilityPreview(FHitResult& CursorHit)
+void AAbilityPreview::UpdateAbilityPreview(const FVector& TargetLocation)
 {
     DrawDebugCircleAroundActor(UnitAbilityPreviewInfo.Unit, UnitAbilityPreviewInfo.AbilityRange, 20, FColor::Blue, 0.1f, 1.f);
+
+    //draw debug spheres at target location and startlocation
+	DrawDebugSphere(GetWorld(), TargetLocation, 20.f, 12, FColor::Red, false, 0.1f);
+	DrawDebugSphere(GetWorld(), UnitAbilityPreviewInfo.Unit->GetActorLocation(), 20.f, 12, FColor::Green, false, 0.1f);
 
     switch (UnitAbilityPreviewInfo.AbilityPreviewType)
     {
@@ -41,7 +45,7 @@ void AAbilityPreview::UpdateAbilityPreview(FHitResult& CursorHit)
         EUnitAbilityPreviewType::Movement:
         {
             FVector OutLocation;
-            const bool TargetPointValid = UAuraAbilitySystemLibrary::GetReachablePointWithinMaxRange(UnitAbilityPreviewInfo.Unit, UnitAbilityPreviewInfo.Unit->GetActorLocation(), CursorHit.ImpactPoint, UnitAbilityPreviewInfo.AbilityRange, OutLocation);
+            const bool TargetPointValid = UAuraAbilitySystemLibrary::GetReachablePointWithinMaxRange(UnitAbilityPreviewInfo.Unit, UnitAbilityPreviewInfo.Unit->GetActorLocation(), TargetLocation, UnitAbilityPreviewInfo.AbilityRange, OutLocation);
 
             if (UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(UnitAbilityPreviewInfo.Unit, UnitAbilityPreviewInfo.Unit->GetActorLocation(), OutLocation))
             {
@@ -49,7 +53,7 @@ void AAbilityPreview::UpdateAbilityPreview(FHitResult& CursorHit)
                 {
                     Point.Z = UnitAbilityPreviewInfo.Unit->GetActorLocation().Z; // Ensure the path points are at the same height as the unit
                 }
-               UpdateSpline(NavPath->PathPoints);
+                UpdateSpline(NavPath->PathPoints);
             }
             break;
         }
@@ -57,7 +61,7 @@ void AAbilityPreview::UpdateAbilityPreview(FHitResult& CursorHit)
         EUnitAbilityPreviewType::RangedAttack:
         {
             FVector OutLocation;
-            const bool TargetPointValid = UAuraAbilitySystemLibrary::GetReachablePointWithinMaxRange(UnitAbilityPreviewInfo.Unit, UnitAbilityPreviewInfo.Unit->GetActorLocation(), CursorHit.ImpactPoint, UnitAbilityPreviewInfo.AbilityRange, OutLocation);
+            const bool TargetPointValid = UAuraAbilitySystemLibrary::GetReachablePointWithinMaxRange(UnitAbilityPreviewInfo.Unit, UnitAbilityPreviewInfo.Unit->GetActorLocation(), TargetLocation, UnitAbilityPreviewInfo.AbilityRange, OutLocation);
 
             if (UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(UnitAbilityPreviewInfo.Unit, UnitAbilityPreviewInfo.Unit->GetActorLocation(), OutLocation))
             {

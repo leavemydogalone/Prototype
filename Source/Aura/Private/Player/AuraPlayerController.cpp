@@ -105,62 +105,82 @@ void AAuraPlayerController::UpdateActiveAbilityPreview()
 {
 	if (bAbilityPreviewIsActive && AbilityPreview)
 	{
-		AbilityPreview->UpdateAbilityPreview(CursorHit);
-	}
-}
-
-void AAuraPlayerController::DrawLineToMouse(AActor* Unit, int32 MaxRange)
-{
-	FVector WorldLocation;
-	FVector WorldDirection;
-	if (DeprojectMousePositionToWorld(WorldLocation, WorldDirection))
-	{
-		// Trace from mouse into the world
-		FVector TraceEnd = WorldLocation + (WorldDirection * 10000.0f);
-
-		FHitResult HitResult;
-		FCollisionQueryParams QueryParams;
-		QueryParams.AddIgnoredActor(this);
-
-		bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, WorldLocation, TraceEnd, ECC_Visibility, QueryParams);
-		FVector TargetPoint = bHit ? HitResult.Location : TraceEnd;
-
-		// Clamp the target point to MaxRange from the unit
-		FVector UnitLocation = Unit->GetActorLocation();
-		FVector DirectionToTarget = (TargetPoint - UnitLocation).GetSafeNormal();
-		float DistanceToTarget = FVector::Dist(UnitLocation, TargetPoint);
-
-		if (DistanceToTarget > MaxRange)
-		{
-			TargetPoint = UnitLocation + DirectionToTarget * MaxRange;
-		}
-
-		TargetPoint.Z = UnitLocation.Z;
-
-		// Draw clamped line
-		DrawDebugLine(GetWorld(), UnitLocation, TargetPoint, FColor::Green, false, 2.0f, 0, 2.0f);
+		AbilityPreview->UpdateAbilityPreview(CursorHit.ImpactPoint);
 	}
 }
 
 void AAuraPlayerController::UpdateStoredAbilityPreviews_Implementation(const TArray<FUnitAbilityPreviewInfo>& StoredAbilities)
 {
-	if (StoredAbilities.IsEmpty()) return;
-	for (const FUnitAbilityPreviewInfo& StoredAbility : StoredAbilities)
-	{
-	/*	if (IsValid(AbilityPreview))
-		{
-			AbilityPreview = GetWorld()->SpawnActor<AAbilityPreview>(AbilityPreviewClass);
-			
-		}*/
+	if (!IsLocalController()) return;
 
-		// Check that the stored ability properties are valid
-		if (!IsValid(StoredAbility.Unit) || StoredAbility.TargetLocation == FVector::ZeroVector)
+	if (StoredAbilities.Num() < StoredAbilityPreviews.Num())
+	{
+		for (const auto& StoredAbilityPreview : StoredAbilityPreviews)
 		{
-			continue;
+			StoredAbilityPreview->Destroy();
 		}
-		DrawDebugLine(GetWorld(), StoredAbility.Unit->GetActorLocation(), StoredAbility.TargetLocation, FColor::Yellow, false, 10.0f, 0, 2.0f);
+		StoredAbilityPreviews.Empty();
+	}
+
+	// Will need to set the mouse location of the ability preview for target and then call updateabilitypreview
+
+	for (const FUnitAbilityPreviewInfo& StoredAbilityInfo : StoredAbilities)
+	{
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Owner = this;
+		SpawnParams.Instigator = nullptr;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		AAbilityPreview* NewAbilityPreview = GetWorld()->SpawnActor<AAbilityPreview>(
+			AbilityPreviewClass,
+			FTransform::Identity,
+			SpawnParams
+		);
+
+
+		if (NewAbilityPreview)
+		{
+			NewAbilityPreview->SetUnitAbilityPreviewInfo(StoredAbilityInfo);
+			NewAbilityPreview->UpdateAbilityPreview(StoredAbilityInfo.TargetLocation);
+			StoredAbilityPreviews.Emplace(NewAbilityPreview);
+		}
+		//DrawDebugLine(GetWorld(), StoredAbility.Unit->GetActorLocation(), StoredAbility.TargetLocation, FColor::Yellow, false, 10.0f, 0, 2.0f);
 	}
 }
+
+
+//void AAuraPlayerController::DrawLineToMouse(AActor* Unit, int32 MaxRange)
+//{
+//	FVector WorldLocation;
+//	FVector WorldDirection;
+//	if (DeprojectMousePositionToWorld(WorldLocation, WorldDirection))
+//	{
+//		// Trace from mouse into the world
+//		FVector TraceEnd = WorldLocation + (WorldDirection * 10000.0f);
+//
+//		FHitResult HitResult;
+//		FCollisionQueryParams QueryParams;
+//		QueryParams.AddIgnoredActor(this);
+//
+//		bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, WorldLocation, TraceEnd, ECC_Visibility, QueryParams);
+//		FVector TargetPoint = bHit ? HitResult.Location : TraceEnd;
+//
+//		// Clamp the target point to MaxRange from the unit
+//		FVector UnitLocation = Unit->GetActorLocation();
+//		FVector DirectionToTarget = (TargetPoint - UnitLocation).GetSafeNormal();
+//		float DistanceToTarget = FVector::Dist(UnitLocation, TargetPoint);
+//
+//		if (DistanceToTarget > MaxRange)
+//		{
+//			TargetPoint = UnitLocation + DirectionToTarget * MaxRange;
+//		}
+//
+//		TargetPoint.Z = UnitLocation.Z;
+//
+//		// Draw clamped line
+//		DrawDebugLine(GetWorld(), UnitLocation, TargetPoint, FColor::Green, false, 2.0f, 0, 2.0f);
+//	}
+//}
+
 
 //This is being called in the Character, in the OnRep_PlayerState, to ensure PS exists
 void AAuraPlayerController::BindToStoredAbilitiesDelegate()

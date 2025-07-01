@@ -27,7 +27,7 @@ public:
 	//TObjectPtr<UDecalComponent> AbilityRangeDecal;
 
 	UFUNCTION()
-	void UpdateAbilityPreview(FHitResult& CursorHit);
+	void UpdateAbilityPreview(const FVector& TargetLocation);
 
 	UFUNCTION()
 	void UpdateSpline(const TArray<FVector>& Points);
