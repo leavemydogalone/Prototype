@@ -52,6 +52,7 @@ void AAbilityPreview::UpdateAbilityPreview(const FVector& TargetLocation)
                 for (FVector& Point : NavPath->PathPoints)
                 {
                     Point.Z = UnitAbilityPreviewInfo.Unit->GetActorLocation().Z; // Ensure the path points are at the same height as the unit
+                    //draw debug sphere at each point
                 }
                 UpdateSpline(NavPath->PathPoints);
             }
@@ -86,6 +87,8 @@ void AAbilityPreview::UpdateSpline(const TArray<FVector>& Points)
     for (int32 i = 0; i < Points.Num(); ++i)
     {
         SplineComponent->AddSplinePoint(Points[i], ESplineCoordinateSpace::World);
+        DrawDebugSphere(GetWorld(), Points[i], 20.f, 12, FColor::Yellow, false, 0.1f);
+
     }
     SplineComponent->UpdateSpline();
 

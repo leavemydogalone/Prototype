@@ -176,6 +176,7 @@ void UUnitGameplayAbilityBase::OnConfirmTagAdded(FGameplayEventData Data)
 	FUnitAbilityPreviewInfo UnitAbilityPreviewInfo;
 	UnitAbilityPreviewInfo.AbilityTag = AbilityTags.First();
 	UnitAbilityPreviewInfo.Unit = GetAvatarActorFromActorInfo();
+	UnitAbilityPreviewInfo.AbilityRange = AbilityRange;
 	UnitAbilityPreviewInfo.TargetLocation = TargetLocation;
 	UnitAbilityPreviewInfo.AbilitySize = AbilitySize;
 	UnitAbilityPreviewInfo.AbilityPreviewType = AbilityPreviewType;
