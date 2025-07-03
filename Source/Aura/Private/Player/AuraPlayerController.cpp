@@ -143,7 +143,6 @@ void AAuraPlayerController::UpdateStoredAbilityPreviews_Implementation(const TAr
 			NewAbilityPreview->UpdateAbilityPreview(StoredAbilityInfo.TargetLocation);
 			StoredAbilityPreviews.Emplace(NewAbilityPreview);
 		}
-		//DrawDebugLine(GetWorld(), StoredAbility.Unit->GetActorLocation(), StoredAbility.TargetLocation, FColor::Yellow, false, 10.0f, 0, 2.0f);
 	}
 }
 
