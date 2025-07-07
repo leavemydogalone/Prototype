@@ -52,7 +52,7 @@ protected:
 	FOnRoundChangeAssignable OnRoundChangeDelegate;
 
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_CurrentRound)
-	int32 CurrentRound = 0;
+	int32 CurrentRound = 1;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Round Manager")
 	int32 StartingRoundTime;
@@ -119,4 +119,7 @@ private:
 
 	UFUNCTION()
 	void HandleActionTurnCountChange();
+
+	UFUNCTION()
+	void HandleCleanUp();
 };

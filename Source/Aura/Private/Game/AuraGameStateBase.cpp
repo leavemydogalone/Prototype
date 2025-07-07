@@ -39,6 +39,10 @@ void AAuraGameStateBase::StartRoundTime()
 
 void AAuraGameStateBase::AdvanceCurrentRound()
 {
+	CurrentRound++;
+	MARK_PROPERTY_DIRTY_FROM_NAME(AAuraGameStateBase, CurrentRound, this);
+    OnRep_CurrentRound();
+
 }
 
 
@@ -56,6 +60,7 @@ void AAuraGameStateBase::Server_AdvanceTurnPhase_Implementation()
         break;
     case EAuraTurnPhase::Action_2:
         CurrentTurnPhase = EAuraTurnPhase::Cleanup;
+        HandleCleanUp();
         break;
     case EAuraTurnPhase::Cleanup:
         CurrentTurnPhase = EAuraTurnPhase::Planning;
@@ -79,6 +84,7 @@ void AAuraGameStateBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 
 	DOREPLIFETIME_WITH_PARAMS_FAST(AAuraGameStateBase, CurrentTurnPhase, Params);
 	DOREPLIFETIME_WITH_PARAMS_FAST(AAuraGameStateBase, CurrentActionTurnCount, Params);
+	DOREPLIFETIME_WITH_PARAMS_FAST(AAuraGameStateBase, CurrentRound, Params);
 }
 
 void AAuraGameStateBase::HandleActionTurnCountChange()
@@ -87,4 +93,9 @@ void AAuraGameStateBase::HandleActionTurnCountChange()
     OnRep_CurrentActionTurnCount();
     MARK_PROPERTY_DIRTY_FROM_NAME(AAuraGameStateBase, CurrentActionTurnCount, this);
 
+}
+
+void AAuraGameStateBase::HandleCleanUp()
+{
+    if (CurrentRound < NumberOfRounds) AdvanceCurrentRound();
 }

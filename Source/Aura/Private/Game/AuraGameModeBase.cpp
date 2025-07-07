@@ -16,6 +16,92 @@
 #include "GameFramework/Character.h"
 #include "Character/AuraUnitBase.h"
 
+
+void AAuraGameModeBase::BeginPlay()
+{
+	Super::BeginPlay();
+	Maps.Add(DefaultMapName, DefaultMap);
+}
+
+void AAuraGameModeBase::SpawnUnitsForPlayer(APlayerController* Player)
+{
+	if (!HasAuthority() || !Player) return;
+
+	UWorld* World = GetWorld();
+
+	check(World);
+	check(PlayerOne_UnitPawnClass);
+	check(PlayerTwo_UnitPawnClass);
+	check(DefaultAIControllerClass);
+	check(SpawnLocationClass);
+
+	TArray<AActor*> SpawnPoints;
+	UGameplayStatics::GetAllActorsOfClass(World, SpawnLocationClass, SpawnPoints);
+
+	for (AActor* SpawnPoint : SpawnPoints)
+	{
+		if (ITeamInterface::Execute_GetTeamID(SpawnPoint) == TeamID)
+		{
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.Owner = Player;
+			FVector SpawnLocation = SpawnPoint->GetActorLocation();
+
+			FTransform SpawnTransform = SpawnPoint->GetTransform();
+
+			AActor* NewUnit = World->SpawnActorDeferred<AActor>(
+				GetPawnForPlayer(),
+				SpawnTransform,
+				Player,
+				nullptr,
+				ESpawnActorCollisionHandlingMethod::AlwaysSpawn
+			);
+
+			if (NewUnit)
+			{
+				AController* AIController = World->SpawnActor<AController>(DefaultAIControllerClass);
+
+				NewUnit->SetReplicates(true);
+				NewUnit->SetOwner(Player);
+				ITeamInterface* TeamUnit = Cast<ITeamInterface>(NewUnit);
+				TeamUnit->SetTeamID(TeamID);
+
+				NewUnit->FinishSpawning(SpawnTransform);
+
+				if (AIController)
+				{
+					AIController->Possess(Cast<APawn>(NewUnit));
+				}
+				// This stuff might not actually do anything, and am getting an error for the aicontroller part.
+				// Unit set to Sim Proxy after possession by AI
+				if (Player->GetRemoteRole() == ROLE_AutonomousProxy)
+				{
+					NewUnit->SetAutonomousProxy(true);
+					AIController->SetAutonomousProxy(true);
+				}
+
+				NewUnit->SetOwner(Player);
+
+			}
+		}
+	}
+}
+
+TSubclassOf<AActor> AAuraGameModeBase::GetPawnForPlayer()
+{
+	if (TeamID == 0)
+	{
+		return PlayerOne_UnitPawnClass;
+	}
+	else
+	{
+		return PlayerTwo_UnitPawnClass;
+	}
+}
+
+
+
+
+
 void AAuraGameModeBase::SaveSlotData(UMVVM_LoadSlot* LoadSlot, int32 SlotIndex)
 {
 	if (UGameplayStatics::DoesSaveGameExist(LoadSlot->GetLoadSlotName(), SlotIndex))
@@ -248,84 +334,3 @@ void AAuraGameModeBase::PostLogin(APlayerController* NewPlayer)
 	}
 }
 
-void AAuraGameModeBase::SpawnUnitsForPlayer(APlayerController* Player)
-{
-	if (!HasAuthority() || !Player) return;
-
-	UWorld* World = GetWorld();
-
-	check(World);
-	check(PlayerOne_UnitPawnClass);
-	check(PlayerTwo_UnitPawnClass);
-	check(DefaultAIControllerClass);
-	check(SpawnLocationClass);
-
-	TArray<AActor*> SpawnPoints;
-	UGameplayStatics::GetAllActorsOfClass(World, SpawnLocationClass, SpawnPoints);
-
-	for (AActor* SpawnPoint : SpawnPoints)
-	{
-		if (ITeamInterface::Execute_GetTeamID(SpawnPoint) == TeamID)
-		{
-			FActorSpawnParameters SpawnParams;
-			SpawnParams.Owner = Player;
-			FVector SpawnLocation = SpawnPoint->GetActorLocation();
-
-			FTransform SpawnTransform = SpawnPoint->GetTransform();
-
-			AActor* NewUnit = World->SpawnActorDeferred<AActor>(
-				GetPawnForPlayer(),
-				SpawnTransform,
-				Player,
-				nullptr,
-				ESpawnActorCollisionHandlingMethod::AlwaysSpawn
-			);
-
-			if (NewUnit)
-			{
-				AController* AIController = World->SpawnActor<AController>(DefaultAIControllerClass);
-			
-				NewUnit->SetReplicates(true);
-				NewUnit->SetOwner(Player);
-				ITeamInterface* TeamUnit = Cast<ITeamInterface>(NewUnit);
-				TeamUnit->SetTeamID(TeamID);
-
-				NewUnit->FinishSpawning(SpawnTransform);
-
-				if (AIController)
-				{
-					AIController->Possess(Cast<APawn>(NewUnit));
-				}
-				// This stuff might not actually do anything, and am getting an error for the aicontroller part.
-				// Unit set to Sim Proxy after possession by AI
-				if (Player->GetRemoteRole() == ROLE_AutonomousProxy)
-				{
-					NewUnit->SetAutonomousProxy(true);
-					AIController->SetAutonomousProxy(true);
-				}
-
-				NewUnit->SetOwner(Player);
-
-			}
-		}
-	}
-}
-
-
-void AAuraGameModeBase::BeginPlay()
-{
-	Super::BeginPlay();
-	Maps.Add(DefaultMapName, DefaultMap);
-}
-
-TSubclassOf<AActor> AAuraGameModeBase::GetPawnForPlayer()
-{
-	if (TeamID == 0)
-	{
-		return PlayerOne_UnitPawnClass;
-	}
-	else
-	{
-		return PlayerTwo_UnitPawnClass;
-	}
-}

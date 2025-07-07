@@ -92,4 +92,5 @@ private:
 	int32 TeamID = 0;
 
 	TSubclassOf<AActor> GetPawnForPlayer();
+
 };
