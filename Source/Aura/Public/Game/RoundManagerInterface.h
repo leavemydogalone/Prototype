@@ -43,4 +43,7 @@ public:
 
 	UFUNCTION()
 	virtual void AdvanceCurrentRound() = 0;
+
+	UFUNCTION(BlueprintCallable, Category = "Round System")
+	virtual int32 GetNumberOfRounds() = 0;
 };

@@ -41,6 +41,8 @@ public:
 	 //virtual const int32 GetCurrentRoundTime() override { return CurrentRoundTime; }
 	 virtual int32 GetCurrentRound() const override { return CurrentRound; }
 	 virtual void AdvanceCurrentRound() override;
+	 UFUNCTION(BlueprintCallable, Category = "Round System")
+	 virtual int32 GetNumberOfRounds() override;
 	 // End IGameManagerInterface
 
 protected:

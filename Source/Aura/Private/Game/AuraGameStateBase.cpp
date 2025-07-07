@@ -45,6 +45,11 @@ void AAuraGameStateBase::AdvanceCurrentRound()
 
 }
 
+int32 AAuraGameStateBase::GetNumberOfRounds()
+{
+    return NumberOfRounds;
+}
+
 
 void AAuraGameStateBase::Server_AdvanceTurnPhase_Implementation()
 {
