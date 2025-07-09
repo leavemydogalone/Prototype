@@ -29,7 +29,14 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 			OnPlayerLevelChangedDelegate.Broadcast(NewLevel, bLevelUp);
 		}
 	);
-	
+	GetAuraPS()->OnStoredAbilitiesArrayChangedDelegate.AddLambda(
+		[this](auto&& Array)
+		{
+			int32 Count = Array.Num();  // works as long as Array is a TArray
+			OnStoredAbilitiesChangedDelegate.Broadcast(Count);
+		}
+	);
+
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(GetAuraAS()->GetHealthAttribute()).AddLambda(
 			[this](const FOnAttributeChangeData& Data)
 			{

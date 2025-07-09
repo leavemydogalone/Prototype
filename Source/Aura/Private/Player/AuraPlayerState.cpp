@@ -164,6 +164,7 @@ void AAuraPlayerState::OnRep_StoredAbilities(TArray<FUnitAbilityPreviewInfo>& Ol
 {
 	OnStoredAbilitiesArrayChangedDelegate.Broadcast(StoredAbilities);
 	UE_LOG(LogTemp, Warning, TEXT("Stored Abilities length changed from %d to %d"), OldStoredAbilities.Num(), StoredAbilities.Num());
+	OnStoredAbilitiesCountChangedDelegate.Broadcast(StoredAbilities.Num());
 }
 
 void AAuraPlayerState::AddToAttributePoints(int32 InPoints)

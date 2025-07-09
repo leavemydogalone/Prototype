@@ -196,7 +196,6 @@ void AAuraCharacter::OnTurnPhaseChanged(EAuraTurnPhase TurnPhase)
 	}
 }
 
-
 void AAuraCharacter::LoadProgress()
 {
 	AAuraGameModeBase* AuraGameMode = Cast<AAuraGameModeBase>(UGameplayStatics::GetGameMode(this));

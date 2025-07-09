@@ -22,6 +22,8 @@ DECLARE_MULTICAST_DELEGATE_OneParam(FOnPlayerStatChanged, int32 /*StatValue*/)
 DECLARE_MULTICAST_DELEGATE_TwoParams(FOnLevelChanged, int32 /*StatValue*/, bool /*bLevelUp*/)
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnPlayerStoredAbilitiesArrayChanged, const TArray<FUnitAbilityPreviewInfo>&)
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnPlayerStoredAbilitiesCountChanged, int32)
+
 
 /**
  * 
@@ -44,6 +46,7 @@ public:
 	FOnPlayerStatChanged OnAttributePointsChangedDelegate;
 	FOnPlayerStatChanged OnSpellPointsChangedDelegate;
 	FOnPlayerStoredAbilitiesArrayChanged OnStoredAbilitiesArrayChangedDelegate;
+	FOnPlayerStoredAbilitiesCountChanged OnStoredAbilitiesCountChangedDelegate;
 
 	FORCEINLINE int32 GetPlayerLevel() const { return Level; }
 	FORCEINLINE int32 GetXP() const { return XP; }
