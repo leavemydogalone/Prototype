@@ -77,6 +77,9 @@ public:
 	void SetSelectedUnit(AActor* Actor);
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void UnselectCurrentSelectedUnit();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	bool GetIsAbilityPreviewing() const;
 
 	UFUNCTION()

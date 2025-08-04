@@ -94,6 +94,13 @@ void AAuraCharacter::SetSelectedUnit_Implementation(AActor* NewUnit)
 
 }
 
+void AAuraCharacter::UnselectCurrentSelectedUnit_Implementation()
+{
+	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
+	check(AuraPlayerState);
+	AuraPlayerState->UnselectCurrentSelectedUnit();
+}
+
 bool AAuraCharacter::GetIsAbilityPreviewing_Implementation() const
 {
 	if (AAuraPlayerController* AuraPlayerController = Cast<AAuraPlayerController>(GetController()))

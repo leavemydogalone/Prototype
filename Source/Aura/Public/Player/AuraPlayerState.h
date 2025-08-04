@@ -69,6 +69,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Unit Management")
 	AActor* GetSelectedUnit() const { return SelectedUnit; }
 
+	UFUNCTION()
+	void UnselectCurrentSelectedUnit();
+
 	// Team interface
 	virtual int32 GetTeamID_Implementation() override;
 	virtual void SetTeamID(int32 ID) override { TeamID = ID; }

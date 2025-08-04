@@ -42,6 +42,12 @@ UAbilitySystemComponent* AAuraPlayerState::GetAbilitySystemComponent() const
 
 void AAuraPlayerState::SetSelectedUnit(AActor* NewUnit)
 {
+
+	if (NewUnit == SelectedUnit)
+	{
+		return;
+	}
+
 	if (SelectedUnit) {
 		LastSelectedUnit = SelectedUnit;
 		if (IsValid(LastSelectedUnit) && LastSelectedUnit->Implements<UHighlightInterface>())
@@ -49,10 +55,6 @@ void AAuraPlayerState::SetSelectedUnit(AActor* NewUnit)
 			IHighlightInterface::Execute_SetUnselectedHighlight(LastSelectedUnit);
 		}
 
-		if (NewUnit == LastSelectedUnit)
-		{
-			return;
-		}
 	}
 
 	if (IsValid(NewUnit) && NewUnit->Implements<UUnitInterface>())
@@ -63,6 +65,17 @@ void AAuraPlayerState::SetSelectedUnit(AActor* NewUnit)
 		if (!HasAuthority() && IsValid(NewUnit) && NewUnit->Implements<UHighlightInterface>()) {
 			IHighlightInterface::Execute_SetSelectedHighlight(NewUnit);
 		}
+	}
+
+}
+
+void  AAuraPlayerState::UnselectCurrentSelectedUnit()
+{
+	if (SelectedUnit) {
+		IHighlightInterface::Execute_SetUnselectedHighlight(SelectedUnit);
+		LastSelectedUnit = SelectedUnit;
+		SelectedUnit = nullptr;
+		UE_LOG(LogTemp, Warning, TEXT("Selected Unit is nullptr or does not implement UUnitInterface"));
 	}
 }
 
