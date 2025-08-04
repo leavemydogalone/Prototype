@@ -136,4 +136,5 @@ private:
 	UFUNCTION()
 	void OnRep_StoredAbilities(TArray<FUnitAbilityPreviewInfo>& OldStoredAbilities);
 
+	int32 MaxStoredAbilities = 2;
 };

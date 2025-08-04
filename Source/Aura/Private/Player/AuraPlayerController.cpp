@@ -25,6 +25,8 @@
 #include "AbilitySystem/Data/AbilityInfo.h"
 #include "Actor/AbilityPreview.h"
 #include "AbilitySystem/AuraAbilitySystemLibrary.h"
+#include "Net/UnrealNetwork.h"
+
 
 
 AAuraPlayerController::AAuraPlayerController()
@@ -86,6 +88,7 @@ void AAuraPlayerController::ShowAbilityPreview_Implementation(const FUnitAbility
 			// Set the abilitypreviewinfo on the AbilityPreview
 			AbilityPreview->SetUnitAbilityPreviewInfo(UnitAbilityPreviewInfo);
 			bAbilityPreviewIsActive = true;
+			ServerSetAbilityPreviewIsActive(true);
 
 		}
 
@@ -99,6 +102,7 @@ void AAuraPlayerController::HideAbilityPreview_Implementation()
 		AbilityPreview->Destroy();
 	}
 	bAbilityPreviewIsActive = false;
+	ServerSetAbilityPreviewIsActive(false);
 }
 
 void AAuraPlayerController::UpdateActiveAbilityPreview()
@@ -107,6 +111,11 @@ void AAuraPlayerController::UpdateActiveAbilityPreview()
 	{
 		AbilityPreview->UpdateAbilityPreview(CursorHit.ImpactPoint);
 	}
+}
+
+void AAuraPlayerController::ServerSetAbilityPreviewIsActive_Implementation(bool NewValue)
+{
+	bAbilityPreviewIsActive = NewValue;
 }
 
 void AAuraPlayerController::UpdateStoredAbilityPreviews_Implementation(const TArray<FUnitAbilityPreviewInfo>& StoredAbilities)
@@ -185,6 +194,12 @@ void AAuraPlayerController::UpdateStoredAbilityPreviews_Implementation(const TAr
 void AAuraPlayerController::BindToStoredAbilitiesDelegate()
 {
 	GetPS()->OnStoredAbilitiesArrayChangedDelegate.AddUObject(this, &AAuraPlayerController::UpdateStoredAbilityPreviews);
+}
+
+void AAuraPlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(AAuraPlayerController, bAbilityPreviewIsActive);
 }
 
 void AAuraPlayerController::ShowDamageNumber_Implementation(float DamageAmount, ACharacter* TargetCharacter, bool bBlockedHit, bool bCriticalHit)

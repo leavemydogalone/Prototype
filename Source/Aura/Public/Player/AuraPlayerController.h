@@ -59,8 +59,9 @@ public:
 	void UpdateStoredAbilityPreviews(const TArray<FUnitAbilityPreviewInfo>& StoredAbilities);
 
 	void BindToStoredAbilitiesDelegate();
+	bool GetIsAbilityPreviewActive() const { return bAbilityPreviewIsActive; }
 
-	bool GetAbilityPreviewIsActive() const { return bAbilityPreviewIsActive; }
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 protected:
 
@@ -145,10 +146,14 @@ private:
 
 	void UpdateActiveAbilityPreview();
 
+	UFUNCTION(Server, Reliable)
+	void ServerSetAbilityPreviewIsActive(bool NewValue);
+
 	bool bIsStoredAbilitiesDelegateBound = false;
 
 	void DrawLineToMouse(AActor* Unit, int32 MaxRange);
 	void DrawDebugCircleAroundActor(AActor* TargetActor, float MaxRange, int32 Segments /*= 64*/, const FColor& Color /*= FColor::Green*/, float Duration /*= 0.f*/, float Thickness /*= 1.f*/);
 
+	UPROPERTY(Replicated)
 	bool bAbilityPreviewIsActive = false;
 };

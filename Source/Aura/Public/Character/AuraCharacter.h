@@ -42,6 +42,7 @@ public:
 	virtual void SaveProgress_Implementation(const FName& CheckpointTag) override;
 	virtual AActor* GetSelectedUnit_Implementation() const override;
 	virtual void SetSelectedUnit_Implementation(AActor* NewUnit) override;
+	virtual bool GetIsAbilityPreviewing_Implementation() const override;
 	UFUNCTION()
 	virtual void ShowAbilityPreview(FUnitAbilityPreviewInfo& UnitAbilityPreviewInfo) override;
 	UFUNCTION()

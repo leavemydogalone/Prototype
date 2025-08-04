@@ -6,6 +6,7 @@
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "AbilitySystem/AuraAttributeSet.h"
 #include "Character/AuraUnitBase.h"
+#include "AbilitySystemBlueprintLibrary.h"
 #include "Net/UnrealNetwork.h"
 
 AAuraPlayerState::AAuraPlayerState()
@@ -72,7 +73,7 @@ int32 AAuraPlayerState::GetTeamID_Implementation()
 
 void AAuraPlayerState::AddAbilityToStoredAbilities(FUnitAbilityPreviewInfo& UnitAbilityPreviewInfo)
 {
-	StoredAbilities.Emplace(UnitAbilityPreviewInfo);
+	if (StoredAbilities.Num() < MaxStoredAbilities) StoredAbilities.Emplace(UnitAbilityPreviewInfo);
 }
 
 void AAuraPlayerState::RemoveFirstStoredAbility()
@@ -86,7 +87,16 @@ void AAuraPlayerState::RemoveFirstStoredAbility()
 
 void AAuraPlayerState::RemoveLastStoredAbility()
 {
+	if (StoredAbilities.Num() > 0 && AbilitySystemComponent)
+	{
 
+		const FAuraGameplayTags& GameplayTags = FAuraGameplayTags::Get();
+		FGameplayEventData Payload;
+		Payload.EventTag = GameplayTags.Event_Unit_Cancel;
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(AbilitySystemComponent->GetAvatarActor(), GameplayTags.Event_Unit_Cancel, Payload);
+
+		StoredAbilities.RemoveAt(StoredAbilities.Num() - 1);
+	}
 }
 
 

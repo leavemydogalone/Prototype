@@ -76,8 +76,8 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void SetSelectedUnit(AActor* Actor);
 
-	/*UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	bool GetIsAbilityPreviewing();*/
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	bool GetIsAbilityPreviewing() const;
 
 	UFUNCTION()
 	virtual void ShowAbilityPreview(FUnitAbilityPreviewInfo& UnitAbilityPreviewInfo) = 0;
@@ -90,6 +90,9 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void RemoveLastStoredAbility();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	bool GetCanAddStoredAbility();
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	FGameplayTag GetTurnPhaseTagToSendToUnit() const;
