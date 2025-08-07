@@ -86,11 +86,13 @@ int32 AAuraPlayerState::GetTeamID_Implementation()
 
 void AAuraPlayerState::AddAbilityToStoredAbilities(FUnitAbilityPreviewInfo& UnitAbilityPreviewInfo)
 {
+	if (!HasAuthority()) return;
 	if (StoredAbilities.Num() < MaxStoredAbilities) StoredAbilities.Emplace(UnitAbilityPreviewInfo);
 }
 
 void AAuraPlayerState::RemoveFirstStoredAbility()
 {
+	if (!HasAuthority()) return;
 	if (StoredAbilities.Num() > 0)
 	{
 		StoredAbilities.RemoveAt(0);
@@ -100,6 +102,7 @@ void AAuraPlayerState::RemoveFirstStoredAbility()
 
 void AAuraPlayerState::RemoveLastStoredAbility()
 {
+	if (!HasAuthority()) return;
 	if (StoredAbilities.Num() > 0 && AbilitySystemComponent)
 	{
 
