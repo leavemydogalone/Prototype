@@ -30,6 +30,15 @@ protected:
 	float AbilitySize = 1.f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Ability")
+	EAEOShapes AEOShape = EAEOShapes::None;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Ability")
+	FVector BoxExtent = FVector::ZeroVector;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Ability")
+	FVector BoxCenterOffset = FVector::ZeroVector;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Ability")
 	EUnitAbilityPreviewType AbilityPreviewType = EUnitAbilityPreviewType::Movement;
 
 	UPROPERTY(BlueprintReadOnly)
@@ -82,6 +91,8 @@ private:
 	UPROPERTY()
 	bool bAbilityIsConfirmed = false;
 
+	UPROPERTY()
+	FUnitAbilityPreviewInfo UnitAbilityPreviewInfo;
 	/*UPROPERTY()
 	bool bAbilityPreviewIsActive = false;*/
 

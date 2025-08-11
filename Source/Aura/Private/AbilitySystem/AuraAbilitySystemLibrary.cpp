@@ -568,6 +568,15 @@ void UAuraAbilitySystemLibrary::GetLivePlayersWithinRadius(const UObject* WorldC
 	}
 }
 
+
+void UAuraAbilitySystemLibrary::CalculateBoxTransform(const FVector& ActorLocation, const FRotator& ActorRotation, const FVector& BoxCenterOffset, FTransform& OutBoxTransform)
+{
+	const FVector BoxCenterWorld = ActorLocation + ActorRotation.RotateVector(BoxCenterOffset);
+	const FQuat BoxRotationQuat = ActorRotation.Quaternion();
+	OutBoxTransform = FTransform(BoxRotationQuat, BoxCenterWorld);	
+}
+
+
 void UAuraAbilitySystemLibrary::GetLivePlayersWithinBox(const UObject* WorldContextObject, TArray<AActor*>& OutActors, const TArray<AActor*>& ActorsToIgnore, const FVector& BoxExtent, const FVector& BoxCenterOffset, const FVector& ActorLocation, const FRotator& ActorRotation)
 {
 	FCollisionQueryParams QueryParams;
@@ -576,9 +585,8 @@ void UAuraAbilitySystemLibrary::GetLivePlayersWithinBox(const UObject* WorldCont
 	if (const UWorld* World = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull))
 	{
 		// Calculate the box center in world space
-		const FVector BoxCenterWorld = ActorLocation + ActorRotation.RotateVector(BoxCenterOffset);
-		const FQuat BoxRotationQuat = ActorRotation.Quaternion();
-		const FTransform BoxTransform(BoxRotationQuat, BoxCenterWorld);
+		FTransform BoxTransform;
+		CalculateBoxTransform(ActorLocation, ActorRotation, BoxCenterOffset, BoxTransform);
 
 		TArray<FOverlapResult> Overlaps;
 		World->OverlapMultiByObjectType(
@@ -593,9 +601,9 @@ void UAuraAbilitySystemLibrary::GetLivePlayersWithinBox(const UObject* WorldCont
 #if !(UE_BUILD_SHIPPING || UE_BUILD_TEST)
 		DrawDebugBox(
 			World,
-			BoxCenterWorld,
+			BoxTransform.GetLocation(),
 			BoxExtent,
-			BoxRotationQuat,
+			BoxTransform.GetRotation(),
 			FColor::Green,
 			false, // Persistent lines
 			2.0f,  // Lifetime

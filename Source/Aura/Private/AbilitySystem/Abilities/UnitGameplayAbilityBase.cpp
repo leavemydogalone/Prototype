@@ -34,6 +34,7 @@ void UUnitGameplayAbilityBase::EndAbility(const FGameplayAbilitySpecHandle Handl
 {
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 	UnbindFromTurnPhaseDelegate();
+	UnitAbilityPreviewInfo = FUnitAbilityPreviewInfo();
 	HideAbilityPreview();
 }
 
@@ -69,12 +70,18 @@ void UUnitGameplayAbilityBase::HandlePhaseEnumFromDelegate(EAuraTurnPhase TurnPh
 
 void UUnitGameplayAbilityBase::ShowAbilityPreview()
 {
-	FUnitAbilityPreviewInfo UnitAbilityPreviewInfo;
 	UnitAbilityPreviewInfo.AbilityTag = AbilityTags.First();
 	UnitAbilityPreviewInfo.Unit = GetAvatarActorFromActorInfo();
 	UnitAbilityPreviewInfo.AbilityRange = AbilityRange;
 	UnitAbilityPreviewInfo.AbilitySize = AbilitySize;
 	UnitAbilityPreviewInfo.AbilityPreviewType = AbilityPreviewType;
+	UnitAbilityPreviewInfo.AEOShape = AEOShape;
+
+	if (AEOShape != EAEOShapes::None)
+	{
+		UnitAbilityPreviewInfo.BoxExtent = BoxExtent;
+		UnitAbilityPreviewInfo.BoxCenterOffset = BoxCenterOffset;
+	}
 
 	GetPlayerInterface()->ShowAbilityPreview(UnitAbilityPreviewInfo);
 	//bAbilityPreviewIsActive = true;
@@ -169,19 +176,9 @@ void UUnitGameplayAbilityBase::OnConfirmTagAdded(FGameplayEventData Data)
 	ConfirmedEventData = Data;
 	FVector TargetLocation = ConfirmedEventData.TargetData.Get(0)->GetHitResult()->Location;
 
-	// Will need to do the calculation for actual target location (at max range) in ability. 
-	// Maybe like, if beyong max range then set to max range
-
-
-	FUnitAbilityPreviewInfo UnitAbilityPreviewInfo;
-	UnitAbilityPreviewInfo.AbilityTag = AbilityTags.First();
-	UnitAbilityPreviewInfo.Unit = GetAvatarActorFromActorInfo();
-	UnitAbilityPreviewInfo.AbilityRange = AbilityRange;
 	UnitAbilityPreviewInfo.TargetLocation = TargetLocation;
-	UnitAbilityPreviewInfo.AbilitySize = AbilitySize;
-	UnitAbilityPreviewInfo.AbilityPreviewType = AbilityPreviewType;
 
 	GetPlayerInterface()->AddAbilityToStoredAbilities(UnitAbilityPreviewInfo);
 	//log that ability was confirmed
-	UE_LOG(LogTemp, Warning, TEXT("Ability confirmed"));
+	UE_LOG(LogTemp, Warning, TEXT("Ability confirmed in ability"));
 }

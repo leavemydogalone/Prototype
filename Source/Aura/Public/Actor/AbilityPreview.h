@@ -8,6 +8,7 @@
 #include "AbilityPreview.generated.h"
 
 class USplineComponent;
+class UBoxComponent;
 class USplineMeshComponent;
 
 UCLASS()
@@ -32,6 +33,9 @@ public:
 	UFUNCTION()
 	void UpdateSpline(const TArray<FVector>& Points);
 
+	/*UFUNCTION()
+	void UpdateAOEShape();*/
+
 	UFUNCTION()
 	void SetUnitAbilityPreviewInfo(const FUnitAbilityPreviewInfo& InUnitAbilityPreviewInfo)
 	{
@@ -54,6 +58,12 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UStaticMesh> SplineMesh;
+
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<UBoxComponent> BoxComponent;
+
+	void SetBoxSize(FVector Extent);
+	void SetBoxTransform(const FTransform& Transform);
 
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UMaterialInterface> PreviewMaterial;

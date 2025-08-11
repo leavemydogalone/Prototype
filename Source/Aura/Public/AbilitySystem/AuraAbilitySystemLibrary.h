@@ -75,7 +75,7 @@ public:
 	UFUNCTION(BlueprintPure, Category = "AuraAbilitySystemLibrary|GameplayAttributeAccessor")
 	static float GetAttributeValueByGameplayTag(const UObject* WorldContextObject, FGameplayTag AttributeTag);
 
-	UFUNCTION(BlueprintPure, Category = "Navigation")
+	UFUNCTION(BlueprintPure, Category = "AuraAbilitySystemLibrary|Navigation")
 	static bool GetReachablePointWithinMaxRange(
 		UObject* WorldContextObject,
 		const FVector& StartLocation,
@@ -86,6 +86,14 @@ public:
 
 	UFUNCTION(BlueprintPure)
 	static void ApplyTurnBasedEffect(const FDamageEffectParams& DamageEffectParams);
+
+	UFUNCTION(BlueprintPure, Category = "AuraAbilitySystemLibrary|Shape")
+	static void CalculateBoxTransform(
+		const FVector& ActorLocation,
+		const FRotator& ActorRotation,
+		const FVector& BoxCenterOffset,
+		FTransform& OutBoxTransform
+	);
 	
 	/*
 	 * Effect Context Getters

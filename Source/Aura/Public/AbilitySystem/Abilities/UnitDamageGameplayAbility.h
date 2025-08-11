@@ -6,6 +6,7 @@
 #include "AbilitySystem/Abilities/UnitGameplayAbilityBase.h"
 #include "AuraAbilityTypes.h"
 #include "Interaction/CombatInterface.h"
+#include "AbilitySystem/Data/AbilityInfo.h"
 #include "UnitDamageGameplayAbility.generated.h"
 
 /**

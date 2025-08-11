@@ -13,8 +13,16 @@ enum class EUnitAbilityPreviewType : uint8
 	Movement,
 	RangedAttack,
 	MeleeAttack,
+	RangedAreaOfEffect,
 };
 
+UENUM()
+enum class EAEOShapes : uint8
+{
+	None,
+	Sphere,
+	Box,
+};
 
 class UGameplayAbility;
 
@@ -33,6 +41,9 @@ struct FUnitAbilityPreviewInfo
 	EUnitAbilityPreviewType AbilityPreviewType;
 
 	UPROPERTY()
+	EAEOShapes AEOShape = EAEOShapes::None;
+
+	UPROPERTY()
 	TObjectPtr<AActor> Unit = nullptr;
 
 	UPROPERTY()
@@ -47,7 +58,14 @@ struct FUnitAbilityPreviewInfo
 	UPROPERTY()
 	TObjectPtr<UDecalComponent> Decal = nullptr;
 
+	UPROPERTY()
+	FVector BoxExtent = FVector::ZeroVector;
+
+	UPROPERTY()
+	FVector BoxCenterOffset = FVector::ZeroVector;
+
 };
+
 
 USTRUCT(BlueprintType)
 struct FAuraAbilityInfo

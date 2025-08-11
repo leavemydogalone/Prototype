@@ -8,6 +8,7 @@
 #include "AbilitySystem/AuraAbilitySystemLibrary.h"
 #include "NavigationSystem.h"
 #include "NavigationPath.h"
+#include "Components/BoxComponent.h"
 
 // Sets default values
 AAbilityPreview::AAbilityPreview()
@@ -15,8 +16,13 @@ AAbilityPreview::AAbilityPreview()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
     SplineComponent = CreateDefaultSubobject<USplineComponent>(TEXT("SplineComponent"));
-    SetRootComponent(SplineComponent);
+    SplineComponent->SetupAttachment(GetRootComponent());
   
+    BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
+    BoxComponent->SetupAttachment(GetRootComponent());
+
+    BoxComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+    BoxComponent->SetGenerateOverlapEvents(false);
 
    /* AbiltyTargetDecal = CreateDefaultSubobject<UDecalComponent>("AbiltyTargetDecal");
     AbiltyTargetDecal->SetupAttachment(GetRootComponent());
@@ -36,13 +42,14 @@ void AAbilityPreview::UpdateAbilityPreview(const FVector& TargetLocation)
     DrawDebugCircleAroundActor(UnitAbilityPreviewInfo.Unit, UnitAbilityPreviewInfo.AbilityRange, 20, FColor::Blue, 0.1f, 1.f);
 
     //draw debug spheres at target location and startlocation
-	DrawDebugSphere(GetWorld(), TargetLocation, 20.f, 12, FColor::Red, false, 0.1f);
 
     switch (UnitAbilityPreviewInfo.AbilityPreviewType)
     {
         case
         EUnitAbilityPreviewType::Movement:
         {
+            DrawDebugSphere(GetWorld(), TargetLocation, 20.f, 12, FColor::Red, false, 0.1f);
+
             FVector OutLocation;
             const bool TargetPointValid = UAuraAbilitySystemLibrary::GetReachablePointWithinMaxRange(UnitAbilityPreviewInfo.Unit, UnitAbilityPreviewInfo.Unit->GetActorLocation(), TargetLocation, UnitAbilityPreviewInfo.AbilityRange, OutLocation);
 
@@ -59,16 +66,60 @@ void AAbilityPreview::UpdateAbilityPreview(const FVector& TargetLocation)
         case
         EUnitAbilityPreviewType::RangedAttack:
         {
-            FVector OutLocation;
-            const bool TargetPointValid = UAuraAbilitySystemLibrary::GetReachablePointWithinMaxRange(UnitAbilityPreviewInfo.Unit, UnitAbilityPreviewInfo.Unit->GetActorLocation(), TargetLocation, UnitAbilityPreviewInfo.AbilityRange, OutLocation);
+            FVector Start = UnitAbilityPreviewInfo.Unit->GetActorLocation();
+            FVector Direction = (TargetLocation - Start).GetSafeNormal();
+            FVector End = Start + Direction * UnitAbilityPreviewInfo.AbilityRange;
 
-            if (UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(UnitAbilityPreviewInfo.Unit, UnitAbilityPreviewInfo.Unit->GetActorLocation(), OutLocation))
+            FHitResult HitResult;
+            FCollisionQueryParams TraceParams(SCENE_QUERY_STAT(AbilityLineTrace), true, UnitAbilityPreviewInfo.Unit);
+            TraceParams.bReturnPhysicalMaterial = false;
+            TraceParams.AddIgnoredActor(UnitAbilityPreviewInfo.Unit);
+
+            bool bHit = GetWorld()->LineTraceSingleByChannel(
+                HitResult,
+                Start,
+                End,
+                ECC_Visibility, // You can use a custom trace channel if needed
+                TraceParams
+            );
+
+            TArray<FVector> SplinePoints;
+            SplinePoints.Add(Start);
+
+            if (bHit)
             {
+				FVector HitLocationAtPorjectileHeight = HitResult.ImpactPoint * FVector(1.f, 1.f, 0.f) + FVector(0.f, 0.f, UnitAbilityPreviewInfo.Unit->GetActorLocation().Z);
+                SplinePoints.Add(HitLocationAtPorjectileHeight);
+                DrawDebugSphere(GetWorld(), HitLocationAtPorjectileHeight, 20.f, 12, FColor::Red, false, 0.1f);
 
-               UpdateSpline(NavPath->PathPoints);
             }
+            else
+            {
+                FVector EndLocationAtPorjectileHeight = End * FVector(1.f, 1.f, 0.f) + FVector(0.f, 0.f, UnitAbilityPreviewInfo.Unit->GetActorLocation().Z);
+                SplinePoints.Add(EndLocationAtPorjectileHeight);
+                DrawDebugSphere(GetWorld(), EndLocationAtPorjectileHeight, 20.f, 12, FColor::Red, false, 0.1f);
+
+            }
+            
+            UpdateSpline(SplinePoints);
+
             break;
         }
+        case
+        EUnitAbilityPreviewType::MeleeAttack:
+        {
+            //Build the box from the unitpreviewinfo extent
+            BoxComponent->SetBoxExtent(UnitAbilityPreviewInfo.BoxExtent);
+            FTransform BoxTransform;
+            FRotator LookAtMouseRotation = (TargetLocation - GetActorLocation()).Rotation();
+
+            UAuraAbilitySystemLibrary::CalculateBoxTransform(UnitAbilityPreviewInfo.Unit->GetActorLocation(), LookAtMouseRotation, UnitAbilityPreviewInfo.BoxCenterOffset, BoxTransform);
+			BoxComponent->SetWorldTransform(BoxTransform);
+
+
+            break;
+        }
+
         default:
             break;
     }
@@ -163,6 +214,16 @@ void AAbilityPreview::DrawDebugCircleAroundActor(AActor* TargetActor, float MaxR
         RightVector,  // X-axis vector
         ForwardVector // Y-axis vector
     );
+}
+
+void AAbilityPreview::SetBoxSize(FVector Extent)
+{
+
+}
+
+void AAbilityPreview::SetBoxTransform(const FTransform& Transform)
+{
+    //Will also need to take in the mouse position
 }
 
 
