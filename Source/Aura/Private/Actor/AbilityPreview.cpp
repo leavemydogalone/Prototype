@@ -67,7 +67,7 @@ void AAbilityPreview::UpdateAbilityPreview(const FVector& TargetLocation)
         EUnitAbilityPreviewType::RangedAttack:
         {
             FVector Start = UnitAbilityPreviewInfo.Unit->GetActorLocation();
-            FVector Direction = (TargetLocation - Start).GetSafeNormal();
+            FVector Direction = (TargetLocation - Start)    ;
             FVector End = Start + Direction * UnitAbilityPreviewInfo.AbilityRange;
 
             FHitResult HitResult;
@@ -111,7 +111,11 @@ void AAbilityPreview::UpdateAbilityPreview(const FVector& TargetLocation)
             //Build the box from the unitpreviewinfo extent
             BoxComponent->SetBoxExtent(UnitAbilityPreviewInfo.BoxExtent);
             FTransform BoxTransform;
-            FRotator LookAtMouseRotation = (TargetLocation - GetActorLocation()).Rotation();
+            FVector FlatTarget = TargetLocation;
+            FlatTarget.Z = UnitAbilityPreviewInfo.Unit->GetActorLocation().Z;
+
+            FVector Dir = FlatTarget - UnitAbilityPreviewInfo.Unit->GetActorLocation();
+            FRotator LookAtMouseRotation = Dir.Rotation();
 
             UAuraAbilitySystemLibrary::CalculateBoxTransform(UnitAbilityPreviewInfo.Unit->GetActorLocation(), LookAtMouseRotation, UnitAbilityPreviewInfo.BoxCenterOffset, BoxTransform);
 			BoxComponent->SetWorldTransform(BoxTransform);
