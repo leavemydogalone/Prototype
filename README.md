@@ -1,1 +1,4 @@
-<iframe width="560" height="315" src="https://www.youtube.com/embed/S58_mEGT2VI?si=IYKvHtrblUUiQTVq" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+Overview video of the game's systems and mechanics
+
+https://github.com/user-attachments/assets/55015f3b-c37d-41ff-85d0-df4208c27a35
+
